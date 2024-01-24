@@ -22,7 +22,7 @@ export class InstitutionService {
     });
   }
 
-  public async getInstitutionById (id: string): Promise<any> {
+  public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
       this.http.get(environment.api.url + environment.api.institutions + id)
         .subscribe({
