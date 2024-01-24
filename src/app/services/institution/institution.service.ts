@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment.development';
+import { environment as env } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +8,15 @@ import { environment } from '../../../environments/environment.development';
 export class InstitutionService {
   private readonly http = inject(HttpClient);
 
+  public async getAllMock(): Promise<any> {
+    return await new Promise((resolve, _reject) => {
+      resolve({ data: [] });
+    });
+  }
+
   public async getAll (): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(environment.api.url + environment.api.institutions + '/page')
+      this.http.get(env.api.url + env.api.institutions + '/page')
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -24,7 +30,7 @@ export class InstitutionService {
 
   public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(environment.api.url + environment.api.institutions + id)
+      this.http.get(env.api.url + env.api.institutions + id)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -35,4 +41,5 @@ export class InstitutionService {
         });
     });
   }
+
 }
