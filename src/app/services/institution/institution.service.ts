@@ -8,7 +8,7 @@ import { environment as env } from '../../../environments/environment.developmen
 export class InstitutionService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock(): Promise<any> {
+  public async getAllMock (): Promise<any> {
     return await new Promise((resolve, _reject) => {
       resolve({ data: [] });
     });
@@ -42,4 +42,45 @@ export class InstitutionService {
     });
   }
 
+  public async create (data: any): Promise<any> {
+    return await new Promise((resolve, reject) => {
+      this.http.post(env.api.url + env.api.institutions, { body: data })
+        .subscribe({
+          next: (data) => {
+            resolve(data);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async delete (data: any): Promise<any> {
+    return await new Promise((resolve, reject) => {
+      this.http.delete(env.api.url + env.api.institutions, { body: data })
+        .subscribe({
+          next: (data) => {
+            resolve(data);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async update (data: any): Promise<any> {
+    return await new Promise((resolve, reject) => {
+      this.http.put(env.api.url + env.api.institutions, { body: data })
+        .subscribe({
+          next: (data) => {
+            resolve(data);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
 }
