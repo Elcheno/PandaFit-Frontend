@@ -12,6 +12,8 @@
         "@typescript-eslint/semi": ["error", "always"],
         "@typescript-eslint/consistent-type-imports": "error",
         "eol-last": 1,
-        "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }]
+        "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+        "prefer-readonly": [false, "only-inline-lambdas"]
+
     }
 }
