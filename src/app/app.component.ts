@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
@@ -13,7 +13,7 @@ import { initFlowbite } from 'flowbite';
 export class AppComponent implements OnInit {
   title = 'Pandafit-Frontend';
 
-  ngOnInit(): void {
+  ngOnInit (): void {
     initFlowbite();
   }
 }
