@@ -1,7 +1,8 @@
-import { Component, type OnInit } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
+import { InstitutionService } from './services/institution/institution.service';
 import { JCCPageComponent } from './pages/jccpage/jccpage.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
@@ -15,7 +16,10 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 export class AppComponent implements OnInit {
   title = 'Pandafit-Frontend';
 
+  private readonly institutionService = inject(InstitutionService);
+
   ngOnInit (): void {
     initFlowbite();
+    void this.institutionService.getAll(1);
   }
 }
