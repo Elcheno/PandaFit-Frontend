@@ -19,12 +19,12 @@ export class InstitutionService {
     });
   }
 
-  public async getAll (x: IPage): Promise<IPageable<IInstitution>> {
+  public async getAll (pageParams: IPage): Promise<IPageable<IInstitution>> {
     return await new Promise<IPageable<IInstitution>>((resolve, reject) => {
       const pageable: any = {
-        page: x.page,
-        size: x.size,
-        sort: x.sort
+        page: pageParams.page,
+        size: pageParams.size,
+        sort: pageParams.sort
       };
 
       this.http.get(env.api.url + env.api.institutions + 'page', { params: pageable })
@@ -34,7 +34,7 @@ export class InstitutionService {
             const response: IPageable<IInstitution> = {
               page: res['number'],
               size: res['size'],
-              sort: x.sort,
+              sort: pageParams.sort,
               totalElements: res['totalElements'],
               totalPages: res['totalPages'],
               content: res['content']
