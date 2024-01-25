@@ -78,7 +78,8 @@ export class InstitutionService {
 
   public async delete (data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.delete('http://localhost:8080/institution', data)
+      console.log(data);
+      this.http.delete('http://localhost:8080/institution', { body: data })
         .subscribe({
           next: (data) => {
             resolve(data);

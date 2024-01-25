@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -122,6 +123,21 @@ export class UserService {
               console.log(res);
               resolve(userCreate);
             }
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async delete (data: IUser): Promise<any> {
+    return await new Promise<any>((resolve, reject) => {
+      this.http.delete('http://localhost:8080/institution/users', { body: data })
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            resolve(res);
           },
           error: (error) => {
             reject(error);

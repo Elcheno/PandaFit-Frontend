@@ -1,6 +1,5 @@
 import { Component, type OnInit, inject } from '@angular/core';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
-import { IPage } from '../../../model/interfaces/i-page';
 import { UserService } from '../../../services/user/user.service';
 import { type IUser } from '../../../model/interfaces/i-user';
 
@@ -29,8 +28,14 @@ export class TableUsersComponent implements OnInit {
     await this.loadTable();
   }
 
-  public async delete (id: string): Promise<void> {
-    // await this.userService.delete(id);
+  public async delete (user: IUser): Promise<void> {
+    await this.userService.delete(user)
+      .then(() => {
+        console.log('User deleted');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     // this.loadTable();
   }
 
