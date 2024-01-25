@@ -1,3 +1,23 @@
-import { Routes } from '@angular/router';
+import { type Routes } from '@angular/router';
+import { InstitutionsComponent } from './pages/institutions/institutions.component';
+import { UsersComponent } from './pages/users/users.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: 'institutions',
+    component: InstitutionsComponent
+  },
+  {
+    path: 'users',
+    component: UsersComponent
+  },
+  {
+    path: '',
+    redirectTo: 'institutions',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    component: InstitutionsComponent
+  }
+];
