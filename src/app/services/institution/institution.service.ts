@@ -64,7 +64,7 @@ export class InstitutionService {
 
   public async create (data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.post(env.api.url + env.api.institutions, { body: data })
+      this.http.post(env.api.url + env.api.institutions, data)
         .subscribe({
           next: (data) => {
             resolve(data);

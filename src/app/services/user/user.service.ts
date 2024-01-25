@@ -99,13 +99,17 @@ export class UserService {
       const data: any = {
         email: user.email,
         password: user.password,
-        roles: user.role.map(role => ITypeRole[role]),
+        // roles: user.role.map(role => ITypeRole[role]),
+        roles: [
+          'USER'
+        ],
         institutionId: user.institutionId
       };
 
       console.log(data);
+      console.log(data.roles);
 
-      this.http.post('http://localhost:8080/institution/users', { body: data })
+      this.http.post('http://localhost:8080/institution/users', data)
         .subscribe({
           next: (res: any) => {
             if (res != null) {

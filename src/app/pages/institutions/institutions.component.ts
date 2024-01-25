@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { TableInstitutionComponent } from '../../components/table-institution/table-institution.component';
 import { InstitutionService } from '../../services/institution/institution.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IInstitution } from '../../model/interfaces/i-institution';
+import { type FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { type IInstitution } from '../../model/interfaces/i-institution';
 
 @Component({
   selector: 'app-institutions',
@@ -12,23 +12,28 @@ import { IInstitution } from '../../model/interfaces/i-institution';
   styleUrl: './institutions.component.scss'
 })
 export class InstitutionsComponent {
-  public form!:FormGroup;
-  private institutionService = inject(InstitutionService)
+  public form!: FormGroup;
+  private readonly institutionService = inject(InstitutionService);
 
-  constructor(private fb:FormBuilder){
+  constructor (private readonly fb: FormBuilder) {
     this.form = this.fb.group({
       name: ''
-    })
-  }
-  submit() {
-    let newInstitution:IInstitution = {
-      id: '',
-      name: this.form.value.name,
-      userList: []
-    }
-    // alert('SUCCESS!! :-)\n\n' + JSON.stringify(newInstitution))
-    this.institutionService.create(newInstitution)
-    this.form.reset();
+    });
   }
 
+  async submit (): Promise<void> {
+    if (this.form.invalid) return;
+
+    const newInstitution: IInstitution = {
+      name: this.form.value.name
+    };
+    await this.institutionService.create(newInstitution)
+      .then(() => {
+        console.log('Institution created');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.form.reset();
+  }
 }
