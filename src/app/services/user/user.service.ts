@@ -81,7 +81,7 @@ export class UserService {
 
   public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.users + id)
+      this.http.get('http://localhost:8080/institution/users/' + id)
         .subscribe({
           next: (data) => {
             resolve(data);
