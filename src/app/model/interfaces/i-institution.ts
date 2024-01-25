@@ -1,7 +1,7 @@
-import { IUser } from "./i-user";
+import { type IUser } from './i-user';
 
 export interface IInstitution {
-    id: string,
-    name: string,
-    userList: IUser[],
+  id: string
+  name: string
+  userList?: IUser[]
 }
