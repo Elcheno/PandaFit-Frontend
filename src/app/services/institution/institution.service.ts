@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment as env } from '../../../environments/environment.development';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
+import { type IPage } from '../../model/interfaces/i-page';
 
 @Injectable({
   providedIn: 'root'
@@ -18,22 +19,22 @@ export class InstitutionService {
     });
   }
 
-  public async getAll (page: number): Promise<IPageable<IInstitution>> {
+  public async getAll (x: IPage): Promise<IPageable<IInstitution>> {
     return await new Promise<IPageable<IInstitution>>((resolve, reject) => {
-      const pageable = {
-        page,
-        size: 5,
-        sort: [
-          'name'
-        ]
+      const pageable: any = {
+        page: x.page,
+        size: x.size,
+        sort: x.sort
       };
 
       this.http.get(env.api.url + env.api.institutions + 'page', { params: pageable })
         .subscribe({
           next (res: any) {
+            console.log(res);
             const response: IPageable<IInstitution> = {
               page: res['number'],
               size: res['size'],
+              sort: x.sort,
               totalElements: res['totalElements'],
               totalPages: res['totalPages'],
               content: res['content']

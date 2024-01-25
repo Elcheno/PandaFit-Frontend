@@ -20,6 +20,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit (): void {
     initFlowbite();
-    void this.institutionService.getAll(0);
+    void this.institutionService.getAll({
+      page: 0,
+      size: 10,
+      sort: ['name']
+    });
   }
 }
