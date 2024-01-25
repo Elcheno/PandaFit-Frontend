@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TableInstitutionComponent } from '../../components/table-institution/table-institution.component';
 import { InstitutionService } from '../../services/institution/institution.service';
-import { type FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 
 @Component({

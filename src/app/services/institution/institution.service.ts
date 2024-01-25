@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment as env } from '../../../environments/environment.development';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
@@ -27,7 +27,7 @@ export class InstitutionService {
         sort: pageParams.sort
       };
 
-      this.http.get(env.api.url + env.api.institutions + 'page', { params: pageable })
+      this.http.get('http://localhost:8080/institution/' + 'page', { params: pageable })
         .subscribe({
           next (res: any) {
             console.log(res);
@@ -50,7 +50,7 @@ export class InstitutionService {
 
   public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.institutions + id)
+      this.http.get('http://localhost:8080/institution/' + id)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -64,7 +64,7 @@ export class InstitutionService {
 
   public async create (data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.post(env.api.url + env.api.institutions, data)
+      this.http.post('http://localhost:8080/institution', data)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -78,7 +78,7 @@ export class InstitutionService {
 
   public async delete (data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.delete(env.api.url + env.api.institutions, { body: data })
+      this.http.delete('http://localhost:8080/institution', data)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -92,7 +92,7 @@ export class InstitutionService {
 
   public async update (data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.put(env.api.url + env.api.institutions, { body: data })
+      this.http.put('http://localhost:8080/institution', data)
         .subscribe({
           next: (data) => {
             resolve(data);
