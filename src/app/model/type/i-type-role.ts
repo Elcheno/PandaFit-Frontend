@@ -1,4 +1,4 @@
-export interface ITypeRole {
-    ADMIN: string;
-    USER: string;
+export enum ITypeRole {
+  ADMIN = 0,
+  USER = 1
 }
