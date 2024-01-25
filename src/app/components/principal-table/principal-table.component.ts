@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 @Component({
   selector: 'app-principal-table',
@@ -9,4 +9,27 @@ import { Component } from '@angular/core';
 })
 export class PrincipalTableComponent {
 
+  // @Input () public data: any[] = [];
+
+  public data: any[] = [
+    {
+      id: 1,
+      name: 'test',
+      userList: []
+    },
+    {
+      id: 2,
+      name: 'test2',
+      userList: []
+    },
+    {
+      id: 3,
+      name: 'test3',
+      userList: []
+    }
+  ]
+
+  ngOnInit() {
+    
+  }
 }
