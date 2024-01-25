@@ -32,6 +32,7 @@ export class UserService {
       this.http.get('http://localhost:8080/institution/users/page', { params: pageable })
         .subscribe({
           next: (res: any) => {
+            console.log(res);
             const response: IPageable<IUser> = {
               page: res['number'],
               size: res['size'],

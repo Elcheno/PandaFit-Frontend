@@ -22,26 +22,26 @@ export class AppComponent implements OnInit {
 
   ngOnInit (): void {
     initFlowbite();
-    void this.institutionService.getAll({
-      page: 0,
-      size: 10,
-      sort: ['name']
-    });
+    // void this.institutionService.getAll({
+    //   page: 0,
+    //   size: 10,
+    //   sort: ['name']
+    // });
 
-    void this.usersService.getAll({
-      page: 0,
-      size: 10,
-      sort: ['email']
-    });
+    // void this.usersService.getAll({
+    //   page: 0,
+    //   size: 10,
+    //   sort: ['email']
+    // });
 
-    void this.usersService.getAllByInstitution({
-      page: 0,
-      size: 10,
-      sort: ['email']
-    },
-    {
-      id: '34fd6762-bc81-42ae-ac5f-d9f7a40c3e04',
-      name: 'global1'
-    });
+    // void this.usersService.getAllByInstitution({
+    //   page: 0,
+    //   size: 10,
+    //   sort: ['email']
+    // },
+    // {
+    //   id: '34fd6762-bc81-42ae-ac5f-d9f7a40c3e04',
+    //   name: 'global1'
+    // });
   }
 }
