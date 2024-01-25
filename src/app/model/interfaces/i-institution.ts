@@ -1,7 +1,7 @@
 import { type IUser } from './i-user';
 
 export interface IInstitution {
-  id: string
+  id?: string
   name: string
   userList?: IUser[]
 }
