@@ -1,8 +1,9 @@
 import { type ITypeRole } from '../type/i-type-role';
 
 export interface IUser {
-  id: string
+  id?: string
   email: string
-  password: string
+  password?: string
   role: ITypeRole[]
+  institutionId?: string
 }

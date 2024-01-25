@@ -6,6 +6,7 @@ import { type IPage } from '../../model/interfaces/i-page';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
+import { ITypeRole } from '../../model/type/i-type-role';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,39 @@ export class UserService {
         .subscribe({
           next: (data) => {
             resolve(data);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async create (user: IUser): Promise<IUser> {
+    return await new Promise<IUser>((resolve, reject) => {
+      console.log(user);
+      const data: any = {
+        email: user.email,
+        password: user.password,
+        roles: user.role.map(role => ITypeRole[role]),
+        institutionId: user.institutionId
+      };
+
+      console.log(data);
+
+      this.http.post('http://localhost:8080/institution/users', { body: data })
+        .subscribe({
+          next: (res: any) => {
+            if (res != null) {
+              const userCreate: IUser = {
+                id: res.id,
+                email: res.email,
+                password: res.password,
+                role: res.role
+              };
+              console.log(res);
+              resolve(userCreate);
+            }
           },
           error: (error) => {
             reject(error);
