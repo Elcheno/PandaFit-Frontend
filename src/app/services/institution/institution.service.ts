@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment as env } from '../../../environments/environment.development';
+import { type IInstitution } from '../../model/interfaces/i-institution';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Injectable({
   providedIn: 'root'
@@ -8,21 +10,34 @@ import { environment as env } from '../../../environments/environment.developmen
 export class InstitutionService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<any> {
+  public async getAllMock (): Promise<IInstitution[]> {
     return await new Promise((resolve, _reject) => {
-      resolve({ data: [] });
+      const data: IInstitution[] = [];
+      resolve(data);
     });
   }
 
-  public async getAll (): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.institutions + '/page')
+  public async getAll (page: number): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+      const pageable = {
+        page,
+        size: 5,
+        sort: [
+          'name'
+        ]
+      };
+
+      this.http.get(env.api.url + env.api.institutions + 'page', { params: pageable })
         .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
+          next (res) {
+            console.log(res);
+            const response: IPageable<IInstitution> = { 
+              page: res['number'],
+              size: res['size'],
+              totalElements: res['totalElements'],
+              totalPages: res['totalPages'],
+              content: res['content']
+            };
           }
         });
     });
