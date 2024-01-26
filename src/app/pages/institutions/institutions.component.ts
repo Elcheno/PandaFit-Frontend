@@ -15,7 +15,7 @@ export class InstitutionsComponent {
   public form!: FormGroup;
   private readonly institutionService = inject(InstitutionService);
 
-  public data!: any[];
+  public data: any[] = [];
 
   constructor (private readonly fb: FormBuilder) {
     this.form = this.fb.group({
@@ -30,9 +30,9 @@ export class InstitutionsComponent {
       name: this.form.value.name
     };
     await this.institutionService.create(newInstitution)
-      .then(() => {
-        this.data.push(newInstitution);
-        console.log('Institution created');
+      .then((res) => {
+        console.log(res);
+        this.data.push(res);
       })
       .catch((error) => {
         console.log(error);

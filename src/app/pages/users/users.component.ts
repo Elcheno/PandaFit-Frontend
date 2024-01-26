@@ -9,6 +9,7 @@ import { type IUser } from '../../model/interfaces/i-user';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-users',
@@ -20,6 +21,7 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 export class UsersComponent implements OnInit {
   public form!: FormGroup;
   public institutionList!: IInstitution[];
+  public data: any[] = [];
 
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
@@ -36,6 +38,7 @@ export class UsersComponent implements OnInit {
 
   public async ngOnInit (): Promise<void> {
     this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
+    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
   }
 
   submit (): void {
