@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { IInstitution } from '../../model/interfaces/i-institution';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -31,7 +31,8 @@ export class TableInstitutionComponent {
   //   }
   // ]
 
-  public data!: any[];
+  // public data!: any[];
+  @Input() public data!: any[]
 
   public pageable:IPageable<IInstitution> = {
     page: 0,
@@ -50,8 +51,10 @@ export class TableInstitutionComponent {
   }
 
   public async delete (id: string): Promise<void> {
-    await this.institutionService.delete(id);
-    this.loadTable();
+    await this.institutionService.delete(id).then(() => {
+      this.data = this.data.filter((item) => item.id !== id);
+      console.log('Institution deleted');
+    });
   }
 
   public async loadTable (): Promise<void> {
