@@ -1,7 +1,7 @@
-import { Component, type OnInit, inject } from '@angular/core';
-import { type IPageable } from '../../../model/interfaces/i-pageable';
+import { Component, inject, Input, type OnInit } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { type IUser } from '../../../model/interfaces/i-user';
+import { type IPageable } from '../../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-table-users',
@@ -11,7 +11,9 @@ import { type IUser } from '../../../model/interfaces/i-user';
   styleUrl: './table-users.component.scss'
 })
 export class TableUsersComponent implements OnInit {
-  public data!: any[];
+  @Input() public data!: any[];
+
+  private readonly userService = inject(UserService);
 
   public pageable: IPageable<IUser> = {
     page: 0,
@@ -22,10 +24,7 @@ export class TableUsersComponent implements OnInit {
     content: []
   };
 
-  private readonly userService = inject(UserService);
-
   public async ngOnInit (): Promise<void> {
-    await this.loadTable();
   }
 
   public async delete (user: IUser): Promise<void> {
@@ -36,15 +35,5 @@ export class TableUsersComponent implements OnInit {
       .catch((error) => {
         console.log(error);
       });
-    // this.loadTable();
-  }
-
-  public async loadTable (): Promise<void> {
-    this.pageable = await this.userService.getAll({
-      page: this.pageable.page,
-      size: this.pageable.size,
-      sort: this.pageable.sort
-    });
-    this.data = this.pageable.content;
   }
 }

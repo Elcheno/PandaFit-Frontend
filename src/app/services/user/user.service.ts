@@ -32,7 +32,7 @@ export class UserService {
       this.http.get('http://localhost:8080/institution/users/page', { params: pageable })
         .subscribe({
           next: (res: any) => {
-            console.log(res);
+            if (res === null) return;
             const response: IPageable<IUser> = {
               page: res['number'],
               size: res['size'],
@@ -101,10 +101,10 @@ export class UserService {
       const data: any = {
         email: user.email,
         password: user.password,
-        // roles: user.role.map(role => ITypeRole[role]),
-        roles: [
-          'USER'
-        ],
+        roles: user.role.map(role => ITypeRole[role]),
+        // roles: [
+        //  'USER'
+        // ],
         institutionId: user.institutionId
       };
 
@@ -134,6 +134,7 @@ export class UserService {
 
   public async delete (data: IUser): Promise<any> {
     return await new Promise<any>((resolve, reject) => {
+      console.log(data);
       this.http.delete('http://localhost:8080/institution/users', { body: data })
         .subscribe({
           next: (res) => {

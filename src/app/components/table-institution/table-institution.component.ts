@@ -50,9 +50,9 @@ export class TableInstitutionComponent {
     this.loadTable();
   }
 
-  public async delete (id: string): Promise<void> {
-    await this.institutionService.delete(id).then(() => {
-      this.data = this.data.filter((item) => item.id !== id);
+  public async delete (institution: IInstitution): Promise<void> {
+    await this.institutionService.delete(institution).then(() => {
+      this.data = this.data.filter((item) => item.id !== institution.id);
       console.log('Institution deleted');
     });
   }
