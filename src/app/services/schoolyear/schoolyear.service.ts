@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment as env } from '../../../environments/environment.development';
+import { type IPage } from '../../model/interfaces/i-page';
+import { type IInstitution } from '../../model/interfaces/i-institution';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +16,18 @@ export class SchoolyearService {
     });
   }
 
-  public async getAll (): Promise<any> {
+  public async getAllByInstitution (pageParams: IPage, institution: IInstitution): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.schoolyear + '/page')
+      const pageable: any = {
+        page: pageParams.page,
+        size: pageParams.size,
+        sort: pageParams.sort
+      };
+
+      this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
         .subscribe({
           next: (data) => {
+            console.log(data);
             resolve(data);
           },
           error: (error) => {
