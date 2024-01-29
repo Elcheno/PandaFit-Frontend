@@ -19,13 +19,13 @@ import { SearchEntityComponent } from '../../components/search-entity/search-ent
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
-  public form!: FormGroup;
-  public institutionList!: IInstitution[];
-  public data: any[] = [];
-
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
   private readonly fb = inject(FormBuilder);
+
+  public form!: FormGroup;
+  public institutionList!: IInstitution[];
+  public data: any[] = [];
 
   constructor () {
     this.form = this.fb.group({
@@ -71,5 +71,12 @@ export class UsersComponent implements OnInit {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  public async search (searchValue: string): Promise<void> {
+    return await new Promise((resolve, reject) => {
+      console.log(searchValue);
+      resolve();
+    });
   }
 }

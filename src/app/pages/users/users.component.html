@@ -3,7 +3,7 @@
     <div class="flex items-center my-5">
 
         <!-- Search entity component -->
-        <app-search-entity class="w-full"></app-search-entity>
+        <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
         <!-- Modal toggle -->
         <button type="button" data-modal-target="create-user-modal" data-modal-toggle="create-user-modal"
