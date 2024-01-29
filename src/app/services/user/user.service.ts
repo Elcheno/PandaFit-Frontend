@@ -8,6 +8,7 @@ import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
+import { shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -97,19 +98,12 @@ export class UserService {
 
   public async create (user: IUser): Promise<IUser> {
     return await new Promise<IUser>((resolve, reject) => {
-      console.log(user);
       const data: any = {
         email: user.email,
         password: user.password,
         roles: user.role.map(role => ITypeRole[role]),
-        // roles: [
-        //  'USER'
-        // ],
         institutionId: user.institutionId
       };
-
-      console.log(data);
-      console.log(data.roles);
 
       this.http.post('http://localhost:8080/institution/users', data)
         .subscribe({
@@ -121,7 +115,6 @@ export class UserService {
                 password: res.password,
                 role: res.role
               };
-              console.log(res);
               resolve(userCreate);
             }
           },
@@ -134,11 +127,9 @@ export class UserService {
 
   public async delete (data: IUser): Promise<any> {
     return await new Promise<any>((resolve, reject) => {
-      console.log(data);
       this.http.delete('http://localhost:8080/institution/users', { body: data })
         .subscribe({
           next: (res) => {
-            console.log(res);
             resolve(res);
           },
           error: (error) => {

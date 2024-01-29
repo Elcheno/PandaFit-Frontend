@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Component, type OnInit, inject } from '@angular/core';
+import { Component, type OnInit, inject, effect } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
 import { UserService } from '../../services/user/user.service';
@@ -30,15 +31,19 @@ export class UsersComponent implements OnInit {
   constructor () {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      checkboxUser: [true, [Validators.required]],
+      checkboxUser: [true],
       checkboxAdmin: [false],
       selectInstitution: ['', [Validators.required]]
+    });
+
+    effect(async () => {
+      this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
+      this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
     });
   }
 
   public async ngOnInit (): Promise<void> {
-    this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
-    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+
   }
 
   submit (): void {
@@ -74,7 +79,7 @@ export class UsersComponent implements OnInit {
   }
 
   public async search (searchValue: string): Promise<void> {
-    return await new Promise((resolve, reject) => {
+    return await new Promise((resolve, _reject) => {
       console.log(searchValue);
       resolve();
     });
