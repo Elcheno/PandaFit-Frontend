@@ -2,13 +2,11 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment as env } from '../../../environments/environment.development';
 import { type IPage } from '../../model/interfaces/i-page';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
-import { shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

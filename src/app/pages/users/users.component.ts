@@ -35,15 +35,11 @@ export class UsersComponent implements OnInit {
       checkboxAdmin: [false],
       selectInstitution: ['', [Validators.required]]
     });
-
-    effect(async () => {
-      this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
-      this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
-    });
   }
 
   public async ngOnInit (): Promise<void> {
-
+    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+    this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
   }
 
   submit (): void {
