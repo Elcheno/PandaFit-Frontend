@@ -1,4 +1,4 @@
-import { Component, inject, Input, type OnInit } from '@angular/core';
+import { Component, inject, Input, Output, type OnInit, EventEmitter } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
@@ -12,6 +12,8 @@ import { type IPageable } from '../../../model/interfaces/i-pageable';
 })
 export class TableUsersComponent implements OnInit {
   @Input() public data!: any[];
+
+  @Output() public onDelete = new EventEmitter<IUser>();
 
   private readonly userService = inject(UserService);
 
@@ -27,13 +29,8 @@ export class TableUsersComponent implements OnInit {
   public async ngOnInit (): Promise<void> {
   }
 
-  public async delete (user: IUser): Promise<void> {
-    await this.userService.delete(user)
-      .then(() => {
-        console.log('User deleted');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  public delete (user: IUser): void {
+    if (user == null) return;
+    this.onDelete.emit(user);
   }
 }

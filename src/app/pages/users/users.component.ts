@@ -9,12 +9,12 @@ import { type IUser } from '../../model/interfaces/i-user';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
-import { IPageable } from '../../model/interfaces/i-pageable';
+import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, ReactiveFormsModule],
+  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
@@ -52,12 +52,24 @@ export class UsersComponent implements OnInit {
     };
 
     this.userService.create(newUser)
-      .then(() => {
+      .then((user: IUser) => {
         console.log('User created');
+        this.data.push(user);
       })
       .catch((error) => {
         console.log(error);
       });
     this.form.reset();
+  }
+
+  public async delete (user: IUser): Promise<void> {
+    await this.userService.delete(user)
+      .then(() => {
+        console.log('User deleted');
+        this.data = this.data.filter((item) => item.id !== user.id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
