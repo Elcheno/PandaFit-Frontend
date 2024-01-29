@@ -3,11 +3,12 @@ import { InstitutionService } from '../../services/institution/institution.servi
 import { IInstitution } from '../../model/interfaces/i-institution';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
+import { ModalTemplateComponent } from '../modal-template/modal-template.component';
 
 @Component({
   selector: 'app-table-institution',
   standalone: true,
-  imports: [],
+  imports: [ModalTemplateComponent],
   templateUrl: './table-institution.component.html',
   styleUrl: './table-institution.component.scss'
 })

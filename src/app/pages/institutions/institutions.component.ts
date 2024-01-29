@@ -3,6 +3,8 @@ import { TableInstitutionComponent } from '../../components/table-institution/ta
 import { InstitutionService } from '../../services/institution/institution.service';
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { type IInstitution } from '../../model/interfaces/i-institution';
+import { ModalService } from '../../services/modal/modal.service';
+import { CreateInstitutionModalComponent } from '../../components/modals/create-institution-modal/create-institution-modal.component';
 
 @Component({
   selector: 'app-institutions',
@@ -14,6 +16,7 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 export class InstitutionsComponent {
   public form!: FormGroup;
   private readonly institutionService = inject(InstitutionService);
+  private readonly modalS = inject(ModalService);
 
   public data: any[] = [];
 
@@ -38,5 +41,9 @@ export class InstitutionsComponent {
         console.log(error);
       });
     this.form.reset();
+  }
+
+  open() {
+    this.modalS.openModal(CreateInstitutionModalComponent);
   }
 }
