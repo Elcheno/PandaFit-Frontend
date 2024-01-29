@@ -4,7 +4,8 @@ import { InstitutionService } from '../../services/institution/institution.servi
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ModalService } from '../../services/modal/modal.service';
-import { CreateInstitutionModalComponent } from '../../components/modals/create-institution-modal/create-institution-modal.component';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+
 
 @Component({
   selector: 'app-institutions',
@@ -16,11 +17,11 @@ import { CreateInstitutionModalComponent } from '../../components/modals/create-
 export class InstitutionsComponent {
   public form!: FormGroup;
   private readonly institutionService = inject(InstitutionService);
-  private readonly modalS = inject(ModalService);
+  // private readonly modalS = inject(ModalService);
 
   public data: any[] = [];
 
-  constructor (private readonly fb: FormBuilder) {
+  constructor (private readonly fb: FormBuilder, private readonly modalS: ModalService) {
     this.form = this.fb.group({
       name: ''
     });
@@ -44,6 +45,6 @@ export class InstitutionsComponent {
   }
 
   open() {
-    this.modalS.openModal(CreateInstitutionModalComponent);
+    this.modalS.openModal(SidebarComponent);
   }
 }

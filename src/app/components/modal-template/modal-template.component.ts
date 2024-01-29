@@ -1,7 +1,10 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, Type, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Injectable, Type, ViewChild } from '@angular/core';
 import { DynamicModalDirective } from './dynamic-modal.directive';
-// import { CreateInstitutionModalComponent } from '../modals/create-institution-modal/create-institution-modal.component';
 import { Modal, ModalOptions, modalPlacement } from 'flowbite';
+
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TableInstitutionComponent } from '../table-institution/table-institution.component';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-modal-template',
@@ -12,24 +15,28 @@ import { Modal, ModalOptions, modalPlacement } from 'flowbite';
 })
 export class ModalTemplateComponent implements AfterViewInit {
 
-  @ViewChild(DynamicModalDirective) dynamic!: DynamicModalDirective
+  @ViewChild(DynamicModalDirective) dynamic!: DynamicModalDirective;
+  SidebarComponente: Type<any> = SidebarComponent;
   // @ViewChild('crud-modal') crudModal: any;
 
   constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
   ngAfterViewInit(): void {
-    // this.generateComponent(CreateInstitutionModalComponent);
+    // this.generateComponent();
     this.changeDetectorRef.detectChanges();
   }
 
   generateComponent(component: Type<any>): void {
     const viewContainerRef = this.dynamic.viewContainerRef;
-    const componentRef = viewContainerRef.createComponent(component);
+
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent<any>(component);
+    componentRef.changeDetectorRef.detectChanges();
   }
 
-  openModal(component: Type<any>): void {
+  public openModal(component: Type<any>): void {    
     this.generateComponent(component);
-    const $targetEl = document.getElementById('crud-modal');
+    const $targetEl = document.getElementById('crud-modals');
 
     const options: ModalOptions = {
       placement: 'bottom-right' as modalPlacement,
@@ -54,6 +61,10 @@ export class ModalTemplateComponent implements AfterViewInit {
     };
     const modal = new Modal($targetEl, options, instanceOptions);
     modal.show();
+  }
+
+  public setComponent(component: Type<any>): void {
+    this.generateComponent(component);
   }
 
 }
