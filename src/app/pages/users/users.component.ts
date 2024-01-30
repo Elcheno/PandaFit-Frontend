@@ -38,7 +38,8 @@ export class UsersComponent implements OnInit {
   }
 
   public async ngOnInit (): Promise<void> {
-    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+    // this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+    this.data = (await this.userService.getAllMock()).content;
     this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
   }
 
