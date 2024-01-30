@@ -1,22 +1,21 @@
-import { Injectable, Type, inject } from '@angular/core';
+import { Injectable, type Type, inject } from '@angular/core';
 import { ModalTemplateComponent } from '../../components/modal-template/modal-template.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-
+import { AppComponent } from '../../app.component';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ModalService {
   private readonly modal = inject(ModalTemplateComponent);
-  constructor() { }
+  // private readonly appComponent = inject(AppComponent);
+  // private readonly viewContainerRef = inject(ViewContainerRef);
 
   // openModal(component: Type<any>): void {
   //   this.modal.openModal(component);
   // }
 
-  openModal(component: Type<any>): void {
-    // this.modal.ngAfterViewInit();
-    // this.modal = new ModalTemplateComponent();
-    this.modal.openModal(SidebarComponent);
+  openModal (component: Type<any>): void {
+    this.modal.openTest();
   }
 }

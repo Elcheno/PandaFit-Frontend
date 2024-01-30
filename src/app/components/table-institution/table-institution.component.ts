@@ -1,9 +1,11 @@
-import { Component, Input, inject } from '@angular/core';
+/* eslint-disable @typescript-eslint/lines-between-class-members */
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import { InstitutionService } from '../../services/institution/institution.service';
-import { IInstitution } from '../../model/interfaces/i-institution';
-import { IPageable } from '../../model/interfaces/i-pageable';
-import { IPage } from '../../model/interfaces/i-page';
+import { type IInstitution } from '../../model/interfaces/i-institution';
+import { type IPageable } from '../../model/interfaces/i-pageable';
 import { ModalTemplateComponent } from '../modal-template/modal-template.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { CreateInstitutionModalComponent } from '../modals/create-institution-modal/create-institution-modal.component';
 
 @Component({
   selector: 'app-table-institution',
@@ -13,7 +15,7 @@ import { ModalTemplateComponent } from '../modal-template/modal-template.compone
   styleUrl: './table-institution.component.scss'
 })
 export class TableInstitutionComponent {
-
+  @ViewChild(ModalTemplateComponent) modal!: ModalTemplateComponent;
   // public data: any[] = [
   //   {
   //     id: 1,
@@ -33,22 +35,21 @@ export class TableInstitutionComponent {
   // ]
 
   // public data!: any[];
-  @Input() public data!: any[]
+  @Input() public data!: any[];
 
-  public pageable:IPageable<IInstitution> = {
+  public pageable: IPageable<IInstitution> = {
     page: 0,
     size: 10,
     sort: ['name'],
     totalElements: 0,
     totalPages: 0,
     content: []
-  }
-
+  };
 
   private readonly institutionService = inject(InstitutionService);
 
   public async ngOnInit (): Promise<void> {
-    this.loadTable();
+    await this.loadTable();
   }
 
   public async delete (institution: IInstitution): Promise<void> {
@@ -65,5 +66,8 @@ export class TableInstitutionComponent {
       sort: this.pageable.sort
     });
     this.data = this.pageable.content;
+  }
+  openModal (): void {
+    this.modal.openModal(CreateInstitutionModalComponent);
   }
 }

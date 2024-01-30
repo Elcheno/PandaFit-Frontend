@@ -1,43 +1,36 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Injectable, Type, ViewChild } from '@angular/core';
-import { DynamicModalDirective } from './dynamic-modal.directive';
-import { Modal, ModalOptions, modalPlacement } from 'flowbite';
-
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+import { type AfterViewInit, ChangeDetectorRef, Component, type Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Modal, type ModalOptions, type modalPlacement } from 'flowbite';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { TableInstitutionComponent } from '../table-institution/table-institution.component';
-import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-modal-template',
   standalone: true,
-  imports: [DynamicModalDirective],
+  imports: [],
   templateUrl: './modal-template.component.html',
-  styleUrl: './modal-template.component.scss',
+  styleUrl: './modal-template.component.scss'
 })
 export class ModalTemplateComponent implements AfterViewInit {
-
-  @ViewChild(DynamicModalDirective) dynamic!: DynamicModalDirective;
-  SidebarComponente: Type<any> = SidebarComponent;
+  @ViewChild('crudmodals') crudmodals!: any;
+  @ViewChild('modal', { read: ViewContainerRef }) viewContainerRef!: ViewContainerRef;
+  // SidebarComponente: Type<any> = SidebarComponent;
   // @ViewChild('crud-modal') crudModal: any;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor (private readonly changeDetectorRef: ChangeDetectorRef) { }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit (): void {
     // this.generateComponent();
     this.changeDetectorRef.detectChanges();
   }
 
-  generateComponent(component: Type<any>): void {
-    const viewContainerRef = this.dynamic.viewContainerRef;
-
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent<any>(component);
+  generateComponent (component: Type<any>): void {
+    this.viewContainerRef.clear();
+    const componentRef = this.viewContainerRef.createComponent<any>(component);
     componentRef.changeDetectorRef.detectChanges();
   }
 
-  public openModal(component: Type<any>): void {    
+  public openModal (component: Type<any>): void {
     this.generateComponent(component);
-    const $targetEl = document.getElementById('crud-modals');
-
     const options: ModalOptions = {
       placement: 'bottom-right' as modalPlacement,
       backdrop: 'dynamic',
@@ -51,7 +44,7 @@ export class ModalTemplateComponent implements AfterViewInit {
       },
       onToggle: () => {
         console.log('modal has been toggled');
-      },
+      }
     };
 
     // instance options object
@@ -59,12 +52,15 @@ export class ModalTemplateComponent implements AfterViewInit {
       id: 'modalEl',
       override: true
     };
-    const modal = new Modal($targetEl, options, instanceOptions);
+    const modal = new Modal(this.crudmodals.nativeElement as HTMLElement, options, instanceOptions);
     modal.show();
   }
 
-  public setComponent(component: Type<any>): void {
+  public setComponent (component: Type<any>): void {
     this.generateComponent(component);
   }
 
+  openTest (): void {
+    this.openModal(SidebarComponent);
+  }
 }

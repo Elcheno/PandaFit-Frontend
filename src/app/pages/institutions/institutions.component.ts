@@ -44,7 +44,4 @@ export class InstitutionsComponent {
     this.form.reset();
   }
 
-  open() {
-    this.modalS.openModal(SidebarComponent);
-  }
 }
