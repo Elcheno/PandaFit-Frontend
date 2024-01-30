@@ -1,13 +1,11 @@
-import { Component, inject, Input, Output, type OnInit, EventEmitter } from '@angular/core';
-import { UserService } from '../../../services/user/user.service';
+import { Component, Input, Output, type OnInit, EventEmitter } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
-import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [CdkMenuTrigger, CdkMenu, CdkMenuItem],
+  imports: [],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.scss'
 })
@@ -15,8 +13,6 @@ export class TableUsersComponent implements OnInit {
   @Input() public data!: any[];
 
   @Output() public onDelete = new EventEmitter<IUser>();
-
-  private readonly userService = inject(UserService);
 
   public pageable: IPageable<IUser> = {
     page: 0,
@@ -30,8 +26,11 @@ export class TableUsersComponent implements OnInit {
   public async ngOnInit (): Promise<void> {
   }
 
-  public delete (user: IUser): void {
+  public delete (user: IUser, i: any): void {
     if (user == null) return;
+    const element: HTMLElement | null = document.getElementById(i + 'Button');
+    if (element == null) return;
+    element.click();
     this.onDelete.emit(user);
   }
 }
