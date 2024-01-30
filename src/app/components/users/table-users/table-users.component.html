@@ -1,7 +1,7 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         @if (data && data.length > 0) {
-        <thead class="text-xs text-black uppercase bg-gray-50">
+        <thead class="text-xs text-white uppercase table-header">
             <tr>
                 <th scope="col" class="px-6 py-3">
                     Nombre
@@ -12,14 +12,40 @@
             </tr>
         </thead>
         <tbody>
-            @for (item of data; track item.id){
+            @for (item of data; track item.id; let index = $index){
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {{ item.email }}
                 </th>
                 <td class="px-6 py-4 text-right">
                     <!-- <button (click)="delete(item)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Borrar</button> -->
-                    
+
+                    <button [id]="index+'Button'" [attr.data-dropdown-toggle]="index"
+                        class="text-white hover:bg-gray-100 focus:outline-none font-medium rounded-lg text-sm px-1 py-1 text-center inline-flex items-center"
+                        type="button">
+                        <svg class="w-[28px] h-[28px] text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="3"
+                                d="M6 12h0m6 0h0m6 0h0" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div [id]="index"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 text-left"
+                            [attr.aria-labelledby]="index+'Button'">
+                            <li>
+                                <span 
+                                    class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Actualizar</span>
+                            </li>
+                            <li>
+                                <span (click)="delete(item)"
+                                    class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Eliminar</span>
+                            </li>
+                        </ul>
+                    </div>
+
                 </td>
             </tr>
             }

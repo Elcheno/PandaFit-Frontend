@@ -11,6 +11,7 @@ import { ITypeRole } from '../../model/type/i-type-role';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-users',
@@ -29,6 +30,7 @@ export class UsersComponent implements OnInit {
   public data: any[] = [];
 
   constructor () {
+    initFlowbite();
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       checkboxUser: [true],
