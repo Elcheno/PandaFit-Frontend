@@ -21,7 +21,7 @@ export class InstitutionsComponent {
 
   public data: any[] = [];
 
-  constructor (private readonly fb: FormBuilder, private readonly modalS: ModalService) {
+  constructor (private readonly fb: FormBuilder) {
     this.form = this.fb.group({
       name: ''
     });

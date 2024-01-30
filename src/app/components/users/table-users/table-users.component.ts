@@ -2,12 +2,11 @@ import { Component, inject, Input, Output, type OnInit, EventEmitter } from '@an
 import { UserService } from '../../../services/user/user.service';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
-import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [CdkMenuTrigger, CdkMenu, CdkMenuItem],
+  imports: [],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.scss'
 })
