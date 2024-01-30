@@ -1,5 +1,4 @@
-import { Component, inject, Input, Output, type OnInit, EventEmitter } from '@angular/core';
-import { UserService } from '../../../services/user/user.service';
+import { Component, Input, Output, type OnInit, EventEmitter } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
 
@@ -14,8 +13,7 @@ export class TableUsersComponent implements OnInit {
   @Input() public data!: any[];
 
   @Output() public onDelete = new EventEmitter<IUser>();
-
-  private readonly userService = inject(UserService);
+  @Output() public onUpdate = new EventEmitter<IUser>();
 
   public pageable: IPageable<IUser> = {
     page: 0,
@@ -29,8 +27,21 @@ export class TableUsersComponent implements OnInit {
   public async ngOnInit (): Promise<void> {
   }
 
-  public delete (user: IUser): void {
+  private closeModal (i: any): void {
+    const element: HTMLElement | null = document.getElementById(i + 'Button');
+    if (element == null) return;
+    element.click();
+  }
+
+  public delete (user: IUser, i: any): void {
     if (user == null) return;
+    this.closeModal(i);
     this.onDelete.emit(user);
+  }
+
+  public update (user: IUser, i: any): void {
+    if (user == null) return;
+    this.closeModal(i);
+    this.onUpdate.emit(user);
   }
 }

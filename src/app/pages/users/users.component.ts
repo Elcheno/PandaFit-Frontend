@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Component, type OnInit, inject, effect } from '@angular/core';
+import { Component, type OnInit, inject, ViewChild } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
 import { UserService } from '../../services/user/user.service';
@@ -12,15 +12,19 @@ import { InstitutionService } from '../../services/institution/institution.servi
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { initFlowbite } from 'flowbite';
+import { ModalTemplateComponent } from '../../components/modal-template/modal-template.component';
+import { UpdateUserComponent } from '../../components/modals/users/form-update-user/update-user-modal.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule],
+  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, ModalTemplateComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
+  @ViewChild(ModalTemplateComponent) modal!: ModalTemplateComponent;
+
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
   private readonly fb = inject(FormBuilder);
@@ -75,6 +79,10 @@ export class UsersComponent implements OnInit {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  public async update (user: IUser): Promise<void> {
+    this.modal.openModal(UpdateUserComponent);
   }
 
   public async search (searchValue: string): Promise<void> {
