@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
@@ -13,7 +14,6 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { UpdateUserComponent } from '../../components/modals/users/update-user-modal/update-user-modal.component';
 import { ModalService } from '../../services/modal/modal.service';
-import { type DialogRef } from '@angular/cdk/dialog';
 import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
 
 @Component({
@@ -32,7 +32,6 @@ export class UsersComponent implements OnInit {
   public form!: FormGroup;
   public institutionList!: IInstitution[];
   public data: any[] = [];
-  private modal!: DialogRef;
 
   constructor () {
     this.form = this.fb.group({
@@ -44,34 +43,28 @@ export class UsersComponent implements OnInit {
   }
 
   public async ngOnInit (): Promise<void> {
-    // this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
-    this.data = (await this.userService.getAllMock()).content;
+    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+    // this.data = (await this.userService.getAllMock()).content;
     this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
   }
 
   public async openModalCreateUser (): Promise<void> {
-    this.modal = await this.modalService.open(CreateUsersModalComponent, this.institutionList);
+    await this.modalService.open(CreateUsersModalComponent, this.institutionList);
   }
 
-  submit (): void {
-    if (this.form.invalid) return;
+  public async create (): Promise<void> {
+    (await this.modalService.open(CreateUsersModalComponent, this.institutionList)).closed.subscribe((user: IUser) => {
+      if (!user) return;
 
-    const newUser: IUser = {
-      email: this.form.value.email,
-      password: 'Example1&',
-      role: this.form.value.checkboxAdmin ? [ITypeRole.USER, ITypeRole.ADMIN] : [ITypeRole.USER],
-      institutionId: this.form.value.selectInstitution
-    };
-
-    this.userService.create(newUser)
-      .then((user: IUser) => {
-        console.log('User created');
-        this.data.push(user);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    this.form.reset();
+      this.userService.create(user)
+        .then((user: IUser) => {
+          console.log('User created');
+          this.data.push(user);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   }
 
   public async delete (user: IUser): Promise<void> {
@@ -86,10 +79,12 @@ export class UsersComponent implements OnInit {
   }
 
   public async update (user: IUser): Promise<void> {
-    this.modal = await this.modalService.open(UpdateUserComponent, user);
-    this.modal.closed.subscribe((res: any) => {
+    (await this.modalService.open(UpdateUserComponent, user)).closed.subscribe(async (res: IUser) => {
       if (!res) return;
-      this.data = this.data.map((item) => item.id === res.id ? res : item);
+      await this.userService.update(res)
+        .then((response) => {
+          this.data = this.data.map((item) => item.id === response.id ? response : item);
+        });
     });
   }
 

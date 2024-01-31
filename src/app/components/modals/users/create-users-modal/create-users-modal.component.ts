@@ -33,7 +33,7 @@ export class CreateUsersModalComponent {
   }
 
   public submit (): void {
-    if (this.form.invalid) return;
+    if (!this.form.valid) return;
 
     const newUser: IUser = {
       email: this.form.value.email,
