@@ -1,5 +1,4 @@
 import { Component, ViewChild, inject } from '@angular/core';
-import { ModalTemplateComponent } from '../../components/modal-template/modal-template.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SchoolyearService } from '../../services/schoolyear/schoolyear.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -15,7 +14,6 @@ import { SearchEntityComponent } from '../../components/search-entity/search-ent
 })
 export class SchoolYearComponent {
   public items: any[] = [1,2,3,4,5,6,7,8,9];
-  @ViewChild(ModalTemplateComponent) modal!: ModalTemplateComponent;
   public form!: FormGroup;
   private readonly shoolyearService = inject(SchoolyearService);
 

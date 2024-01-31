@@ -3,19 +3,16 @@ import { Component, Input, ViewChild, inject } from '@angular/core';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
-import { ModalTemplateComponent } from '../modal-template/modal-template.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CreateInstitutionModalComponent } from '../modals/create-institution-modal/create-institution-modal.component';
 
 @Component({
   selector: 'app-table-institution',
   standalone: true,
-  imports: [ModalTemplateComponent],
+  imports: [],
   templateUrl: './table-institution.component.html',
   styleUrl: './table-institution.component.scss'
 })
 export class TableInstitutionComponent {
-  @ViewChild(ModalTemplateComponent) modal!: ModalTemplateComponent;
   // public data: any[] = [
   //   {
   //     id: 1,
@@ -68,6 +65,6 @@ export class TableInstitutionComponent {
     this.data = this.pageable.content;
   }
   openModal (): void {
-    this.modal.openModal(CreateInstitutionModalComponent);
+    
   }
 }
