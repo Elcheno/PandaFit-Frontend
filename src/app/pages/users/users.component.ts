@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Component, type OnInit, inject, ViewChild } from '@angular/core';
+import { Component, type OnInit, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
 import { UserService } from '../../services/user/user.service';
@@ -11,14 +11,15 @@ import { ITypeRole } from '../../model/type/i-type-role';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
-import { UpdateUserComponent } from '../../components/modals/users/form-update-user/update-user-modal.component';
+import { UpdateUserComponent } from '../../components/modals/users/update-user-modal/update-user-modal.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { type DialogRef } from '@angular/cdk/dialog';
+import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule],
+  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, CreateUsersModalComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
@@ -46,6 +47,10 @@ export class UsersComponent implements OnInit {
     // this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
     this.data = (await this.userService.getAllMock()).content;
     this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
+  }
+
+  public async openModalCreateUser (): Promise<void> {
+    this.modal = await this.modalService.open(CreateUsersModalComponent, this.institutionList);
   }
 
   submit (): void {

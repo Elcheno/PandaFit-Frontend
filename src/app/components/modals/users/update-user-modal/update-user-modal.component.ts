@@ -4,6 +4,7 @@ import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type IUser } from '../../../../model/interfaces/i-user';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { ModalConfirmService } from '../../../../services/modal/modal-confirm.service';
 
 @Component({
   selector: 'app-update-user-modal',
@@ -14,6 +15,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 })
 export class UpdateUserComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly confirmService = inject(ModalConfirmService);
 
   public form!: FormGroup;
 
@@ -30,13 +32,22 @@ export class UpdateUserComponent {
     // console.log(this.dialogRef);
   }
 
-  public submit (): void {
+  public async submit (): Promise<void> {
     if (this.form.invalid) return;
-    const user: IUser = {
-      id: this.data.id,
-      email: this.form.value.email,
-      role: this.data.role
-    };
-    this.dialogRef.close(user);
+    (await this.confirmService.open('¿Estas seguro de actualizar este usuario?')).closed.subscribe((res: boolean) => {
+      if (!res) return;
+      const user: IUser = {
+        id: this.data.id,
+        email: this.form.value.email,
+        role: this.data.role,
+        password: this.data.password,
+        institutionId: this.data.institutionId
+      };
+      this.dialogRef.close(user);
+    });
+  }
+
+  public closeModal (): void {
+    this.dialogRef.close();
   }
 }

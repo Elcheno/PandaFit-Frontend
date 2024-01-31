@@ -1,8 +1,9 @@
-import { Component, Input, Output, type OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, type OnInit, EventEmitter, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
+import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 
 @Component({
   selector: 'app-table-users',
@@ -17,6 +18,8 @@ export class TableUsersComponent implements OnInit {
   @Output() public onDelete = new EventEmitter<IUser>();
   @Output() public onUpdate = new EventEmitter<IUser>();
 
+  private readonly confirmService = inject(ModalConfirmService);
+
   public pageable: IPageable<IUser> = {
     page: 0,
     size: 10,
@@ -29,9 +32,12 @@ export class TableUsersComponent implements OnInit {
   public async ngOnInit (): Promise<void> {
   }
 
-  public delete (user: IUser): void {
+  public async delete (user: IUser): Promise<void> {
     if (user == null) return;
-    this.onDelete.emit(user);
+    (await this.confirmService.open('Estas seguro de eliminar este usuario')).closed.subscribe((res: boolean) => {
+      if (!res) return;
+      this.onDelete.emit(user);
+    });
   }
 
   public async update (user: IUser): Promise<void> {

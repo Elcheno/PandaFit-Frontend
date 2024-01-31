@@ -6,7 +6,7 @@
         <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
         <!-- Modal toggle -->
-        <button type="button" data-modal-target="create-user-modal" data-modal-toggle="create-user-modal"
+        <button type="button" (click)="openModalCreateUser()"
             class="p-2.5 ms-2 w-20 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
             Crear
         </button>
@@ -62,7 +62,7 @@
                                 <select id="institutions-user-modal" formControlName="selectInstitution"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5 cursor-pointer">
                                     @for (institution of institutionList; track institution.id) {
-                                    <option value="{{ institution.id }}">{{ institution.name }}</option>
+                                        <option value="{{ institution.id }}">{{ institution.name }}</option>
                                     }
                                 </select>
                             </div>
@@ -83,6 +83,10 @@
         </div>
     </div>
 
-    <app-table-users [data]="data" (onDelete)="delete($event)" (onUpdate)="update($event)">
-    </app-table-users>
+    <app-table-users 
+        [data]="data" 
+        (onDelete)="delete($event)" 
+        (onUpdate)="update($event)"
+    ></app-table-users>
+
 </div>
