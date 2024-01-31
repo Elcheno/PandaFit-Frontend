@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type IUser } from '../../../../model/interfaces/i-user';
-import { type DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-update-user-modal',
@@ -12,27 +13,30 @@ import { type DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
   styleUrl: './update-user-modal.component.scss'
 })
 export class UpdateUserComponent {
-  @Inject(DIALOG_DATA) public data!: IUser;
-
   private readonly fb = inject(FormBuilder);
 
-  public dialogRef!: DialogRef<string>;
   public form!: FormGroup;
 
-  constructor () {
+  constructor (
+    public dialogRef: DialogRef<IUser>,
+    @Inject(DIALOG_DATA) public data: IUser
+  ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: [this.data.email, [Validators.required, Validators.email]]
     });
   }
 
   ngOnInit (): void {
-    setTimeout(() => {
-      console.log(this.dialogRef);
-    }, 1000);
+    // console.log(this.dialogRef);
   }
 
   public submit (): void {
     if (this.form.invalid) return;
-    console.log(this.form.value);
+    const user: IUser = {
+      id: this.data.id,
+      email: this.form.value.email,
+      role: this.data.role
+    };
+    this.dialogRef.close(user);
   }
 }

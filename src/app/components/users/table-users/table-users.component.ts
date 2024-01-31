@@ -1,13 +1,13 @@
-import { Component, Input, Output, type OnInit, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, type OnInit, EventEmitter } from '@angular/core';
+import { NgFor } from '@angular/common';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
-import { ModalService } from '../../../services/modal/modal.service';
-import { UpdateUserComponent } from '../../modals/users/form-update-user/update-user-modal.component';
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [],
+  imports: [CdkMenuTrigger, CdkMenu, CdkMenuItem, NgFor],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.scss'
 })
@@ -16,8 +16,6 @@ export class TableUsersComponent implements OnInit {
 
   @Output() public onDelete = new EventEmitter<IUser>();
   @Output() public onUpdate = new EventEmitter<IUser>();
-
-  private readonly modalService = inject(ModalService);
 
   public pageable: IPageable<IUser> = {
     page: 0,
@@ -38,7 +36,6 @@ export class TableUsersComponent implements OnInit {
 
   public async update (user: IUser): Promise<void> {
     if (user == null) return;
-    await this.modalService.open(UpdateUserComponent, user);
     this.onUpdate.emit(user);
   }
 }

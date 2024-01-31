@@ -12,6 +12,8 @@ import { InstitutionService } from '../../services/institution/institution.servi
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { UpdateUserComponent } from '../../components/modals/users/form-update-user/update-user-modal.component';
+import { ModalService } from '../../services/modal/modal.service';
+import { type DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-users',
@@ -21,14 +23,15 @@ import { UpdateUserComponent } from '../../components/modals/users/form-update-u
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
-
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
   private readonly fb = inject(FormBuilder);
+  private readonly modalService = inject(ModalService);
 
   public form!: FormGroup;
   public institutionList!: IInstitution[];
   public data: any[] = [];
+  private modal!: DialogRef;
 
   constructor () {
     this.form = this.fb.group({
@@ -78,7 +81,11 @@ export class UsersComponent implements OnInit {
   }
 
   public async update (user: IUser): Promise<void> {
-    
+    this.modal = await this.modalService.open(UpdateUserComponent, user);
+    this.modal.closed.subscribe((res: any) => {
+      if (!res) return;
+      this.data = this.data.map((item) => item.id === res.id ? res : item);
+    });
   }
 
   public async search (searchValue: string): Promise<void> {
