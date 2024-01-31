@@ -1,7 +1,6 @@
 import { Component, inject, ViewChild, type OnInit, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { initFlowbite } from 'flowbite';
 import { InstitutionService } from './services/institution/institution.service';
 import { JCCPageComponent } from './pages/jccpage/jccpage.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -19,7 +18,5 @@ export class AppComponent implements OnInit {
   private readonly institutionService = inject(InstitutionService);
   private readonly usersService = inject(UserService);
 
-  ngOnInit (): void {
-    initFlowbite();
-  }
+  ngOnInit (): void { }
 }

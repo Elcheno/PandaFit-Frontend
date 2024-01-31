@@ -11,19 +11,16 @@ import { ITypeRole } from '../../model/type/i-type-role';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
-import { initFlowbite } from 'flowbite';
-import { ModalTemplateComponent } from '../../components/modal-template/modal-template.component';
 import { UpdateUserComponent } from '../../components/modals/users/form-update-user/update-user-modal.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, ModalTemplateComponent],
+  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
-  @ViewChild(ModalTemplateComponent) modal!: ModalTemplateComponent;
 
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
@@ -34,7 +31,6 @@ export class UsersComponent implements OnInit {
   public data: any[] = [];
 
   constructor () {
-    initFlowbite();
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       checkboxUser: [true],
@@ -82,7 +78,7 @@ export class UsersComponent implements OnInit {
   }
 
   public async update (user: IUser): Promise<void> {
-    this.modal.openModal(UpdateUserComponent);
+    
   }
 
   public async search (searchValue: string): Promise<void> {

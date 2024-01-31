@@ -3,7 +3,6 @@ import { TableInstitutionComponent } from '../../components/table-institution/ta
 import { InstitutionService } from '../../services/institution/institution.service';
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { type IInstitution } from '../../model/interfaces/i-institution';
-import { ModalService } from '../../services/modal/modal.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 
 
