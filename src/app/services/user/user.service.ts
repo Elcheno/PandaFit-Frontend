@@ -161,6 +161,7 @@ export class UserService {
         roles: user.role.map(role => ITypeRole[role]),
         institutionId: user.institutionId
       };
+      console.log(data);
 
       this.http.post('http://localhost:8080/institution/users', data)
         .subscribe({
@@ -188,6 +189,29 @@ export class UserService {
         .subscribe({
           next: (res) => {
             resolve(res);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async update (data: IUser): Promise<any> {
+    return await new Promise<any>((resolve, reject) => {
+      console.log(data);
+      this.http.put('http://localhost:8080/institution/users', data)
+        .subscribe({
+          next: (res: any) => {
+            if (res != null) {
+              const userCreate: IUser = {
+                id: res.id,
+                email: res.email,
+                password: res.password,
+                role: res.role
+              };
+              resolve(userCreate);
+            }
           },
           error: (error) => {
             reject(error);
