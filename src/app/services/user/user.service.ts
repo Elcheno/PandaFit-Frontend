@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment as env } from '../../../environments/environment.development';
+import { type IPage } from '../../model/interfaces/i-page';
+import { type IPageable } from '../../model/interfaces/i-pageable';
+import { type IUser } from '../../model/interfaces/i-user';
+import { type IInstitution } from '../../model/interfaces/i-institution';
+import { ITypeRole } from '../../model/type/i-type-role';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +16,132 @@ export class UserService {
 
   public async getAllMock (): Promise<any> {
     return await new Promise((resolve, _reject) => {
-      resolve({ data: [] });
+      const response: IPageable<IUser> = {
+        page: 0,
+        size: 10,
+        sort: ['email'],
+        totalElements: 50,
+        totalPages: 5,
+        content: [
+          {
+            id: '1',
+            email: 'ruben@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '2',
+            email: 'miguel@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '3',
+            email: 'fer@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '4',
+            email: 'damian@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '5',
+            email: 'pedro@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '6',
+            email: 'jose@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '7',
+            email: 'manuel@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '8',
+            email: 'carlos@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '9',
+            email: 'pedri@example.com',
+            role: [ITypeRole.USER]
+          },
+          {
+            id: '10',
+            email: 'facundo@example.com',
+            role: [ITypeRole.USER]
+          }
+        ]
+      };
+      resolve(response);
     });
   }
 
-  public async getAll (): Promise<any> {
+  public async getAll (pageParams: IPage): Promise<IPageable<IUser>> {
+    return await new Promise<IPageable<IUser>>((resolve, reject) => {
+      const pageable: any = {
+        page: pageParams.page,
+        size: pageParams.size,
+        sort: pageParams.sort
+      };
+
+      this.http.get('http://localhost:8080/institution/users/page', { params: pageable })
+        .subscribe({
+          next: (res: any) => {
+            if (res === null) return;
+            const response: IPageable<IUser> = {
+              page: res['number'],
+              size: res['size'],
+              sort: pageParams.sort,
+              totalElements: res['totalElements'],
+              totalPages: res['totalPages'],
+              content: res['content']
+            };
+            console.log(response);
+            resolve(response);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async getAllByInstitution (pageParams: IPage, institution: IInstitution): Promise<IPageable<IInstitution>> {
+    return await new Promise<IPageable<IInstitution>>((resolve, reject) => {
+      if (institution == null) { reject(new Error('Institution not found')); }
+      const pageable: any = {
+        page: pageParams.page,
+        size: pageParams.size,
+        sort: pageParams.sort
+      };
+
+      this.http.get('http://localhost:8080/institution/' + institution.id + '/users/page', { params: pageable })
+        .subscribe({
+          next: (res: any) => {
+            const response: IPageable<IInstitution> = {
+              page: res['number'],
+              size: res['size'],
+              sort: pageParams.sort,
+              totalElements: res['totalElements'],
+              totalPages: res['totalPages'],
+              content: res['content']
+            };
+            console.log(response);
+            resolve(response);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.users + '/page')
+      this.http.get('http://localhost:8080/institution/users/' + id)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -28,12 +153,41 @@ export class UserService {
     });
   }
 
-  public async getById (id: string): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.users + id)
+  public async create (user: IUser): Promise<IUser> {
+    return await new Promise<IUser>((resolve, reject) => {
+      const data: any = {
+        email: user.email,
+        password: user.password,
+        roles: user.role.map(role => ITypeRole[role]),
+        institutionId: user.institutionId
+      };
+
+      this.http.post('http://localhost:8080/institution/users', data)
         .subscribe({
-          next: (data) => {
-            resolve(data);
+          next: (res: any) => {
+            if (res != null) {
+              const userCreate: IUser = {
+                id: res.id,
+                email: res.email,
+                password: res.password,
+                role: res.role
+              };
+              resolve(userCreate);
+            }
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  public async delete (data: IUser): Promise<any> {
+    return await new Promise<any>((resolve, reject) => {
+      this.http.delete('http://localhost:8080/institution/users', { body: data })
+        .subscribe({
+          next: (res) => {
+            resolve(res);
           },
           error: (error) => {
             reject(error);

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JCCPageComponent } from './jccpage.component';
+import { SchoolYearComponent } from './school-year.component';
 
-describe('JCCPageComponent', () => {
-  let component: JCCPageComponent;
-  let fixture: ComponentFixture<JCCPageComponent>;
+describe('SchoolYearComponent', () => {
+  let component: SchoolYearComponent;
+  let fixture: ComponentFixture<SchoolYearComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JCCPageComponent]
+      imports: [SchoolYearComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(JCCPageComponent);
+    fixture = TestBed.createComponent(SchoolYearComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
