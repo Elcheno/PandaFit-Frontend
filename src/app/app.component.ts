@@ -2,7 +2,6 @@ import { Component, inject, ViewChild, type OnInit, ViewContainerRef } from '@an
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { InstitutionService } from './services/institution/institution.service';
-import { JCCPageComponent } from './pages/jccpage/jccpage.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserService } from './services/user/user.service';
 
