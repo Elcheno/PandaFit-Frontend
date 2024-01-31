@@ -1,6 +1,8 @@
-import { Component, Input, Output, type OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, type OnInit, EventEmitter, inject } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
+import { ModalService } from '../../../services/modal/modal.service';
+import { UpdateUserComponent } from '../../modals/users/form-update-user/update-user-modal.component';
 
 @Component({
   selector: 'app-table-users',
@@ -15,6 +17,8 @@ export class TableUsersComponent implements OnInit {
   @Output() public onDelete = new EventEmitter<IUser>();
   @Output() public onUpdate = new EventEmitter<IUser>();
 
+  private readonly modalService = inject(ModalService);
+
   public pageable: IPageable<IUser> = {
     page: 0,
     size: 10,
@@ -27,21 +31,14 @@ export class TableUsersComponent implements OnInit {
   public async ngOnInit (): Promise<void> {
   }
 
-  private closeModal (i: any): void {
-    const element: HTMLElement | null = document.getElementById(i + 'Button');
-    if (element == null) return;
-    element.click();
-  }
-
-  public delete (user: IUser, i: any): void {
+  public delete (user: IUser): void {
     if (user == null) return;
-    this.closeModal(i);
     this.onDelete.emit(user);
   }
 
-  public update (user: IUser, i: any): void {
+  public async update (user: IUser): Promise<void> {
     if (user == null) return;
-    this.closeModal(i);
+    await this.modalService.open(UpdateUserComponent, user);
     this.onUpdate.emit(user);
   }
 }
