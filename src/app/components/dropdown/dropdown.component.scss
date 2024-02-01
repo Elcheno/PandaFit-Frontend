@@ -43,18 +43,19 @@
 
 .example-menu-item:hover {
   background-color: rgb(235, 235, 235);
+  cursor: pointer;
 }
 
-.example-menu-item:active {
-  background-color: rgb(170, 170, 170);
+.example-menu-item:disabled:hover {
+  background-color: none;
+  cursor: default;
+}
+
+.example-menu-item:disabled {
+  background-color: transparent;
+  color: lightgrey;
 }
 
 .example-standalone-item {
   background-color: rgb(239, 239, 239);
-}
-.example-standalone-item:hover {
-  background-color: rgb(208, 208, 208);
-}
-.example-standalone-item[aria-expanded='true'] {
-  background-color: rgb(208, 208, 208);
 }

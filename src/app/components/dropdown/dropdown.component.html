@@ -12,11 +12,12 @@
     }
     @for (row of rows; let index = $index; track index) {
     <button 
-      class="example-menu-item hover:bg-gray-100 cursor-pointer"
+      class="example-menu-item hover:bg-gray-200"
       [class]="dropdownStyle"
       (click)="onClickRow(row.fnc)" 
+      [disabled]="row.disabled"
       cdkMenuItem>
-     <div class="mr-1" [innerHTML]="row.icon"></div> {{ row.title }}
+        <div class="mr-1" [innerHTML]="row.icon"></div> {{ row.title }}
     </button>
     }
   </div>

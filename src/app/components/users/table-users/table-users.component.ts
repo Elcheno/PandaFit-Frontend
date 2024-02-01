@@ -34,12 +34,14 @@ export class TableUsersComponent implements OnInit {
   };
 
   public dropdownRows: IDropdownData<IUser> = {
+    header: 'Usuario',
     button: {
       icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
     },
     rows: [
       {
         title: 'Update',
+        disabled: true,
         fnc: (data: any) => {
           if (data == null) return;
           console.log(data);

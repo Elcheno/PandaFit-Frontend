@@ -14,4 +14,5 @@ export interface IDropdownRow <T> {
   title: string
   fnc?: (data?: T) => void | Promise<void>
   icon?: any
+  disabled?: boolean
 }
