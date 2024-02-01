@@ -4,6 +4,12 @@
 
 <ng-template #menu>
   <div class="example-menu" cdkMenu>
+    @if (dropdownData.header) {
+      <div class="m-2 text-black-secondary font-bold">
+        <p class="">{{ dropdownData.header }}</p>
+      </div>
+      <hr class="mb-2">
+    }
     @for (row of rows; let index = $index; track index) {
     <button 
       class="example-menu-item hover:bg-gray-100 cursor-pointer"

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/array-type */
 export interface IDropdownData <T> {
   button: IDropdownButton
+  header?: string
   rows: IDropdownRow<T>[]
 }
 

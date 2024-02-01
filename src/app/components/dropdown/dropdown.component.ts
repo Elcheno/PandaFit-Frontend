@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
@@ -23,11 +24,10 @@ export class DropdownComponent {
   private readonly sanitizer = inject(DomSanitizer);
 
   public rows: IDropdownRow<any>[];
-  public button: IDropdownButton;
+  public button!: IDropdownButton;
 
   constructor () {
     this.rows = [];
-    this.button = {};
   }
 
   ngOnInit (): void {
