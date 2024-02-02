@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
-import { Component, Input, ViewChild, inject } from '@angular/core';
-import { InstitutionService } from '../../services/institution/institution.service';
+import { Component, Input, inject } from '@angular/core';
 import { type IInstitution } from '../../model/interfaces/i-institution';
-import { type IPageable } from '../../model/interfaces/i-pageable';
-import { CreateInstitutionModalComponent } from '../modals/create-institution-modal/create-institution-modal.component';
+import { DropdownComponent } from '../dropdown/dropdown.component';
+import { type IDropdownData } from '../../model/interfaces/i-dropdown';
 
 @Component({
   selector: 'app-table-institution',
@@ -13,58 +12,30 @@ import { CreateInstitutionModalComponent } from '../modals/create-institution-mo
   styleUrl: './table-institution.component.scss'
 })
 export class TableInstitutionComponent {
-  // public data: any[] = [
-  //   {
-  //     id: 1,
-  //     name: 'test',
-  //     userList: []
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'test2',
-  //     userList: []
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'test3',
-  //     userList: []
-  //   }
-  // ]
+  @Input() public data!: IInstitution[];
 
-  // public data!: any[];
-  @Input() public data!: any[];
-
-  public pageable: IPageable<IInstitution> = {
-    page: 0,
-    size: 10,
-    sort: ['name'],
-    totalElements: 0,
-    totalPages: 0,
-    content: []
+  public dropdownData: IDropdownData<IInstitution> = {
+    header: 'Instituto',
+    button: {
+      icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>',
+    },
+    rows: [
+      {
+        title: 'Update',
+        icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z" /></svg>',
+        fnc: () => { }
+      },
+      {
+        title: 'Delete',
+        icon: '<svg class="w-6 h-6 inline mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" /></svg>',
+        fnc: () => { }
+      }
+    ]
   };
 
-  private readonly institutionService = inject(InstitutionService);
+  public async ngOnInit (): Promise<void> { }
 
-  public async ngOnInit (): Promise<void> {
-    await this.loadTable();
-  }
+  public async delete (institution: IInstitution): Promise<void> { }
 
-  public async delete (institution: IInstitution): Promise<void> {
-    await this.institutionService.delete(institution).then(() => {
-      this.data = this.data.filter((item) => item.id !== institution.id);
-      console.log('Institution deleted');
-    });
-  }
-
-  public async loadTable (): Promise<void> {
-    this.pageable = await this.institutionService.getAll({
-      page: this.pageable.page,
-      size: this.pageable.size,
-      sort: this.pageable.sort
-    });
-    this.data = this.pageable.content;
-  }
-  openModal (): void {
-    
-  }
+  public async update (): Promise<void> { }
 }

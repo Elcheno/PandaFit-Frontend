@@ -12,13 +12,13 @@
                 </tr>
             </thead>
             <tbody>
-                @for (item of data; track item.$index){
+                @for (item of data; track index; let index = $index) {
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ item.name }}
                     </th>
                     <td class="px-6 py-4 text-right">
-                        <button (click)="delete(item)" class="font-medium text-blue-600 hover:underline">Borrar</button>
+                        <button class="font-medium text-blue-600 hover:underline">Borrar</button>
                     </td>
                 </tr>
                 }
@@ -43,8 +43,8 @@
     </table>
 </div>
 <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-    <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
-        <span class="font-semibold text-gray-900">{{pageable.page * pageable.size - pageable.size + 1}} - {{pageable.page * pageable.size}}</span> de <span class="font-semibold text-gray-900">{{pageable.totalElements}}</span></span>
+<!--    <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
+        <span class="font-semibold text-gray-900">{{pageable.page * pageable.size - pageable.size + 1}} - {{pageable.page * pageable.size}}</span> de <span class="font-semibold text-gray-900">{{pageable.totalElements}}</span></span> -->
     <div class="float-end">
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
             <li>
@@ -59,4 +59,3 @@
         </ul>
     </div>
 </nav>
-<button (click)="openModal()">CLICK</button>
