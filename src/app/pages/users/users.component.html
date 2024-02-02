@@ -5,10 +5,7 @@
         <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
         <!-- Modal component create user -->
-        <button type="button" (click)="create()"
-            class="p-2.5 ms-2 w-20 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
-            Crear
-        </button>
+        <buttonComp [text]="'Crear'" (click)="create()"></buttonComp>
     </div>
 
     <!-- Table users component -->

@@ -3,6 +3,8 @@ import { type Routes } from '@angular/router';
 import { InstitutionsComponent } from './pages/institutions/institutions.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
+import { SchoolYearComponent } from './pages/school-year/school-year.component';
+
 
 export const routes: Routes = [
   {
@@ -24,6 +26,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: ErrorComponent
+    component: ErrorComponent,
+    pathMatch: 'full'
   }
 ];
