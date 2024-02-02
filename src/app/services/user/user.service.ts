@@ -7,6 +7,7 @@ import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +88,7 @@ export class UserService {
         sort: pageParams.sort
       };
 
-      this.http.get('http://localhost:8080/institution/users/page', { params: pageable })
+      this.http.get(environment.api.url + environment.api.institution + environment.api.users + '/page', { params: pageable })
         .subscribe({
           next: (res: any) => {
             if (res === null) return;
@@ -118,7 +119,7 @@ export class UserService {
         sort: pageParams.sort
       };
 
-      this.http.get('http://localhost:8080/institution/' + institution.id + '/users/page', { params: pageable })
+      this.http.get(environment.api.url + environment.api.institution + '/' + institution.id + environment.api.users + '/page', { params: pageable })
         .subscribe({
           next: (res: any) => {
             const response: IPageable<IInstitution> = {
@@ -141,7 +142,7 @@ export class UserService {
 
   public async getById (id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.get('http://localhost:8080/institution/users/' + id)
+      this.http.get(environment.api.url + environment.api.institution + environment.api.users + '/' + id)
         .subscribe({
           next: (data) => {
             resolve(data);
@@ -163,7 +164,7 @@ export class UserService {
       };
       console.log(data);
 
-      this.http.post('http://localhost:8080/institution/users', data)
+      this.http.post(environment.api.url + environment.api.institution + environment.api.users, data)
         .subscribe({
           next: (res: any) => {
             if (res != null) {
@@ -185,7 +186,7 @@ export class UserService {
 
   public async delete (data: IUser): Promise<any> {
     return await new Promise<any>((resolve, reject) => {
-      this.http.delete('http://localhost:8080/institution/users', { body: data })
+      this.http.delete(environment.api.url + environment.api.institution + environment.api.users, { body: data })
         .subscribe({
           next: (res) => {
             resolve(res);
@@ -200,7 +201,7 @@ export class UserService {
   public async update (data: IUser): Promise<any> {
     return await new Promise<any>((resolve, reject) => {
       console.log(data);
-      this.http.put('http://localhost:8080/institution/users', data)
+      this.http.put(environment.api.url + environment.api.institution + environment.api.users, data)
         .subscribe({
           next: (res: any) => {
             if (res != null) {
