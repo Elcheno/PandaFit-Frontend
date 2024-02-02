@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment as env } from '../../../environments/environment.development';
 import { type IPage } from '../../model/interfaces/i-page';
 import { type IInstitution } from '../../model/interfaces/i-institution';
+import { ISchoolYear } from '../../model/interfaces/i-school-year';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,21 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 export class SchoolyearService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<any> {
+  public async getAllMock (): Promise<ISchoolYear[]> {
     return await new Promise((resolve, _reject) => {
-      resolve({ data: [] });
+      const data: ISchoolYear[] = [
+        {
+          id: '1',
+          name: '1A',
+          institutionId: '1'
+        },
+        {
+          id: '2',
+          name: '1B',
+          institutionId: '1'
+        }
+      ]
+      resolve(data);
     });
   }
 

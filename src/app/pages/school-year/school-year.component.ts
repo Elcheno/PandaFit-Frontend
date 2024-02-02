@@ -4,6 +4,9 @@ import { SchoolyearService } from '../../services/schoolyear/schoolyear.service'
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
+import { IPage } from '../../model/interfaces/i-page';
+import { IInstitution } from '../../model/interfaces/i-institution';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-school-year',
@@ -16,6 +19,9 @@ export class SchoolYearComponent {
   public items: any[] = [1,2,3,4,5,6,7,8,9];
   public form!: FormGroup;
   private readonly shoolyearService = inject(SchoolyearService);
+  private readonly modalService = inject(ModalService);
+
+  public data: ISchoolYear[] = [];
 
   constructor (private readonly fb: FormBuilder) {
     this.form = this.fb.group({
@@ -32,9 +38,10 @@ export class SchoolYearComponent {
     content: []
   };
 
-  // public async ngOnInit (): Promise<void> {
-  //   await this.loadTable();
-  // }
+  public async ngOnInit (): Promise<void> {
+    // await this.loadTable();
+    await this.getMock();
+  }
 
   // public async delete (institution: IInstitution): Promise<void> {
   //   await this.institutionService.delete(institution).then(() => {
@@ -43,15 +50,19 @@ export class SchoolYearComponent {
   //   });
   // }
 
-  // public async loadTable (): Promise<void> {
-  //   this.pageable = await this.institutionService.getAll({
-  //     page: this.pageable.page,
-  //     size: this.pageable.size,
-  //     sort: this.pageable.sort
-  //   });
-  //   this.data = this.pageable.content;
-  // }
-  // openModal (): void {
-  //   this.modal.openModal(CreateInstitutionModalComponent);
-  // }
+  public async loadTable (): Promise<void> {
+    this.pageable = await this.shoolyearService.getAllByInstitution({
+      page: this.pageable.page,
+      size: this.pageable.size,
+      sort: this.pageable.sort
+    } as IPage, {} as IInstitution);
+    this.data = this.pageable.content;
+  }
+  public async create (): Promise<void> {
+    // this.modalService.open(CreateSchoolYearModalComponent);
+  }
+
+  public async getMock (): Promise<void> {
+    this.data = await this.shoolyearService.getAllMock();
+  }
 }

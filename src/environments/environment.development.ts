@@ -3,7 +3,7 @@ export const environment = {
   api: {
     url: 'http://localhost:8080/',
     institutions: 'institution',
-    users: 'institution/user',
+    users: '/user',
     schoolyear: 'institution/school-year'
   }
 };
