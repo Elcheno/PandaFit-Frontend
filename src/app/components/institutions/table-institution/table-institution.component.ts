@@ -5,11 +5,12 @@ import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { Router } from '@angular/router';
+import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 
 @Component({
   selector: 'app-table-institution',
   standalone: true,
-  imports: [DropdownComponent],
+  imports: [DropdownComponent, LoaderSpinnerComponent],
   templateUrl: './table-institution.component.html',
   styleUrl: './table-institution.component.scss'
 })

@@ -14,21 +14,23 @@ export class InstitutionService {
 
   public async getAllMock (): Promise<IInstitution[]> {
     return await new Promise((resolve, _reject) => {
-      const data: IInstitution[] = [
-        {
-          id: '1',
-          name: 'Institution 1',
-        },
-        {
-          id: '2',
-          name: 'Institution 2',
-        },
-        {
-          id: '3',
-          name: 'Institution 3',
-        }
-      ];
-      resolve(data);
+      setTimeout(() => {
+        const data: IInstitution[] = [
+          {
+            id: '1',
+            name: 'Institution 1',
+          },
+          {
+            id: '2',
+            name: 'Institution 2',
+          },
+          {
+            id: '3',
+            name: 'Institution 3',
+          }
+        ];
+        resolve(data);
+      }, 1000);
     });
   }
 
