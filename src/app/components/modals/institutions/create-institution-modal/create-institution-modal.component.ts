@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TableInstitutionComponent } from '../../../table-institution/table-institution.component';
+import { TableInstitutionComponent } from '../../../institutions/table-institution/table-institution.component';
 import { IInstitution } from '../../../../model/interfaces/i-institution';
 import { DialogRef } from '@angular/cdk/dialog';
 
@@ -13,7 +13,6 @@ import { DialogRef } from '@angular/cdk/dialog';
 })
 export class CreateInstitutionModalComponent {
   public form!: FormGroup;
-  public data: any[] = [];
   private readonly fb = inject(FormBuilder);
 
   constructor (

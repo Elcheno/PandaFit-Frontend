@@ -28,9 +28,7 @@ export class UpdateUserComponent {
     });
   }
 
-  ngOnInit (): void {
-    // console.log(this.dialogRef);
-  }
+  ngOnInit (): void { }
 
   public async submit (): Promise<void> {
     if (this.form.invalid) return;

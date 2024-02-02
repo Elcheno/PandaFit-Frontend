@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { TableInstitutionComponent } from '../../components/table-institution/table-institution.component';
+import { TableInstitutionComponent } from '../../components/institutions/table-institution/table-institution.component';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { CreateInstitutionModalComponent } from '../../components/modals/institutions/create-institution-modal/create-institution-modal.component';
+import { UpdateInstitutionsModalComponent } from '../../components/modals/institutions/update-institutions-modal/update-institutions-modal.component';
 
 @Component({
   selector: 'app-institutions',
@@ -39,5 +40,21 @@ export class InstitutionsComponent {
           console.log(error);
         });
     }); 
+  }
+
+  public async update (institution: IInstitution): Promise<void> {
+    if (!institution) return;
+    (await this.modalService.open(UpdateInstitutionsModalComponent, institution)).closed.subscribe((res: IInstitution) => {
+      if (!res) return;
+      this.institutionService.update(res)
+        .then((response) => {
+          if (!response) return;
+          this.data = this.data.map((item) => item.id === response.id ? response : item);
+        });
+    });
+  }
+
+  public async delete (institution: IInstitution): Promise<void> {
+    if (!institution) return;
   }
 }

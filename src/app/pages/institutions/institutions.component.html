@@ -13,5 +13,9 @@
     </div>
 
     <!-- Table Institutions Component -->
-    <app-table-institution [data]="data"></app-table-institution>
+    <app-table-institution 
+        [data]="data"
+        (onDelete)="delete($event)"
+        (onUpdate)="update($event)"
+    ></app-table-institution>
 </div>
