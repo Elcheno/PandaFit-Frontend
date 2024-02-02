@@ -1,0 +1,61 @@
+.example-menu {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: 280px;
+  background-color: rgb(253, 253, 253);
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #e5e7eb;
+}
+
+.example-standalone-trigger {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+
+  user-select: none;
+  line-height: 36px;
+  padding: 0 6px;
+
+  display: flex;
+  align-items: center;
+}
+
+.example-menu-item {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+
+  user-select: none;
+  line-height: 36px;
+  padding: 4px 12px;
+
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 15px;
+  transition: background-color .15s cubic-bezier(.4,0,.2,1);
+}
+
+.example-menu-item:hover {
+  background-color: rgb(235, 235, 235);
+  cursor: pointer;
+}
+
+.example-menu-item:disabled:hover {
+  background-color: none;
+  cursor: default;
+}
+
+.example-menu-item:disabled {
+  background-color: transparent;
+  color: lightgrey;
+}
+
+.example-standalone-item {
+  background-color: rgb(239, 239, 239);
+}
