@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
@@ -33,6 +34,14 @@ export class UsersComponent implements OnInit {
   public institutionList!: IInstitution[];
   public data: any[] = [];
 
+  public usuario: IUser = {
+    id: '',
+    email: '',
+    password: '',
+    role: [],
+    institutionId: ''
+  };
+
   constructor () {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -42,17 +51,17 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  public async ngOnInit (): Promise<void> {
-    this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
-    // this.data = (await this.userService.getAllMock()).content;
+  public async ngOnInit (): Promise <void> {
+    // this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
+    this.data = (await this.userService.getAllMock()).content;
     this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
   }
 
-  public async openModalCreateUser (): Promise<void> {
+  public async openModalCreateUser (): Promise < void> {
     await this.modalService.open(CreateUsersModalComponent, this.institutionList);
   }
 
-  public async create (): Promise<void> {
+  public async create (): Promise <void> {
     (await this.modalService.open(CreateUsersModalComponent, this.institutionList)).closed.subscribe((user: IUser) => {
       if (!user) return;
 
@@ -67,7 +76,7 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  public async delete (user: IUser): Promise<void> {
+  public async delete (user: IUser): Promise < void> {
     await this.userService.delete(user)
       .then(() => {
         console.log('User deleted');
@@ -78,7 +87,7 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  public async update (user: IUser): Promise<void> {
+  public async update (user: IUser): Promise < void> {
     (await this.modalService.open(UpdateUserComponent, user)).closed.subscribe(async (res: IUser) => {
       if (!res) return;
       await this.userService.update(res)
@@ -88,7 +97,7 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  public async search (searchValue: string): Promise<void> {
+  public async search (searchValue: string): Promise < void> {
     return await new Promise((resolve, _reject) => {
       console.log(searchValue);
       resolve();
