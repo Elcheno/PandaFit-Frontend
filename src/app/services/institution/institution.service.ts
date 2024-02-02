@@ -12,23 +12,30 @@ import { type IPage } from '../../model/interfaces/i-page';
 export class InstitutionService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<IInstitution[]> {
+  public async getAllMock (): Promise<IPageable<IInstitution>> {
     return await new Promise((resolve, _reject) => {
       setTimeout(() => {
-        const data: IInstitution[] = [
-          {
-            id: '1',
-            name: 'Institution 1',
-          },
-          {
-            id: '2',
-            name: 'Institution 2',
-          },
-          {
-            id: '3',
-            name: 'Institution 3',
-          }
-        ];
+        const data: IPageable<IInstitution> = {
+          page: 0,
+          size: 10,
+          sort: ['name'],
+          totalElements: 3,
+          totalPages: 1,
+          content: [
+            {
+              id: '1',
+              name: 'Institution 1',
+            },
+            {
+              id: '2',
+              name: 'Institution 2',
+            },
+            {
+              id: '3',
+              name: 'Institution 3',
+            }
+          ]
+        };
         resolve(data);
       }, 1000);
     });

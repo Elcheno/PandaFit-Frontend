@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { type IPage } from '../../model/interfaces/i-page';
@@ -17,66 +15,68 @@ export class UserService {
 
   public async getAllMock (): Promise<any> {
     return await new Promise((resolve, _reject) => {
-      const response: IPageable<IUser> = {
-        page: 0,
-        size: 10,
-        sort: ['email'],
-        totalElements: 50,
-        totalPages: 5,
-        content: [
-          {
-            id: '1',
-            email: 'ruben@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '2',
-            email: 'miguel@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '3',
-            email: 'fer@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '4',
-            email: 'damian@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '5',
-            email: 'pedro@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '6',
-            email: 'jose@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '7',
-            email: 'manuel@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '8',
-            email: 'carlos@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '9',
-            email: 'pedri@example.com',
-            role: [ITypeRole.USER]
-          },
-          {
-            id: '10',
-            email: 'facundo@example.com',
-            role: [ITypeRole.USER]
-          }
-        ]
-      };
-      resolve(response);
+      setTimeout(() => {
+        const response: IPageable<IUser> = {
+          page: 0,
+          size: 10,
+          sort: ['email'],
+          totalElements: 50,
+          totalPages: 5,
+          content: [
+            {
+              id: '1',
+              email: 'ruben@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '2',
+              email: 'miguel@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '3',
+              email: 'fer@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '4',
+              email: 'damian@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '5',
+              email: 'pedro@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '6',
+              email: 'jose@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '7',
+              email: 'manuel@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '8',
+              email: 'carlos@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '9',
+              email: 'pedri@example.com',
+              role: [ITypeRole.USER]
+            },
+            {
+              id: '10',
+              email: 'facundo@example.com',
+              role: [ITypeRole.USER]
+            }
+          ]
+        };
+        resolve(response);
+      }, 1000);
     });
   }
 

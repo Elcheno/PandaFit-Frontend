@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { type IInstitution } from '../../../model/interfaces/i-institution';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
@@ -6,6 +5,7 @@ import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { Router } from '@angular/router';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
+import { IPageable } from '../../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-table-institution',
@@ -15,7 +15,7 @@ import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.comp
   styleUrl: './table-institution.component.scss'
 })
 export class TableInstitutionComponent {
-  @Input() public data!: IInstitution[];
+  @Input() public data!: IPageable<IInstitution>;
 
   @Output() public onDelete = new EventEmitter<IInstitution>();
   @Output() public onUpdate = new EventEmitter<IInstitution>(); 
@@ -57,6 +57,4 @@ export class TableInstitutionComponent {
       }
     ]
   };
-
-  public async ngOnInit (): Promise<void> { }
 }

@@ -1,23 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/array-type */
-import { Component, Input, Output, type OnInit, EventEmitter, inject } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, Input, Output, EventEmitter, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
-import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
+import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [CdkMenuTrigger, CdkMenu, CdkMenuItem, NgFor, DropdownComponent],
+  imports: [DropdownComponent, LoaderSpinnerComponent],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.scss'
 })
-export class TableUsersComponent implements OnInit {
-  @Input() public data!: any[];
+export class TableUsersComponent {
+  @Input() public data!: IPageable<IUser>;
 
   @Output() public onDelete = new EventEmitter<IUser>();
   @Output() public onUpdate = new EventEmitter<IUser>();
@@ -62,7 +59,4 @@ export class TableUsersComponent implements OnInit {
       }
     ]
   };
-
-  public async ngOnInit (): Promise<void> {
-  }
 }

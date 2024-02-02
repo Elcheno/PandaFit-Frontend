@@ -6,6 +6,7 @@ import { SearchEntityComponent } from '../../components/search-entity/search-ent
 import { ModalService } from '../../services/modal/modal.service';
 import { CreateInstitutionModalComponent } from '../../components/modals/institutions/create-institution-modal/create-institution-modal.component';
 import { UpdateInstitutionsModalComponent } from '../../components/modals/institutions/update-institutions-modal/update-institutions-modal.component';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-institutions',
@@ -18,7 +19,7 @@ export class InstitutionsComponent {
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
 
-  public data: IInstitution[] = [];
+  public data!: IPageable<IInstitution>;
 
   public async ngOnInit (): Promise<void> {
     this.data = await this.institutionService.getAllMock();
@@ -34,7 +35,7 @@ export class InstitutionsComponent {
       this.institutionService.create(institution)
         .then((res) => {
           if (!res) return;
-          this.data.push(res);
+          this.data.content.push(res);
         })
         .catch((error) => {
           console.log(error);
@@ -49,7 +50,7 @@ export class InstitutionsComponent {
       this.institutionService.update(res)
         .then((response) => {
           if (!response) return;
-          this.data = this.data.map((item) => item.id === response.id ? response : item);
+          this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
         });
     });
   }
