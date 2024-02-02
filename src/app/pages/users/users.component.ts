@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/array-type */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Component, type OnInit, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
@@ -17,6 +11,7 @@ import { UpdateUserComponent } from '../../components/modals/users/update-user-m
 import { ModalService } from '../../services/modal/modal.service';
 import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
 import { ButtonComponent } from '../../components/button/button.component';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-users',
@@ -32,16 +27,8 @@ export class UsersComponent implements OnInit {
   private readonly modalService = inject(ModalService);
 
   public form!: FormGroup;
-  public institutionList!: IInstitution[];
-  public data: any[] = [];
-
-  public usuario: IUser = {
-    id: '',
-    email: '',
-    password: '',
-    role: [],
-    institutionId: ''
-  };
+  public institutionList!: IPageable<IInstitution>;
+  public data!: IPageable<IUser>;
 
   constructor () {
     this.form = this.fb.group({
@@ -53,9 +40,25 @@ export class UsersComponent implements OnInit {
   }
 
   public async ngOnInit (): Promise <void> {
+    this.data = (await this.userService.getAllMock());
+    // this.institutionList = (await this.institutionService.getAllMock());
     // this.data = (await this.userService.getAll({ page: 0, size: 10, sort: ['email'] })).content;
-    this.data = (await this.userService.getAllMock()).content;
-    this.institutionList = (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })).content;
+    (await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
+      .then((res: IPageable<IInstitution>) => {
+        if (res === null) return;
+        this.institutionList = res;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.institutionList = {
+          page: 0,
+          size: 10,
+          sort: ['name'],
+          totalElements: 0,
+          totalPages: 0,
+          content: []
+        };
+      }));
   }
 
   public async openModalCreateUser (): Promise < void> {
@@ -63,13 +66,13 @@ export class UsersComponent implements OnInit {
   }
 
   public async create (): Promise <void> {
-    (await this.modalService.open(CreateUsersModalComponent, this.institutionList)).closed.subscribe((user: IUser) => {
+    (await this.modalService.open(CreateUsersModalComponent, this.institutionList.content)).closed.subscribe((user: IUser) => {
       if (!user) return;
 
       this.userService.create(user)
         .then((user: IUser) => {
           console.log('User created');
-          this.data.push(user);
+          this.data.content.push(user);
         })
         .catch((error) => {
           console.log(error);
@@ -81,7 +84,7 @@ export class UsersComponent implements OnInit {
     await this.userService.delete(user)
       .then(() => {
         console.log('User deleted');
-        this.data = this.data.filter((item) => item.id !== user.id);
+        this.data.content = this.data.content.filter((item) => item.id !== user.id);
       })
       .catch((error) => {
         console.log(error);
@@ -93,7 +96,7 @@ export class UsersComponent implements OnInit {
       if (!res) return;
       await this.userService.update(res)
         .then((response) => {
-          this.data = this.data.map((item) => item.id === response.id ? response : item);
+          this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
         });
     });
   }
