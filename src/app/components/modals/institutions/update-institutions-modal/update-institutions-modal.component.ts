@@ -2,6 +2,7 @@ import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IInstitution } from '../../../../model/interfaces/i-institution';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { ModalConfirmService } from '../../../../services/modal/modal-confirm.service';
 
 @Component({
   selector: 'app-update-institutions-modal',
@@ -11,8 +12,10 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
   styleUrl: './update-institutions-modal.component.scss'
 })
 export class UpdateInstitutionsModalComponent {
-  public form!: FormGroup;
   private readonly fb = inject(FormBuilder);
+  private readonly confirmService = inject(ModalConfirmService);
+
+  public form!: FormGroup;
 
   constructor (
     public dialogRef: DialogRef<IInstitution>,
@@ -25,11 +28,14 @@ export class UpdateInstitutionsModalComponent {
 
   public async submit (): Promise<void> {
     if (this.form.invalid || !this.form.dirty) return;
-    const newInstitution: IInstitution = {
-      ...this.data,
-      name: this.form.value.name
-    };
-    this.dialogRef.close(newInstitution);
+    (await this.confirmService.open('¿Estas seguro de actualizar este instituto?')).closed.subscribe((res: boolean) => {
+      if (!res) return;
+      const newInstitution: IInstitution = {
+        ...this.data,
+        name: this.form.value.name
+      };
+      this.dialogRef.close(newInstitution);
+    });
   }
 
   public closeModal (): void {
