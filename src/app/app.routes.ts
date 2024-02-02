@@ -2,21 +2,20 @@
 import { type Routes } from '@angular/router';
 import { InstitutionsComponent } from './pages/institutions/institutions.component';
 import { UsersComponent } from './pages/users/users.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 export const routes: Routes = [
   {
     path: 'institutions',
     component: InstitutionsComponent,
-    children: [
-      {
-        path: 'schoolyear',
-        loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
-      }
-    ]
   },
   {
     path: 'users',
     component: UsersComponent
+  },
+  {
+    path: 'institutions/schoolyear',
+    loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
   },
   {
     path: '',
@@ -25,6 +24,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: InstitutionsComponent
+    component: ErrorComponent
   }
 ];
