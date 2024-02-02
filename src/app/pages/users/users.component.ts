@@ -16,11 +16,12 @@ import { SearchEntityComponent } from '../../components/search-entity/search-ent
 import { UpdateUserComponent } from '../../components/modals/users/update-user-modal/update-user-modal.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
+import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, CreateUsersModalComponent],
+  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, ButtonComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })

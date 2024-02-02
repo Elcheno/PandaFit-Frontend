@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-button',
+  selector: 'buttonComp',
   standalone: true,
   imports: [],
   templateUrl: './button.component.html',
   styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
-
+  @Input() public text!: string;
+  @Input() public buttonStyle!: string;
+  @Input() public buttonType!: string;
 }
