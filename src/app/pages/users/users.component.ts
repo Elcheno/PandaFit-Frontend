@@ -10,7 +10,7 @@ import { ModalService } from '../../services/modal/modal.service';
 import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { IPage } from '../../model/interfaces/i-page';
 
 @Component({
@@ -21,6 +21,8 @@ import { IPage } from '../../model/interfaces/i-page';
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
+  @ViewChild(TableUsersComponent) table!: TableUsersComponent;
+
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
   private readonly fb = inject(FormBuilder);
@@ -94,6 +96,7 @@ export class UsersComponent implements OnInit {
       .then((res: IPageable<IUser>) => {
         if (!res) return;
         this.data = res;
+        this.table.toggleTableLoader();
       }
     );
 

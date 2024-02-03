@@ -13,16 +13,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <div #tableLoaderPage id="tableLoaderPage" class="absolute inset-x-0 bottom-0 h-full bg-black bg-opacity-30 flex justify-center hidden"><app-loader-spinner class="flex items-center"></app-loader-spinner></div>
                     @for (item of data.content; track index; let index = $index) {
-                    <tr class="bg-white border-b hover:bg-gray-50">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ item.email }}
-                        </th>
-                        <td class="px-6 py-4 text-right flex justify-end">
-                            <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
-                                [dropdownStyle]="'text-black-primary'"></app-dropdown>
-                        </td>
-                    </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ item.email }}
+                            </th>
+                            <td class="px-6 py-4 text-right flex justify-end">
+                                <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
+                                    [dropdownStyle]="'text-black-primary'"></app-dropdown>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             } @else {
@@ -69,7 +70,7 @@
     <div class="float-end">
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
             <li>
-                <button (click)="previousPage()" [disabled]="this.data.page === 0"
+                <button (click)="previousPage()" [disabled]="this.data ? this.data.page === 0 : true"
                     class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg nav-button">Previous</button>
             </li>
             <li>
@@ -77,7 +78,7 @@
                     class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">{{ this.data ? this.data.page + 1 : 0}}</span>
             </li>
             <li>
-                <button (click)="nextPage()" [disabled]="(this.data.page + 1) === this.data.totalPages"
+                <button (click)="nextPage()" [disabled]="this.data ? (this.data.page + 1) === this.data.totalPages : true"
                     class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg nav-button">Next</button>
             </li>
         </ul>

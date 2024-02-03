@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ElementRef } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
@@ -15,6 +15,8 @@ import { IPage } from '../../../model/interfaces/i-page';
   styleUrl: './table-users.component.scss'
 })
 export class TableUsersComponent {
+  @ViewChild('tableLoaderPage') public tableLoader!: any;
+
   @Input() public data!: IPageable<IUser>;
 
   @Output() public onDelete = new EventEmitter<IUser>();
@@ -54,6 +56,7 @@ export class TableUsersComponent {
 
   public nextPage (): void { 
     if ((this.data.page + 1) > this.data.totalPages) return;
+    this.toggleTableLoader();
     const page: IPage = {  
       page: this.data.page + 1,
       size: this.data.size,
@@ -64,8 +67,8 @@ export class TableUsersComponent {
   }
 
   public previousPage (): void {
-    console.log(this.data);
     if (this.data.page === 0) return;
+    this.toggleTableLoader();
     const page: IPage = {  
       page: this.data.page - 1,
       size: this.data.size,
@@ -73,5 +76,9 @@ export class TableUsersComponent {
     };
 
     this.onChangePage.emit(page);
+  }
+
+  public toggleTableLoader (): void {
+    this.tableLoader.nativeElement.classList.toggle('hidden');
   }
 }
