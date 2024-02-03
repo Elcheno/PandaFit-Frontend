@@ -13,69 +13,132 @@ import { environment } from '../../../environments/environment.development';
 export class UserService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<any> {
+  public async getAllMock (page: number): Promise<any> {
     return await new Promise((resolve, _reject) => {
       setTimeout(() => {
-        const response: IPageable<IUser> = {
-          page: 0,
-          size: 10,
-          sort: ['email'],
-          totalElements: 50,
-          totalPages: 5,
-          content: [
-            {
-              id: '1',
-              email: 'ruben@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '2',
-              email: 'miguel@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '3',
-              email: 'fer@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '4',
-              email: 'damian@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '5',
-              email: 'pedro@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '6',
-              email: 'jose@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '7',
-              email: 'manuel@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '8',
-              email: 'carlos@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '9',
-              email: 'pedri@example.com',
-              role: [ITypeRole.USER]
-            },
-            {
-              id: '10',
-              email: 'facundo@example.com',
-              role: [ITypeRole.USER]
-            }
-          ]
-        };
-        resolve(response);
+        if (page === 0) {
+          const response: IPageable<IUser> = {
+            page: 0,
+            size: 10,
+            sort: ['email'],
+            totalElements: 20,
+            totalPages: 2,
+            content: [
+              {
+                id: '1',
+                email: 'ruben@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '2',
+                email: 'miguel@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '3',
+                email: 'fer@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '4',
+                email: 'damian@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '5',
+                email: 'pedro@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '6',
+                email: 'jose@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '7',
+                email: 'manuel@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '8',
+                email: 'carlos@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '9',
+                email: 'pedri@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '10',
+                email: 'facundo@example.com',
+                role: [ITypeRole.USER]
+              }
+            ]
+          };
+          resolve(response);
+        } else {
+          const response: IPageable<IUser> = {
+            page: 1,
+            size: 10,
+            sort: ['email'],
+            totalElements: 20,
+            totalPages: 2,
+            content: [
+              {
+                id: '11',
+                email: 'manolo@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '12',
+                email: 'firmento@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '13',
+                email: 'fernando@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '14',
+                email: 'couthino@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '15',
+                email: 'samuel@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '16',
+                email: 'borja@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '17',
+                email: 'federico@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '18',
+                email: 'daniel@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '19',
+                email: 'sara@example.com',
+                role: [ITypeRole.USER]
+              },
+              {
+                id: '20',
+                email: 'maria@example.com',
+                role: [ITypeRole.USER]
+              }
+            ]
+          };
+          resolve(response);
+        }
       }, 1000);
     });
   }
