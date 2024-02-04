@@ -11,6 +11,15 @@ module.exports = {
         'green-light': '#6ABB6B',
         'black-primary': '#27272A',
         'black-secondary': '#3F3F46'
+      },
+      keyframes: {
+        opacityIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 }
+        }
+      },
+      animation: {
+        opacityIn: 'opacityIn 0.2s ease-in-out'
       }
     }
   },

@@ -79,6 +79,7 @@ export class TableUsersComponent {
   }
 
   public toggleTableLoader (): void {
+    this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');
   }
 }

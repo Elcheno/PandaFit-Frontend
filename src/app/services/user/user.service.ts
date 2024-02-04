@@ -114,26 +114,6 @@ export class UserService {
                 id: '16',
                 email: 'borja@example.com',
                 role: [ITypeRole.USER]
-              },
-              {
-                id: '17',
-                email: 'federico@example.com',
-                role: [ITypeRole.USER]
-              },
-              {
-                id: '18',
-                email: 'daniel@example.com',
-                role: [ITypeRole.USER]
-              },
-              {
-                id: '19',
-                email: 'sara@example.com',
-                role: [ITypeRole.USER]
-              },
-              {
-                id: '20',
-                email: 'maria@example.com',
-                role: [ITypeRole.USER]
               }
             ]
           };
