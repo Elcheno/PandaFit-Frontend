@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { TableInstitutionComponent } from '../../components/institutions/table-institution/table-institution.component';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
@@ -7,6 +7,7 @@ import { ModalService } from '../../services/modal/modal.service';
 import { CreateInstitutionModalComponent } from '../../components/modals/institutions/create-institution-modal/create-institution-modal.component';
 import { UpdateInstitutionsModalComponent } from '../../components/modals/institutions/update-institutions-modal/update-institutions-modal.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
+import { IPage } from '../../model/interfaces/i-page';
 
 @Component({
   selector: 'app-institutions',
@@ -16,13 +17,19 @@ import { IPageable } from '../../model/interfaces/i-pageable';
   styleUrl: './institutions.component.scss'
 })
 export class InstitutionsComponent {
+  @ViewChild(TableInstitutionComponent) table!: TableInstitutionComponent;
+
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
 
   public data!: IPageable<IInstitution>;
 
   public async ngOnInit (): Promise<void> {
-    this.data = await this.institutionService.getAllMock();
+    await this.institutionService.getAllMock(0)
+      .then((res: IPageable<IInstitution>) => {
+        if (!res) return;
+        this.data = res;
+      });
   }
 
   public search (value: string): void {
@@ -57,5 +64,28 @@ export class InstitutionsComponent {
 
   public async delete (institution: IInstitution): Promise<void> {
     if (!institution) return;
+  }
+
+  public async getAll (page: IPage): Promise<void> {
+    // console.log(page);
+    // MOCK USER DATA
+    await this.institutionService.getAllMock(page.page)
+      .then((res: IPageable<IInstitution>) => {
+        if (!res) return;
+        this.data = res;
+        this.table.toggleTableLoader();
+      }
+    );
+
+
+    // this.userService.getAll(page)
+    //   .then((res: IPageable<IUser>) => {
+    //     if (!res) return;
+    //     this.data = res;
+    //   })
+    //   .catch((error: any) => {
+    //     console.log(error);
+    //   }
+    // );
   }
 }

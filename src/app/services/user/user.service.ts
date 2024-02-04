@@ -21,7 +21,7 @@ export class UserService {
             page: 0,
             size: 10,
             sort: ['email'],
-            totalElements: 20,
+            totalElements: 16,
             totalPages: 2,
             content: [
               {
@@ -82,7 +82,7 @@ export class UserService {
             page: 1,
             size: 10,
             sort: ['email'],
-            totalElements: 20,
+            totalElements: 16,
             totalPages: 2,
             content: [
               {

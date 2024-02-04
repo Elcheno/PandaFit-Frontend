@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { type IInstitution } from '../../../model/interfaces/i-institution';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
@@ -6,6 +6,7 @@ import { ModalConfirmService } from '../../../services/modal/modal-confirm.servi
 import { Router } from '@angular/router';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { IPageable } from '../../../model/interfaces/i-pageable';
+import { IPage } from '../../../model/interfaces/i-page';
 
 @Component({
   selector: 'app-table-institution',
@@ -15,10 +16,13 @@ import { IPageable } from '../../../model/interfaces/i-pageable';
   styleUrl: './table-institution.component.scss'
 })
 export class TableInstitutionComponent {
+  @ViewChild('tableLoaderPage') public tableLoader!: any;
+
   @Input() public data!: IPageable<IInstitution>;
 
   @Output() public onDelete = new EventEmitter<IInstitution>();
   @Output() public onUpdate = new EventEmitter<IInstitution>(); 
+  @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
@@ -57,4 +61,33 @@ export class TableInstitutionComponent {
       }
     ]
   };
+
+  public nextPage (): void { 
+    if ((this.data.page + 1) > this.data.totalPages) return;
+    this.toggleTableLoader();
+    const page: IPage = {  
+      page: this.data.page + 1,
+      size: this.data.size,
+      sort: this.data.sort 
+    };
+
+    this.onChangePage.emit(page);
+  }
+
+  public previousPage (): void {
+    if (this.data.page === 0) return;
+    this.toggleTableLoader();
+    const page: IPage = {  
+      page: this.data.page - 1,
+      size: this.data.size,
+      sort: this.data.sort 
+    };
+
+    this.onChangePage.emit(page);
+  }
+
+  public toggleTableLoader (): void {
+    this.tableLoader.nativeElement.classList.toggle('flex');
+    this.tableLoader.nativeElement.classList.toggle('hidden');
+  }
 }
