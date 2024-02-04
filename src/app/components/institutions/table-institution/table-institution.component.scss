@@ -1,0 +1,9 @@
+.nav-button:hover {
+  background-color: rgb(243 244 246);
+  color: rgb(55 65 81);
+}
+
+.nav-button:disabled:hover {
+  background-color: transparent;
+  color: rgb(107 114 128);
+}

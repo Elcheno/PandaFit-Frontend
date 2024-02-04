@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild, ElementRef } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
+import { IPage } from '../../../model/interfaces/i-page';
 
 @Component({
   selector: 'app-table-users',
@@ -14,21 +15,15 @@ import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.comp
   styleUrl: './table-users.component.scss'
 })
 export class TableUsersComponent {
+  @ViewChild('tableLoaderPage') public tableLoader!: any;
+
   @Input() public data!: IPageable<IUser>;
 
   @Output() public onDelete = new EventEmitter<IUser>();
   @Output() public onUpdate = new EventEmitter<IUser>();
+  @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
-
-  public pageable: IPageable<IUser> = {
-    page: 0,
-    size: 10,
-    sort: ['email'],
-    totalElements: 0,
-    totalPages: 0,
-    content: []
-  };
 
   public dropdownRows: IDropdownData<IUser> = {
     header: 'Usuario',
@@ -38,7 +33,6 @@ export class TableUsersComponent {
     rows: [
       {
         title: 'Update',
-        disabled: true,
         fnc: (data: any) => {
           if (data == null) return;
           console.log(data);
@@ -59,4 +53,33 @@ export class TableUsersComponent {
       }
     ]
   };
+
+  public nextPage (): void { 
+    if ((this.data.page + 1) > this.data.totalPages) return;
+    this.toggleTableLoader();
+    const page: IPage = {  
+      page: this.data.page + 1,
+      size: this.data.size,
+      sort: this.data.sort 
+    };
+
+    this.onChangePage.emit(page);
+  }
+
+  public previousPage (): void {
+    if (this.data.page === 0) return;
+    this.toggleTableLoader();
+    const page: IPage = {  
+      page: this.data.page - 1,
+      size: this.data.size,
+      sort: this.data.sort 
+    };
+
+    this.onChangePage.emit(page);
+  }
+
+  public toggleTableLoader (): void {
+    this.tableLoader.nativeElement.classList.toggle('flex');
+    this.tableLoader.nativeElement.classList.toggle('hidden');
+  }
 }

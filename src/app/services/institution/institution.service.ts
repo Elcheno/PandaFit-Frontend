@@ -12,32 +12,110 @@ import { type IPage } from '../../model/interfaces/i-page';
 export class InstitutionService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<IPageable<IInstitution>> {
+  public async getAllMock (page?: number): Promise<IPageable<IInstitution>> {
     return await new Promise((resolve, _reject) => {
-      setTimeout(() => {
-        const data: IPageable<IInstitution> = {
-          page: 0,
-          size: 10,
-          sort: ['name'],
-          totalElements: 3,
-          totalPages: 1,
-          content: [
-            {
-              id: '1',
-              name: 'Institution 1',
-            },
-            {
-              id: '2',
-              name: 'Institution 2',
-            },
-            {
-              id: '3',
-              name: 'Institution 3',
-            }
-          ]
-        };
-        resolve(data);
-      }, 1000);
+      if (page !== undefined) {
+        if (page === 0) {
+          setTimeout(() => {
+            const data: IPageable<IInstitution> = {
+              page: 0,
+              size: 10,
+              sort: ['name'],
+              totalElements: 12,
+              totalPages: 2,
+              content: [
+                {
+                  id: '1',
+                  name: 'Institution 1',
+                },
+                {
+                  id: '2',
+                  name: 'Institution 2',
+                },
+                {
+                  id: '3',
+                  name: 'Institution 3',
+                },
+                {
+                  id: '4',
+                  name: 'Institution 4',
+                },
+                {
+                  id: '5',
+                  name: 'Institution 5',
+                },
+                {
+                  id: '6',
+                  name: 'Institution 6',
+                },
+                {
+                  id: '7',
+                  name: 'Institution 7',
+                },
+                {
+                  id: '8',
+                  name: 'Institution 8',
+                },
+                {
+                  id: '9',
+                  name: 'Institution 9',
+                },
+                {
+                  id: '10',
+                  name: 'Institution 10',
+                },
+              ]
+            };
+            resolve(data);
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            const data: IPageable<IInstitution> = {
+              page: 1,
+              size: 10,
+              sort: ['name'],
+              totalElements: 12,
+              totalPages: 2,
+              content: [
+                {
+                  id: '11',
+                  name: 'Institution 11',
+                },
+                {
+                  id: '12',
+                  name: 'Institution 12',
+                }
+              ]
+            };
+            resolve(data);
+          }, 1000);
+        }
+      } else {
+        setTimeout(() => {
+          const data: IPageable<IInstitution> = {
+            page: 0,
+            size: 10,
+            sort: ['name'],
+            totalElements: 3,
+            totalPages: 1,
+            content: [
+              {
+                id: '1',
+                name: 'Institution 1',
+              },
+              {
+                id: '2',
+                name: 'Institution 2',
+              },
+              {
+                id: '3',
+                name: 'Institution 3',
+              }
+            ]
+          };
+          resolve(data);
+        }, 1000);
+      }
     });
   }
 
