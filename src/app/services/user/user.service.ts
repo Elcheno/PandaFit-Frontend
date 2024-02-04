@@ -6,6 +6,7 @@ import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { environment } from '../../../environments/environment.development';
+import { Observable, map, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -123,144 +124,94 @@ export class UserService {
     });
   }
 
-  public async getAll (pageParams: IPage): Promise<IPageable<IUser>> {
-    return await new Promise<IPageable<IUser>>((resolve, reject) => {
-      const pageable: any = {
-        page: pageParams.page,
-        size: pageParams.size,
-        sort: pageParams.sort
-      };
-
-      this.http.get(environment.api.url + environment.api.institution + environment.api.users + '/page', { params: pageable })
-        .subscribe({
-          next: (res: any) => {
-            if (res === null) return;
-            const response: IPageable<IUser> = {
-              page: res['number'],
-              size: res['size'],
-              sort: pageParams.sort,
-              totalElements: res['totalElements'],
-              totalPages: res['totalPages'],
-              content: res['content']
-            };
-            console.log(response);
-            resolve(response);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getAll (pageParams?: IPage): Observable<IPageable<IUser>> {
+    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}${environment.api.users}/page`, { params: pageParams as any })
+      .pipe(
+        map((res: any) => {
+          const response: IPageable<IUser> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async getAllByInstitution (pageParams: IPage, institution: IInstitution): Promise<IPageable<IInstitution>> {
-    return await new Promise<IPageable<IInstitution>>((resolve, reject) => {
-      if (institution == null) { reject(new Error('Institution not found')); }
-      const pageable: any = {
-        page: pageParams.page,
-        size: pageParams.size,
-        sort: pageParams.sort
-      };
-
-      this.http.get(environment.api.url + environment.api.institution + '/' + institution.id + environment.api.users + '/page', { params: pageable })
-        .subscribe({
-          next: (res: any) => {
-            const response: IPageable<IInstitution> = {
-              page: res['number'],
-              size: res['size'],
-              sort: pageParams.sort,
-              totalElements: res['totalElements'],
-              totalPages: res['totalPages'],
-              content: res['content']
-            };
-            console.log(response);
-            resolve(response);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getAllByInstitution (institution: IInstitution, pageParams?: IPage, ): Observable<IPageable<IUser>> {
+    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institution.id}${environment.api.users}/page`, { params: pageParams as any })
+      .pipe(
+        map((res: any) => {
+          const response: IPageable<IUser> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async getById (id: string): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.get(environment.api.url + environment.api.institution + environment.api.users + '/' + id)
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getById (id: string): Observable<IUser> {
+    return this.http.get<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}/${id}`)
+      .pipe(
+        map((res: any) => {
+          const response: IUser = {
+            id: res.id,
+            email: res.email,
+            password: res.password,
+            role: res.role
+          };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async create (user: IUser): Promise<IUser> {
-    return await new Promise<IUser>((resolve, reject) => {
-      const data: any = {
-        email: user.email,
-        password: user.password,
-        roles: user.role.map(role => ITypeRole[role]),
-        institutionId: user.institutionId
-      };
-      console.log(data);
+  public create (user: IUser): Observable<IUser> {
+    const data: any = {
+      email: user.email,
+      password: user.password,
+      roles: user.role.map(role => ITypeRole[role]),
+      institutionId: user.institutionId
+    };
 
-      this.http.post(environment.api.url + environment.api.institution + environment.api.users, data)
-        .subscribe({
-          next: (res: any) => {
-            if (res != null) {
-              const userCreate: IUser = {
-                id: res.id,
-                email: res.email,
-                password: res.password,
-                role: res.role
-              };
-              resolve(userCreate);
-            }
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+    return this.http.post<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data)
+      .pipe(
+        map((res: any) => {
+          const response: IUser = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async delete (data: IUser): Promise<any> {
-    return await new Promise<any>((resolve, reject) => {
-      this.http.delete(environment.api.url + environment.api.institution + environment.api.users, { body: data })
-        .subscribe({
-          next: (res) => {
-            resolve(res);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public delete (data: IUser): Observable<IUser> {
+    return this.http.delete<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data })
+      .pipe(
+        map((res: any) => {
+          const response: IUser = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async update (data: IUser): Promise<any> {
-    return await new Promise<any>((resolve, reject) => {
-      console.log(data);
-      this.http.put(environment.api.url + environment.api.institution + environment.api.users, data)
-        .subscribe({
-          next: (res: any) => {
-            if (res != null) {
-              const userCreate: IUser = {
-                id: res.id,
-                email: res.email,
-                password: res.password,
-                role: res.role
-              };
-              resolve(userCreate);
-            }
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public update (data: IUser): Observable<IUser> {
+    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data)
+      .pipe(
+        map((res: any) => {
+          const response: IUser = { ...res };
+          return response;
+        })
+      );
   }
 }

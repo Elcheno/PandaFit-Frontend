@@ -25,67 +25,61 @@ export class InstitutionsComponent {
   public data!: IPageable<IInstitution>;
 
   public async ngOnInit (): Promise<void> {
-    await this.institutionService.getAllMock(0)
-      .then((res: IPageable<IInstitution>) => {
-        if (!res) return;
+    // await this.institutionService.getAllMock(0)
+    //   .then((res: IPageable<IInstitution>) => {
+    //     this.data = res;
+    //   });
+
+      this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
         this.data = res;
       });
   }
 
-  public search (value: string): void {
-    console.log(value);
+  public async getAll (page: IPage): Promise<void> {
+    // MOCK USER DATA
+    // await this.institutionService.getAllMock(page.page)
+    //   .then((res: IPageable<IInstitution>) => {
+    //     this.data = res;
+    //     this.table.toggleTableLoader();
+    //   }
+    // );
+
+    this.institutionService.getAll(page).subscribe((res) => {
+      this.data = res;
+    });
   }
 
   public async create (): Promise<void> {
     (await this.modalService.open(CreateInstitutionModalComponent)).closed.subscribe((institution: IInstitution) => {
       if (!institution) return;
-      this.institutionService.create(institution)
-        .then((res) => {
-          if (!res) return;
-          this.data.content.push(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }); 
+
+      this.institutionService.create(institution).subscribe((res: IInstitution) => {
+        this.data.content.splice(0, 0, res);
+        this.data.totalElements += 1;
+      });
+    });
   }
 
   public async update (institution: IInstitution): Promise<void> {
     if (!institution) return;
+
     (await this.modalService.open(UpdateInstitutionsModalComponent, institution)).closed.subscribe((res: IInstitution) => {
-      if (!res) return;
-      this.institutionService.update(res)
-        .then((response) => {
-          if (!response) return;
-          this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
-        });
+      this.institutionService.update(res).subscribe((response: IInstitution) => {
+        this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+      });
     });
   }
 
   public async delete (institution: IInstitution): Promise<void> {
     if (!institution) return;
+    
+    this.institutionService.delete(institution).subscribe((res: IInstitution) => {
+      this.data.content = this.data.content.filter((item) => item.id !== institution.id);
+      this.data.totalElements -= 1;
+    })
   }
 
-  public async getAll (page: IPage): Promise<void> {
-    // console.log(page);
-    // MOCK USER DATA
-    await this.institutionService.getAllMock(page.page)
-      .then((res: IPageable<IInstitution>) => {
-        if (!res) return;
-        this.data = res;
-        this.table.toggleTableLoader();
-      }
-    );
-
-
-    // this.userService.getAll(page)
-    //   .then((res: IPageable<IUser>) => {
-    //     if (!res) return;
-    //     this.data = res;
-    //   })
-    //   .catch((error: any) => {
-    //     console.log(error);
-    //   }
-    // );
+  public search (value: string): void {
+    console.log(value);
   }
 }

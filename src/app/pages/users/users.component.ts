@@ -1,4 +1,4 @@
-import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, type FormGroup, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
 import { UserService } from '../../services/user/user.service';
 import { type IUser } from '../../model/interfaces/i-user';
@@ -16,7 +16,7 @@ import { IPage } from '../../model/interfaces/i-page';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableUsersComponent, SearchEntityComponent, ReactiveFormsModule, ButtonComponent],
+  imports: [TableUsersComponent, SearchEntityComponent, ButtonComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
@@ -25,133 +25,71 @@ export class UsersComponent implements OnInit {
 
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
-  private readonly fb = inject(FormBuilder);
   private readonly modalService = inject(ModalService);
 
-  public form!: FormGroup;
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
 
-  public page: IPage = {
-    page: 0,
-    size: 10,
-    sort: ['email']
-  };
-
-  constructor () {
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      checkboxUser: [true],
-      checkboxAdmin: [false],
-      selectInstitution: ['', [Validators.required]]
-    });
-  }
-
-  public async ngOnInit (): Promise <void> {
+  public async ngOnInit (): Promise<void> {
     // MOCK USER DATA AND INSTITUTION DATA
-    this.data = (await this.userService.getAllMock(0));
-    this.institutionList = (await this.institutionService.getAllMock());
+    // this.data = (await this.userService.getAllMock(0));
+    // this.institutionList = (await this.institutionService.getAllMock());
 
+    this.userService.getAll({ page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
+      this.data = res;
+    });
 
-    // await this.userService.getAll(this.page)
-    //   .then((res: IPageable<IUser>) => {
-    //     if (!res) return;
-    //     this.data = res;
-    //   })
-    //   .catch((error: any) => {
-    //     console.log(error);
-    //     this.data = {
-    //       page: 0,
-    //       size: 0,
-    //       sort: ['email'],
-    //       totalElements: 0,
-    //       totalPages: 0,
-    //       content: []
-    //     };
-    //   });
-
-      
-    // await this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
-    //   .then((res: IPageable<IInstitution>) => {
-    //     if (res === null) return;
-    //     this.institutionList = res;
-    //   })
-    //   .catch((error: any) => {
-    //     console.log(error);
-    //     this.institutionList = {
-    //       page: 0,
-    //       size: 10,
-    //       sort: ['name'],
-    //       totalElements: 0,
-    //       totalPages: 0,
-    //       content: []
-    //     };
-    //   });
+    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+      this.institutionList = res;
+    });
   }
 
   public async getAll (page: IPage): Promise<void> {
-    // console.log(page);
     // MOCK USER DATA
-    await this.userService.getAllMock(page.page)
-      .then((res: IPageable<IUser>) => {
-        if (!res) return;
-        this.data = res;
-        this.table.toggleTableLoader();
-      }
-    );
-
-
-    // this.userService.getAll(page)
+    // await this.userService.getAllMock(page.page)
     //   .then((res: IPageable<IUser>) => {
-    //     if (!res) return;
     //     this.data = res;
-    //   })
-    //   .catch((error: any) => {
-    //     console.log(error);
+    //     this.table.toggleTableLoader();
     //   }
     // );
+
+    this.userService.getAll(page).subscribe((res) => {
+      this.data = res;
+      this.table.toggleTableLoader(); 
+    });
   }
 
-  public async create (): Promise <void> {
+  public async create (): Promise<void> {
     (await this.modalService.open(CreateUsersModalComponent, this.institutionList.content)).closed.subscribe((user: IUser) => {
       if (!user) return;
 
-      this.userService.create(user)
-        .then((user: IUser) => {
-          console.log('User created');
-          this.data.content.push(user);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
+      this.userService.create(user).subscribe((res: IUser) => {
+        this.data.content.splice(0, 0, res);
+        this.data.totalElements += 1;
+      });
     });
   }
 
-  public async delete (user: IUser): Promise < void> {
-    await this.userService.delete(user)
-      .then(() => {
-        console.log('User deleted');
-        this.data.content = this.data.content.filter((item) => item.id !== user.id);
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+  public async delete (user: IUser): Promise<void> {
+    if (!user) return;
+
+    this.userService.delete(user).subscribe((res: IUser) => {
+      this.data.content = this.data.content.filter((item) => item.id !== user.id);
+      this.data.totalElements -= 1;
+    })
   }
 
-  public async update (user: IUser): Promise < void> {
+  public async update (user: IUser): Promise<void> {
     (await this.modalService.open(UpdateUserComponent, user)).closed.subscribe(async (res: IUser) => {
       if (!res) return;
-      await this.userService.update(res)
-        .then((response: IUser) => {
-          this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
-        });
+
+      this.userService.update(res).subscribe((response: IUser) => {
+        this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+      });
     });
   }
 
-  public async search (searchValue: string): Promise < void> {
-    return await new Promise((resolve, _reject) => {
-      console.log(searchValue);
-      resolve();
-    });
+  public search (searchValue: string): void {
+    console.log(searchValue);
   }
 }

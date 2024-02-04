@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
+import { Observable, map, take } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -119,89 +119,65 @@ export class InstitutionService {
     });
   }
 
-  public async getAll (pageParams: IPage): Promise<IPageable<IInstitution>> {
-    return await new Promise<IPageable<IInstitution>>((resolve, reject) => {
-      const pageable: any = {
-        page: pageParams.page,
-        size: pageParams.size,
-        sort: pageParams.sort
-      };
-
-      this.http.get('http://localhost:8080/institution/' + 'page', { params: pageable })
-        .subscribe({
-          next (res: any) {
-            console.log(res);
-            const response: IPageable<IInstitution> = {
-              page: res['number'],
-              size: res['size'],
-              sort: pageParams.sort,
-              totalElements: res['totalElements'],
-              totalPages: res['totalPages'],
-              content: res['content']
-            };
-            resolve(response);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
+    return this.http.get<IPageable<IInstitution>>(`${environment.api.url}${environment.api.institution}/page`, { params: pageParams as any })
+      .pipe(
+        map((res: any) => {
+          const response: IPageable<IInstitution> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['name'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async getById (id: string): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.get('http://localhost:8080/institution/' + id)
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getById (id: string): Observable<IInstitution> {
+    return this.http.get<IInstitution>(`${environment.api.url}${environment.api.institution}/${id}`)
+      .pipe(
+        map((res: any) => {
+          const response: IInstitution = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async create (data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.post('http://localhost:8080/institution', data)
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public create (data: any): Observable<IInstitution> {
+    return this.http.post<IInstitution>(`${environment.api.url}${environment.api.institution}`, data)
+      .pipe(
+        map((res: any) => {
+          const response: IInstitution = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async delete (data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      console.log(data);
-      this.http.delete('http://localhost:8080/institution', { body: data })
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public delete (data: any): Observable<IInstitution> {
+    return this.http.delete<IInstitution>(`${environment.api.url}${environment.api.institution}`, { body: data })
+    .pipe(
+      map((res: any) => {
+        const response: IInstitution = { ...res };
+        return response;
+      }),
+      take(1)
+    );
   }
 
-  public async update (data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.put('http://localhost:8080/institution', data)
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public update (data: any): Observable<IInstitution> {
+    return this.http.put<IInstitution>(`${environment.api.url}${environment.api.institution}`, data)
+      .pipe(
+        map((res: any) => {
+          const response: IInstitution = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 }
