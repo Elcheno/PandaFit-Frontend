@@ -21,11 +21,8 @@
         <div class="flex flex-col items-center pb-10">
             <h5 class="mb-1 text-4xl font-medium text-gray-900">{{item.name}}</h5>
             <div class="flex mt-4 md:mt-6">
-                <a href="#"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">Add
-                    friend</a>
-                <a href="#"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 ms-3">Message</a>
+                <buttonComp [text]="'Gestión Respuestas'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
+                <buttonComp [text]="'Gestión Formularios'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
             </div>
         </div>
     </div>
