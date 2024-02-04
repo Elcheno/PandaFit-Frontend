@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment as env } from '../../../environments/environment.development';
+import { environment as env, environment } from '../../../environments/environment.development';
 import { type IPage } from '../../model/interfaces/i-page';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
@@ -11,7 +11,7 @@ import { ISchoolYear } from '../../model/interfaces/i-school-year';
 export class SchoolyearService {
   private readonly http = inject(HttpClient);
 
-  public async getAllMock (): Promise<ISchoolYear[]> {
+  public async getAllMock(): Promise<ISchoolYear[]> {
     return await new Promise((resolve, _reject) => {
       const data: ISchoolYear[] = [
         {
@@ -29,7 +29,7 @@ export class SchoolyearService {
     });
   }
 
-  public async getAllByInstitution (pageParams: IPage, institution: IInstitution): Promise<any> {
+  public async getAllByInstitution(pageParams: IPage, institution: IInstitution): Promise<any> {
     return await new Promise((resolve, reject) => {
       const pageable: any = {
         page: pageParams.page,
@@ -37,10 +37,11 @@ export class SchoolyearService {
         sort: pageParams.sort
       };
 
-      this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
+      // this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
+      this.http.get('http://localhost:8080/institution/' + 'a81e752b-a9bb-4652-8f6a-3369b4abcd04' + '/schoolYear/page', { params: pageable })
         .subscribe({
           next: (data) => {
-            console.log(data);
+            // console.log(data);
             resolve(data);
           },
           error: (error) => {
@@ -50,7 +51,7 @@ export class SchoolyearService {
     });
   }
 
-  public async getById (id: string): Promise<any> {
+  public async getById(id: string): Promise<any> {
     return await new Promise((resolve, reject) => {
       this.http.get(env.api.url + env.api.schoolyear + id)
         .subscribe({
@@ -64,12 +65,24 @@ export class SchoolyearService {
     });
   }
 
-  public async create (data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.post(env.api.url + env.api.schoolyear, { body: data })
+  public async create(schoolYear: any): Promise<ISchoolYear> {
+    return await new Promise<ISchoolYear>((resolve, reject) => {
+      const data: any = {
+        name: schoolYear.name,
+        institutionId: 'a81e752b-a9bb-4652-8f6a-3369b4abcd04'
+      };
+
+      this.http.post(environment.api.url + environment.api.institution + environment.api.schoolyear, data)
         .subscribe({
-          next: (data) => {
-            resolve(data);
+          next: (res: any) => {
+            if (res != null) {
+              const schoolYearCreate: ISchoolYear = {
+                id: res.id,
+                name: res.name,
+                institutionId: res.institutionId
+              };
+              resolve(schoolYearCreate);
+            }
           },
           error: (error) => {
             reject(error);
@@ -78,12 +91,19 @@ export class SchoolyearService {
     });
   }
 
-  public async update (data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.put(env.api.url + env.api.schoolyear, { body: data })
+  public async update(data: ISchoolYear): Promise<any> {
+    return await new Promise<any>((resolve, reject) => {
+      console.log(data);
+      this.http.put(environment.api.url + environment.api.institution + environment.api.schoolyear, data)
         .subscribe({
-          next: (data) => {
-            resolve(data);
+          next: (res: any) => {
+            if (res != null) {
+              const schoolYearCreate: ISchoolYear = {
+                id: data.id,
+                name: res.name,
+              };
+              resolve(schoolYearCreate);
+            }
           },
           error: (error) => {
             reject(error);
@@ -92,7 +112,8 @@ export class SchoolyearService {
     });
   }
 
-  public async delete (data: any): Promise<any> {
+
+  public async delete(data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
       this.http.delete(env.api.url + env.api.schoolyear, { body: data })
         .subscribe({
