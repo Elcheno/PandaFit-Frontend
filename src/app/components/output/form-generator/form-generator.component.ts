@@ -25,25 +25,27 @@ interface Item {
 export class FormGeneratorComponent {
   @Output() changed = new EventEmitter();
 
-  public inputService = inject(InputService);
+  private inputService = inject(InputService);
 
   private inputBufferSubject = new Subject<string>();
+
+  public status: WritableSignal<any> = signal({
+    error: false,
+    inputs: []
+  });
+
+  private selectedItemId: number | null = null;
+
+  private itemsid: number = 0;
 
   public inputBuffer: string = '';
 
   public inputData!: any;
   
-  isOpen=false;
-
-  items: Item[] = [];
-  selectedItemId: number | null = null;
-  itemsid: number = 0;
-  status: WritableSignal<any>=signal({
-    error: false,
-    inputs: []
-  });
+  public items: Item[] = [];
 
   private dropdownRows!: IDropdownRow<any>[];
+  
   public dropdownData: IDropdownData<any> = {
     button: {
       title: 'Inputs',
@@ -53,7 +55,7 @@ export class FormGeneratorComponent {
 
   ngOnInit() {
     this.inputBufferSubject
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(1000))
       .subscribe(() => {
         this.handleInputBuffer();
       });
@@ -97,12 +99,10 @@ export class FormGeneratorComponent {
   insertInput(input: IInputData) {
     if(input && input.name)
       this.insertElement('#'+input?.id+'{'+input?.name+'}');
-
-      this.isOpen=false;
   }
 
   insertElement(newText: string) {
-    const newItem: Item = { id: this.itemsid++, text: newText , selected:false};
+    const newItem: Item = { id: this.itemsid++, text: newText, selected: false };
     this.items.push(newItem);
     this.evaluateFormulas();
     
@@ -141,24 +141,25 @@ export class FormGeneratorComponent {
   evaluateFormulas() {
     const concatenatedFormula = this.emulateInputsToValidate();
     this.changed.emit(concatenatedFormula);
-    try {
-      // Intenta evaluar la fórmula completa
+
+    try { // Intenta evaluar la fórmula completa
       const result = eval(concatenatedFormula);
       console.log('Resultado de la fórmula completa:', result);
+      
       if (result) {
         this.status.update(()=>{
           return {
-            error:false,
-            inputs:this.items
+            error: false,
+            inputs: this.items
           }
-        })
+        });
       } else {
         this.status.update(()=>{
           return {
             error:true,
             inputs:this.items
           }
-        })
+        });
       }
     } catch (error) {
       // Si hay un error al evaluar la fórmula, puedes manejarlo aquí
@@ -168,31 +169,27 @@ export class FormGeneratorComponent {
           error:true,
           inputs:this.items
         }
-      })
+      });
     }
   }
 
   /**
    * Elimina de items el item seleccionado o no hace nada si no hay ninguno
    */
-  removeItem(){
-    if(this.selectedItemId){
-      this.items=this.items.filter(item => item.id !== this.selectedItemId);
+  public removeItem() {
+    if (this.selectedItemId) {
+      this.items = this.items.filter(item => item.id !== this.selectedItemId);
       this.evaluateFormulas();
     }
   }
 
-  try(){
-    this.checkSintaxis();
-  }
-
-  emulateInputsToValidate(){
+  private emulateInputsToValidate() {
     const concatenatedFormula = this.items.map(item => item.text).join('');
     const patronRegex = /#(\d+){([^}]+)}/g;
     return concatenatedFormula.replaceAll(patronRegex, '1');
   }
 
-  checkSintaxis(){
+  public checkSintaxis() {
     const concatenatedFormula = this.items.map(item => item.text).join('');
     let newconcatenatedFormula =concatenatedFormula;
     const patronRegex = /#(\d+){([^}]+)}/gi;

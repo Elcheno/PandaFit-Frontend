@@ -30,15 +30,17 @@ export class OutputService {
     this._mockData = value;
   }
 
-  addOutput(output:OutputData){
+  addOutput(output: OutputData){
     if(this.searchOutput(output.id)){
       return
     }
     this._mockData.push(output)
   }
+
   removeOuput(id:number){
     this._mockData=this._mockData.filter(input=>input.id!==id)
   }
+
   searchOutput(id:number|undefined):OutputData|undefined{
     return this._mockData.find(input=>input.id===id)
   }
@@ -54,6 +56,5 @@ export class OutputService {
       }
     })
     return result;
-    
   }
 }

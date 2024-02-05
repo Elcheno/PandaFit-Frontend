@@ -1,14 +1,14 @@
-<form [formGroup]="form" style="width:90%" class="mx-auto" (ngSubmit)="create()">
+<form [formGroup]="form" style="width:90%" class="mx-auto" (ngSubmit)="onSubmit()">
 
     <div class="mb-5">
         <input type="text" formControlName="name"
-            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
             placeholder="Nombre">
     </div>
 
     <div class="mb-5">
         <textarea formControlName="description" rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
             placeholder="Descripción"></textarea>
     </div>
 
@@ -17,4 +17,50 @@
         <textarea hidden formControlName="calculation"></textarea>
     </div>
 
+    <div class="mb-5">
+        <input type="text" formControlName="text_lower"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Texto para valor por debajo de umbral">
+    </div>
+
+    @if (form.value.text_lower && form.value.text_lower.trim().length>0) {
+        <div class="mb-5">
+            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Valor por debajo del umbral:</label>
+            <input type="number" formControlName="value_lower"
+                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                placeholder="Valor por debajo de umbral">
+        </div>
+    }
+
+    <div class="mb-5">
+        <input type="text" formControlName="text_upper"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Texto para valor por encima de umbral">
+    </div>
+
+    @if (form.value.text_upper && form.value.text_upper.trim().length>0) {
+        <div class="mb-5">
+            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Valor por encima del umbral:</label>
+            <input type="number" formControlName="value_upper"
+                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                placeholder="Valor por encima de umbral">
+        </div>
+    }
+
+    <div class="mb-5">
+        <input type="text" formControlName="unit"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Unidad de medida, por ejemplo cms">
+    </div>
+
+    <!-- <button type="submit" [disabled]="!form.valid"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        Crea Output</button> -->
+    <buttonComp 
+        [text]="'Crear Output'" 
+        [buttonStyle]="'mx-0 w-full'"
+        (click)="onSubmit()">
+    </buttonComp>
 </form>

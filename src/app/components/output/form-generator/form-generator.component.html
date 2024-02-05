@@ -1,4 +1,4 @@
-<div class="grid grid-rows-3 gap-2 text-black-primary">
+<div class="grid grid-rows-2 gap-2 text-black-primary">
     <div>
         <div [style.background-color]="status().error?'rgb(220, 197, 197)':'rgb(229 231 235)'"
             class="flex flex-row flex-wrap canvas example-list rounded-xl p-1" cdkDropList
@@ -16,7 +16,7 @@
                     {{ item.text }}
                     @if (item.selected) {
                         <button class="m-1 text-black-secondary hover:text-red-600" (click)="deleteItem(item.id)">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -127,6 +127,10 @@
         </div>
     </div>
     <div>
-        <buttonComp (click)="try()" [text]="'Comprobar fórmula'" [buttonStyle]="'mx-0 w-full'"></buttonComp>
+        <buttonComp 
+            (click)="checkSintaxis()" 
+            [text]="'Comprobar fórmula'" 
+            [buttonStyle]="'mx-0 w-full'">
+        </buttonComp>
     </div>
 </div>
