@@ -29,7 +29,7 @@ export class SchoolyearService {
     });
   }
 
-  public async getAllByInstitution(pageParams: IPage, institution: IInstitution): Promise<any> {
+  public async getAllByInstitution(pageParams: IPage, id: any): Promise<any> {
     return await new Promise((resolve, reject) => {
       const pageable: any = {
         page: pageParams.page,
@@ -38,7 +38,7 @@ export class SchoolyearService {
       };
 
       // this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
-      this.http.get('http://localhost:8080/institution/' + '6a718b1c-4880-4eca-9b49-ea289cc6bbd7' + '/schoolYear/page', { params: pageable })
+      this.http.get('http://localhost:8080/institution/' + id + '/schoolYear/page', { params: pageable })
         .subscribe({
           next: (data) => {
             // console.log(data);
@@ -65,11 +65,11 @@ export class SchoolyearService {
     });
   }
 
-  public async create(schoolYear: any): Promise<ISchoolYear> {
+  public async create(schoolYear: any, id:any): Promise<ISchoolYear> {
     return await new Promise<ISchoolYear>((resolve, reject) => {
       const data: any = {
         name: schoolYear.name,
-        institutionId: '6a718b1c-4880-4eca-9b49-ea289cc6bbd7'
+        institutionId: id
       };
 
       this.http.post(environment.api.url + environment.api.institution + environment.api.schoolyear, data)
@@ -115,7 +115,7 @@ export class SchoolyearService {
 
   public async delete(data: any): Promise<any> {
     return await new Promise((resolve, reject) => {
-      this.http.delete(env.api.url + env.api.schoolyear, { body: data })
+      this.http.delete(env.api.url + env.api.institution + env.api.schoolyear, { body: data })
         .subscribe({
           next: (data) => {
             resolve(data);
