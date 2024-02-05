@@ -5,6 +5,9 @@ import { CdkDrag, CdkDropList, DragDropModule, moveItemInArray } from '@angular/
 import {OverlayModule} from '@angular/cdk/overlay';
 import { IInputData } from '../../../model/interfaces/i-input-data';
 import { InputService } from '../../../services/input/input.service';
+import { ButtonComponent } from '../../button/button.component';
+import { DropdownComponent } from '../../dropdown/dropdown.component';
+import { IDropdownData, IDropdownRow } from '../../../model/interfaces/i-dropdown';
 
 interface Item {
   id: number;
@@ -15,18 +18,20 @@ interface Item {
 @Component({
   selector: 'app-form-generator',
   standalone: true,
-  imports: [CommonModule, DragDropModule,CdkDropList, CdkDrag,OverlayModule],
+  imports: [CommonModule, DragDropModule,CdkDropList, CdkDrag,OverlayModule, ButtonComponent, DropdownComponent],
   templateUrl: './form-generator.component.html',
   styleUrl: './form-generator.component.scss'
 })
 export class FormGeneratorComponent {
   @Output() changed = new EventEmitter();
 
-  inputS = inject(InputService);
+  public inputService = inject(InputService);
 
   private inputBufferSubject = new Subject<string>();
 
   public inputBuffer: string = '';
+
+  public inputData!: any;
   
   isOpen=false;
 
@@ -38,12 +43,41 @@ export class FormGeneratorComponent {
     inputs: []
   });
 
+  private dropdownRows!: IDropdownRow<any>[];
+  public dropdownData: IDropdownData<any> = {
+    button: {
+      title: 'Inputs',
+    },
+    rows: []
+  };
+
   ngOnInit() {
     this.inputBufferSubject
       .pipe(debounceTime(500))
       .subscribe(() => {
         this.handleInputBuffer();
       });
+
+    this.inputData = this.inputService.mockData;
+
+    this.dropdownRows = this.inputData.map((input: IInputData) => {
+      if (input.type === 1 || input.type === 2) {
+        console.log(input.type);
+        return {
+          title: input.name,
+          fnc: () => this.insertInput(input)
+        };
+      }
+      return
+    });
+
+    this.dropdownData = {
+      button: {
+        title: 'Inputs',
+      },
+      rows: this.dropdownRows
+    };
+    console.log(this.dropdownRows);
   }
 
   handleInputBuffer() {
@@ -75,10 +109,16 @@ export class FormGeneratorComponent {
     //this.evaluateFormulas();
   }
 
-  selectItem(item:any) {
-    this.items=this.items.map(i => {return {...i,selected : false}});
-    this.items=this.items.map(i => {return {...i,selected : i.id===item.id}});
-    this.selectedItemId=item.id;
+  selectItem(item: any) {
+    if (!item.selected) {
+      this.items = this.items.map(i => { return { ...i, selected : false } });
+      this.items = this.items.map(i => { return { ...i, selected : i.id === item.id } });
+      this.selectedItemId = item.id;
+    } else {
+      console.log(item);
+      this.items = this.items.map(i => { return { ...i, selected : false } });
+      this.selectedItemId = null;
+    }
   }
 
   deleteItem(itemId: number) {
@@ -161,7 +201,7 @@ export class FormGeneratorComponent {
     for (const input of inputs) {
       const id = input[1];
       const name = input[2];
-      let inputData = this.inputS.searchInput(+id);
+      let inputData = this.inputService.searchInput(+id);
       const v = prompt(`Inserte valor para la variable ${name} en ${inputData?.unit}`);
       const regex = RegExp(`#${id}{${name}}`, 'gi')
       console.log(newconcatenatedFormula)
