@@ -1,0 +1,98 @@
+<div class="w-full bg-black-secondary p-5">
+    <div class="text-black-primary p-2 border-gray-300 h-8 bg-gray-200 rounded-xl flex items-center">{{ inputBuffer }}</div>
+</div>
+<div class="grid grid-cols-subgrid bg-black-secondary p-4">
+    <div class="col-start-0">
+        <div class="grid grid-cols-3 gap-1 botonera bg-black-secondary p-2" >
+
+            <button type="button" class=" col-span-2 bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="isOpen = !isOpen" cdkOverlayOrigin
+                #trigger="cdkOverlayOrigin">Inputs</button>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen">
+
+                <ul class=" mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    tabindex="-1" role="listbox" aria-labelledby="listbox-label"
+                    aria-activedescendant="listbox-option-3">
+                    <!--
+        Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
+        Highlighted: "bg-indigo-600 text-white", Not Highlighted: "text-gray-900"
+      -->
+                            @for (input of inputS.mockData;track input.id) {
+                                @if (input.type == 1 || input.type == 2) {
+                                <li (click)="insertInput(input)" class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9" id="listbox-option-0" role="option">
+                                    <div class="flex items-center">
+                                    <span class="font-normal ml-3 block truncate">{{ input.name }}</span>
+                                    </div>
+                            
+                                </li>
+                                }
+                            
+                            }
+                    <!-- More items... -->
+                </ul>
+
+
+            </ng-template>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="removeItem()">X</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.sqrt(',')')">√</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.pow(',',',')')">^</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('average(',')')">Avg</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('(')">(</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey(')')">)</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.round(',')')">Round</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.floor(',')')">Floor</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.ceil(',')')">Ceil</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.sin(',')')">Sin</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.cos(',')')">Cos</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.tan(',')')">Tan</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('Math.log(',')')">Log</button>
+        </div>
+    </div>
+    <div class="col-start-2 col-end-6 ">
+
+        <div 
+            [style.background-color]="status().error?'rgb(220, 197, 197)':'rgb(229 231 235)'"
+            class="flex flex-row flex-wrap canvas example-list rounded-xl p-1" 
+            cdkDropList 
+            cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="onDrop($event)">
+
+            <div *ngFor="let item of items" cdkDragBoundary=".canvas" cdkDrag [attr.data-id]="item.id"
+                class="items example-box rounded-lg flex justify-between items-center" (click)="selectItem(item)"
+                [class]="item.selected ? 'bg-green-light' : 'bg-white'">
+                {{ item.text }}
+                @if (item.selected) {
+                    <button class="m-1 text-red-300 hover:text-red-500" (click)="deleteItem(item.id)">
+                        <svg class="w-4 h-4 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                    </button> 
+                }
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-start-6">
+        <div class="grid grid-cols-3 gap-1 botonera bg-black-secondary p-2">
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('1')">1</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('2')">2</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('3')">3</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('4')">4</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('5')">5</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('6')">6</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('7')">7</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('8')">8</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('9')">9</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('0')">0</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKeyNumber('.')">.</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('+')">+</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('-')">-</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('*')">*</button>
+            <button type="button" class="bg-gray-50 p-1 rounded hover:bg-gray-200 cursor-default" (click)="handleKey('/')">/</button>
+        </div>
+    </div>
+</div>
+<div class=" p-3 flex justify-center">
+    <button type="button" class="bg-green-primary p-4 rounded text-white hover:bg-green-light" (click)="try()">Prueba la fórmula</button>
+</div>

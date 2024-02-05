@@ -82,7 +82,7 @@ export class UsersComponent implements OnInit {
   public async update (user: IUser): Promise<void> {
     (await this.modalService.open(UpdateUserComponent, user)).closed.subscribe(async (res: IUser) => {
       if (!res) return;
-
+      
       this.userService.update(res).subscribe((response: IUser) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
       });

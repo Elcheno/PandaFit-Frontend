@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/promise-function-async */
 import { type Routes } from '@angular/router';
 import { InstitutionsComponent } from './pages/institutions/institutions.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { SchoolYearComponent } from './pages/school-year/school-year.component';
 import { InputComponent } from './pages/input/input.component';
+import { OutputComponent } from './pages/output/output.component';
 
 
 export const routes: Routes = [
@@ -23,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'inputs',
     component: InputComponent
+  },
+  {
+    path: 'outputs',
+    component: OutputComponent
   },
   {
     path: '',
