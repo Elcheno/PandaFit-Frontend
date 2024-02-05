@@ -38,7 +38,7 @@ export class SchoolyearService {
       };
 
       // this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
-      this.http.get('http://localhost:8080/institution/' + 'a81e752b-a9bb-4652-8f6a-3369b4abcd04' + '/schoolYear/page', { params: pageable })
+      this.http.get('http://localhost:8080/institution/' + '6a718b1c-4880-4eca-9b49-ea289cc6bbd7' + '/schoolYear/page', { params: pageable })
         .subscribe({
           next: (data) => {
             // console.log(data);
@@ -69,7 +69,7 @@ export class SchoolyearService {
     return await new Promise<ISchoolYear>((resolve, reject) => {
       const data: any = {
         name: schoolYear.name,
-        institutionId: 'a81e752b-a9bb-4652-8f6a-3369b4abcd04'
+        institutionId: '6a718b1c-4880-4eca-9b49-ea289cc6bbd7'
       };
 
       this.http.post(environment.api.url + environment.api.institution + environment.api.schoolyear, data)

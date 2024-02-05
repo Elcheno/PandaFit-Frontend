@@ -4,6 +4,7 @@ import { InstitutionsComponent } from './pages/institutions/institutions.compone
 import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { SchoolYearComponent } from './pages/school-year/school-year.component';
+import { InputComponent } from './pages/input/input.component';
 
 
 export const routes: Routes = [
@@ -18,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'institutions/schoolyear',
     loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
+  },
+  {
+    path: 'inputs',
+    component: InputComponent
   },
   {
     path: '',
