@@ -14,6 +14,7 @@ import { DropdownComponent } from '../../components/dropdown/dropdown.component'
 import { IDropdownData } from '../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../services/modal/modal-confirm.service';
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-school-year',
@@ -27,8 +28,10 @@ export class SchoolYearComponent {
   private readonly shoolyearService = inject(SchoolyearService);
   private readonly modalService = inject(ModalService);
   private readonly confirmService = inject(ModalConfirmService);
+  private readonly router = inject(ActivatedRoute);
 
   public data: ISchoolYear[] = [];
+  private route = this.router.snapshot.paramMap.get('institutionId');
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
@@ -55,14 +58,14 @@ export class SchoolYearComponent {
       page: this.pageable.page,
       size: this.pageable.size,
       sort: this.pageable.sort
-    } as IPage, {} as IInstitution);
+    } as IPage, this.route);
     this.data = this.pageable.content;
   }
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
       if (!schoolYear) return;
 
-      this.shoolyearService.create(schoolYear)
+      this.shoolyearService.create(schoolYear, this.route)
         .then((schoolYear: ISchoolYear) => {
           console.log('SchoolYear created');
           this.data.push(schoolYear);

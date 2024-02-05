@@ -3,17 +3,23 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IInputType } from '../../model/interfaces/i-input-type';
 import { CommonModule } from '@angular/common';
 import { InputService } from '../../services/input/input.service';
+import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
+import { IInputData } from '../../model/interfaces/i-input-data';
+import { IPageable } from '../../model/interfaces/i-pageable';
+import { ModalService } from '../../services/modal/modal.service';
 
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,CreateInputModalComponent],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss'
 })
 export class InputComponent {
   inputService = inject(InputService);
+  private readonly modalService = inject(ModalService);
+  public inputList!: IPageable<IInputData>;
   inputType:any[]=[
     {
       name:'Number',
@@ -66,5 +72,22 @@ export class InputComponent {
     };
     this.inputService.addInput(newInput);
     this.formGroup.reset();
+  }
+
+  
+
+  ngOnInit(){
+    this.create()
+  }
+
+  public async create (): Promise<void> {
+    (await this.modalService.open(CreateInputModalComponent, this.inputList)).closed.subscribe((input: IInputData) => {
+      if (!input) return;
+
+        // this.userService.create(input).subscribe((res: IUser) => {
+        //   this.data.content.splice(0, 0, res);
+        //   this.data.totalElements += 1;
+        // });
+    });
   }
 }

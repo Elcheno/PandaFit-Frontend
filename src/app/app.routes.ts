@@ -17,7 +17,7 @@ export const routes: Routes = [
     component: UsersComponent
   },
   {
-    path: 'institutions/schoolyear',
+    path: 'institutions/:institutionId/schoolyear',
     loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
   },
   {
