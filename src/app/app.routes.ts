@@ -5,6 +5,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { SchoolYearComponent } from './pages/school-year/school-year.component';
 import { InputComponent } from './pages/input/input.component';
+import { FormComponent } from './pages/form/form.component';
 
 
 export const routes: Routes = [
@@ -23,6 +24,10 @@ export const routes: Routes = [
   {
     path: 'inputs',
     component: InputComponent
+  },
+  {
+    path: 'forms',
+    component: FormComponent
   },
   {
     path: '',
