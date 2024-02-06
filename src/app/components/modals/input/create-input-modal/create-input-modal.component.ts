@@ -2,10 +2,10 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, WritableSignal, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IInstitution } from '../../../../model/interfaces/i-institution';
-import { IUser } from '../../../../model/interfaces/i-user';
 import { ITypeRole } from '../../../../model/type/i-type-role';
 import { IInputType } from '../../../../model/interfaces/i-input-type';
 import { CommonModule } from '@angular/common';
+import { IInputData } from '../../../../model/interfaces/i-input-data';
 
 @Component({
   selector: 'app-create-input-modal',
@@ -41,7 +41,7 @@ export class CreateInputModalComponent {
   ];
 
   constructor (
-    public dialogRef: DialogRef<IUser>,
+    public dialogRef: DialogRef<IInputData>,
     @Inject(DIALOG_DATA) public institutionList: IInstitution[]
   ) {
     this.form=this.formBuilder.group({
@@ -50,7 +50,7 @@ export class CreateInputModalComponent {
       selectType:['',Validators.required],
       decimal:[''],
       decimals:[1],
-      unit:['',Validators.required]
+      unit:['']
     })
   }
 
@@ -67,8 +67,8 @@ export class CreateInputModalComponent {
       unit:this.form.get('unit')?.value
     };
     this.form.reset();
+    this.dialogRef.close(newInput);
 
-    this.dialogRef.close();
   }
 
   public closeModal (): void {
