@@ -3,7 +3,9 @@ import { InstitutionsComponent } from './pages/institutions/institutions.compone
 import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { InputComponent } from './pages/input/input.component';
+import { FormComponent } from './pages/form/form.component';
 import { OutputComponent } from './pages/output/output.component';
+
 
 
 export const routes: Routes = [
@@ -22,6 +24,10 @@ export const routes: Routes = [
   {
     path: 'inputs',
     component: InputComponent
+  },
+  {
+    path: 'forms',
+    component: FormComponent
   },
   {
     path: 'outputs',

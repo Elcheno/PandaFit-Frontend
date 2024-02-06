@@ -1,1 +1,67 @@
-<p>form works!</p>
+<h1
+    class="m-4 mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900">
+    Creación de Formularios</h1>
+<form [formGroup]="formGroup" class="xl:mx-auto w-3/5 xl:w-2/5" (ngSubmit)="onSubmit()">
+    <div class="mb-5">
+        <input type="text" formControlName="name"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="nombre">
+    </div>
+    <div class="mb-5">
+        <textarea formControlName="description" rows="4"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Write your thoughts here..."></textarea>
+    </div>
+    <div cdkDropListGroup>
+        <div #sidebar
+            class="fixed top-0 right-0 mt-10 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+            aria-label="Sidebar">
+            <div class="example-container">
+                <h2 class="mb-10">Campos disponibles:</h2>
+
+                <div cdkDropList [cdkDropListData]="inputsAvailable" class="example-list" cdkDropListSortingDisabled
+                    (cdkDropListDropped)="drop($event)">
+                    @for (item of inputsAvailable; track item.id) {
+                    <div class="example-box" cdkDrag>{{item.name}}</div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+        <div class="example-container">
+            <h2>Inputs Seleccinados</h2>
+
+            <div cdkDropList [cdkDropListData]="inputsSelected" class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (item of inputsSelected; track item.id) {
+                <div class="example-box" cdkDrag>{{item.name}}</div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+    <h3 class="mb-4 font-semibold text-gray-900">Technology</h3>
+    <ul
+        class="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg">
+        @for (item of outputsRelated; track item.id) {
+        <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
+            <div class="flex items-center ps-3">
+                <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                <label for="vue-checkbox"
+                    class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
+            </div>
+        </li>
+        }
+    </ul>
+
+
+
+    <button type="submit" [disabled]="!formGroup.valid && inputsSelected.length > 0"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Crea
+        Form</button>
+
+</form>
