@@ -1,0 +1,52 @@
+.canvas {
+  height: 100% !important;
+  border: 1px dotted var(--black-secondary);
+  background-color: rgb(197, 197, 197);
+}
+
+.items {
+  height: fit-content;
+  cursor: pointer;
+  border: 1px solid gray;
+  padding: 8px;
+  margin: 0px;
+  font-weight: bold;
+  font-size: large;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.imput-list {
+  width: 100px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+}
+
+
+.btn-parent {
+  button {
+    transition: background-color .1s cubic-bezier(.4,0,.2,1);
+  }
+}

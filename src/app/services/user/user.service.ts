@@ -206,7 +206,12 @@ export class UserService {
   }
 
   public update (data: IUser): Observable<IUser> {
-    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data)
+    const dataUpdate: any = {
+      id: data.id,
+      email: data.email,
+      password: data.password,
+    }
+    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, dataUpdate)
       .pipe(
         map((res: any) => {
           const response: IUser = { ...res };

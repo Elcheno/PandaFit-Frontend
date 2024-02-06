@@ -33,12 +33,13 @@ export class DropdownComponent {
   ngOnInit (): void {
     this.button = {
       ...this.dropdownData.button,
-      icon: this.sanitizer.bypassSecurityTrustHtml(this.dropdownData.button.icon)
+      icon: this.dropdownData.button.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(this.dropdownData.button.icon) : ''
     };
+    console.log(this.dropdownData);
     for (const row of this.dropdownData.rows) {
       this.rows.push({
         ...row,
-        icon: this.sanitizer.bypassSecurityTrustHtml(row.icon)
+        icon: row.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(row.icon) : ''
       });
     }
   }
