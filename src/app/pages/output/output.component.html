@@ -17,17 +17,17 @@
         <textarea hidden formControlName="calculation"></textarea>
     </div>
 
-    <buttonComp
-        [text]="'Definir Umbral'"
-        [buttonStyle]="'mx-0 w-full'"
-        (click)="setThreshold()"
-    ></buttonComp>
-
     <div class="mb-5">
         <input type="text" formControlName="unit"
             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
             placeholder="Unidad de medida, por ejemplo cms">
     </div>
+
+    <buttonComp
+        [text]="'Definir Umbral'"
+        [buttonStyle]="'mx-0 w-full mb-5'"
+        (click)="setThreshold()"
+    ></buttonComp>
 
     <buttonComp 
         [text]="'Crear Output'" 
