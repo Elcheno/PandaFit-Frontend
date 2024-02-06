@@ -1,5 +1,6 @@
 <button [cdkMenuTriggerFor]="menu" class="example-standalone-trigger" [class]="triggerStyle">
-  <div [innerHTML]="button.icon"></div> {{ button.title }}
+  @if (button.icon !== undefined) { <div [innerHTML]="button.icon"></div> }
+   {{ button.title }}
 </button>
 
 <ng-template #menu>
@@ -17,7 +18,7 @@
       (click)="onClickRow(row.fnc)" 
       [disabled]="row.disabled"
       cdkMenuItem>
-        <div class="mr-1" [innerHTML]="row.icon"></div> {{ row.title }}
+        @if (row.icon !== undefined) { <div class="mr-1" [innerHTML]="row.icon"></div> } {{ row.title }}
     </button>
     }
   </div>
