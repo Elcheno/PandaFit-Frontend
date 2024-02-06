@@ -7,14 +7,20 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
+import { OutputData } from '../../model/interfaces/i-output-data';
+import { OutputService } from '../../services/output/output.service';
+import { FormService } from '../../services/form/form.service';
+import { IFormData } from '../../model/interfaces/i-form-data';
+import { ButtonComponent } from '../../components/button/button.component';
+import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [],
+  imports: [CdkDrag,CdkDropList,CdkDropListGroup,ReactiveFormsModule, ButtonComponent, SearchEntityComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
@@ -34,7 +40,12 @@ export class FormComponent {
       description:['']
     })
   }
-  drop(event: CdkDragDrop<InputData[]>) {
+
+  public search (value: string): void {
+    console.log(value);
+  }
+
+  drop(event: CdkDragDrop<IInputData[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -76,7 +87,7 @@ export class FormComponent {
   onSubmit(){
     //https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
    
-    const form:FormsData = {
+    const form:IFormData = {
       id:Math.floor(1000 + Math.random() * 9000)+"",
       name:this.formGroup.get('name')?.value,
       description:this.formGroup.get('description')?.value,
@@ -88,4 +99,4 @@ export class FormComponent {
     //this.formGroup.reset();
   }
 }
-}
+
