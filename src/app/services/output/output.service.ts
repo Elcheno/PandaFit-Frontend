@@ -12,14 +12,7 @@ export class OutputService {
       description:'Índice de masa muscular',
       inputsIds:[1,2],
       calculations:"#1{Peso}/Math.pow(#2{Altura}/100,2)",
-      lowerValue:{
-          value:35,
-          text:"Obesidad"
-      },
-      upperValue:{
-          value:15,
-          text:"Delgadez Severa"
-      },
+      umbrals: [],
       unit:''
     }
   ]

@@ -1,0 +1,63 @@
+<!-- Modal content -->
+<div class="relative bg-white rounded-lg shadow w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12 m-auto">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+        <h3 class="text-lg font-semibold text-black-primary">
+            Creación de Umbrales
+        </h3>
+
+        <button type="button" (click)="closeModal()"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+            <svg class="w-6 h-6 text-black-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18 18 6m0 12L6 6" />
+            </svg>
+        </button>
+    </div>
+
+    <form class="p-4 md:p-5">
+        <div class="grid gap-2 mb-4 grid-cols-subgrid">
+
+            @for (umbral of umbralList; track index; let index = $index) {
+                <div class="mb-5 col-start-1 col-end-5 flex">
+                    <span class="text-lg font-normal text-gray-500 py-2 px-4">{{ index + 1 }}</span>
+                    <input type="text"
+                        [(ngModel)]="umbral.text"
+                        [ngModelOptions]="{standalone: true}"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                        placeholder="Texto">
+                </div>
+    
+                <div class="mb-5 col-start-5">
+                    <input type="number"
+                        [(ngModel)]="umbral.value"
+                        [ngModelOptions]="{standalone: true}"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                        placeholder="Valor">
+                </div>
+    
+                <div class="mb-5 col-start-6">
+                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                      <option selected value="="> = </option>
+                      <option value=">"> > </option>
+                      <option value="<"> < </option>
+                    </select>
+                </div>
+            }
+
+        </div>
+
+        <div class="flex justify-center">
+            <button type="button"
+                (click)="addUmbral()"
+                class="bg-green-primary hover:bg-green-light text-white font-medium rounded-full px-5 py-2.5 text-center">
+                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h14m-7 7V5" />
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>

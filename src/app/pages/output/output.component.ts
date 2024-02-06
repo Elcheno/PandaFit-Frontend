@@ -4,11 +4,13 @@ import { FormGeneratorComponent } from '../../components/output/form-generator/f
 import { ButtonComponent } from '../../components/button/button.component';
 import { OutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
+import { UmbralGeneratorComponent } from '../../components/output/umbral-generator/umbral-generator.component';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-output',
   standalone: true,
-  imports: [ReactiveFormsModule, FormGeneratorComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, FormGeneratorComponent, ButtonComponent, UmbralGeneratorComponent],
   templateUrl: './output.component.html',
   styleUrl: './output.component.scss'
 })
@@ -16,6 +18,7 @@ export class OutputComponent {
 
   private readonly outputService = inject(OutputService);
   private readonly fb = inject(FormBuilder);
+  private readonly modalService = inject(ModalService);
 
   public form!: FormGroup;
 
@@ -36,21 +39,13 @@ export class OutputComponent {
   }
 
   public onSubmit (): void {
-    console.log(this.form)
     const output: OutputData = {
       id: Math.floor(1000 + Math.random() * 9000),
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
       calculations: this.form.get('calculation')?.value,
-      lowerValue:{
-        value:this.form.get('value_lower')?.value,
-        text:this.form.get('text_lower')?.value
-      },
-      upperValue:{
-        value:this.form.get('value_upper')?.value,
-        text:this.form.get('text_upper')?.value
-      }
+      umbrals: []
     }
     console.log(output);
     this.outputService.addOutput(output);
@@ -90,6 +85,10 @@ export class OutputComponent {
       }
       
       return inputsValues;
-     
+    }
+
+    public setThreshold (): void {
+      console.log("umbrales");
+      this.modalService.open(UmbralGeneratorComponent);
     }
 }
