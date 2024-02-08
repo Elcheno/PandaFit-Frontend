@@ -8,6 +8,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
 import { OutputData } from '../../model/interfaces/i-output-data';
@@ -88,6 +89,7 @@ export class FormComponent {
     //https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
    
     const form:IFormData = {
+    const form:IFormData = {
       id:Math.floor(1000 + Math.random() * 9000)+"",
       name:this.formGroup.get('name')?.value,
       description:this.formGroup.get('description')?.value,
@@ -99,4 +101,5 @@ export class FormComponent {
     //this.formGroup.reset();
   }
 }
+
 
