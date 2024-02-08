@@ -36,6 +36,69 @@ export class InputService {
       decimals:0,
       unit:''
     },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
+    {
+      id:3,
+      name:'Fumador',
+      description:'Indique si fuma',
+      type:IInputType.BOOLEAN,
+      decimal:false,
+      decimals:0,
+      unit:''
+    },
   ]
   constructor() { }
 

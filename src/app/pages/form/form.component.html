@@ -1,41 +1,81 @@
-<h1
-    class="m-4 mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900">
-    Creación de Formularios</h1>
 <form [formGroup]="formGroup" class="xl:mx-auto w-3/5 xl:w-2/5" (ngSubmit)="onSubmit()">
+    <h1
+        class="mt-4 text-3xl font-bold mb-7 text-black-primary">
+        Creación de Formularios</h1>
     <div class="mb-5">
+        <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Nombre</label>
         <input type="text" formControlName="name"
-            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
             placeholder="nombre">
     </div>
     <div class="mb-5">
+        <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Descripción</label>
         <textarea formControlName="description" rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
             placeholder="Write your thoughts here..."></textarea>
     </div>
     <div cdkDropListGroup>
         <div #sidebar
             class="fixed top-0 right-0 mt-10 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
             aria-label="Sidebar">
-            <div class="example-container">
-                <h2 class="mb-10">Campos disponibles:</h2>
+            <div class="example-container w-full p-2.5">
+                <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
+                <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
-                <div cdkDropList [cdkDropListData]="inputsAvailable" class="example-list" cdkDropListSortingDisabled
+                <div cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5" cdkDropListSortingDisabled
                     (cdkDropListDropped)="drop($event)">
                     @for (item of inputsAvailable; track item.id) {
-                    <div class="example-box" cdkDrag>{{item.name}}</div>
+                    <div class="example-box" cdkDrag>{{item.name}}
+
+                        <div class="flex gap-2">
+                            <svg class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                              </svg>
+                            <svg class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M10 11h2v5m-2 0h4m-2.6-8.5h0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                              </svg>
+                        </div>
+                    </div>
                     }
                 </div>
             </div>
+            <nav class="flex p-2.5 items-center flex-column flex-wrap md:flex-row justify-end" aria-label="Table navigation">
+                <div class="float-end">
+                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                        <li>
+                            <button
+                                class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg nav-button">Previous</button>
+                        </li>
+                        <li>
+                            <span
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">0</span>
+                        </li>
+                        <li>
+                            <button
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg nav-button">Next</button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
         </div>
 
         <div class="example-container">
-            <h2>Inputs Seleccinados</h2>
+            <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos Seleccionados:</label>
 
             <div cdkDropList [cdkDropListData]="inputsSelected" class="example-list"
                 (cdkDropListDropped)="drop($event)">
                 @for (item of inputsSelected; track item.id) {
-                <div class="example-box" cdkDrag>{{item.name}}</div>
+                <div class="example-box" cdkDrag>{{item.name}}
+                    <div class="flex gap-2">
+                        <svg class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                          </svg>
+                        <svg class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M10 11h2v5m-2 0h4m-2.6-8.5h0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                          </svg>
+                    </div>
+                </div>
                 }
             </div>
         </div>
@@ -43,25 +83,27 @@
 
 
 
-    <h3 class="mb-4 font-semibold text-gray-900">Technology</h3>
-    <ul
-        class="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg">
-        @for (item of outputsRelated; track item.id) {
-        <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
-            <div class="flex items-center ps-3">
-                <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                <label for="vue-checkbox"
-                    class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
-            </div>
-        </li>
-        }
-    </ul>
+    <div class="mb-4 mt-5">
+        <h3 class="font-semibold text-black-primary">Respuestas posibles según los campos:</h3>
+        <ul
+            class="w-48 text-sm font-medium text-black-primary bg-white rounded-lg">
+            @for (item of outputsRelated; track item.id) {
+            <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
+                <div class="flex items-center ps-3">
+                    <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                    <label for="vue-checkbox"
+                        class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
 
 
 
     <button type="submit" [disabled]="!formGroup.valid && inputsSelected.length > 0"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Crea
-        Form</button>
+        class="p-2.5 w-40 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
+        Crear Formulario</button>
 
 </form>

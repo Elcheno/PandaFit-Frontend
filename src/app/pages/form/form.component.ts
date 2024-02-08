@@ -15,11 +15,12 @@ import { OutputService } from '../../services/output/output.service';
 import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
 import { ButtonComponent } from '../../components/button/button.component';
+import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [CdkDrag,CdkDropList,CdkDropListGroup,ReactiveFormsModule, ButtonComponent],
+  imports: [CdkDrag,CdkDropList,CdkDropListGroup,ReactiveFormsModule, ButtonComponent, SearchEntityComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
@@ -39,6 +40,11 @@ export class FormComponent {
       description:['']
     })
   }
+
+  public search (value: string): void {
+    console.log(value);
+  }
+
   drop(event: CdkDragDrop<IInputData[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -80,7 +86,7 @@ export class FormComponent {
   }
   onSubmit(){
     //https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
-   
+  
     const form:IFormData = {
       id:Math.floor(1000 + Math.random() * 9000)+"",
       name:this.formGroup.get('name')?.value,
@@ -93,4 +99,5 @@ export class FormComponent {
     //this.formGroup.reset();
   }
 }
+
 
