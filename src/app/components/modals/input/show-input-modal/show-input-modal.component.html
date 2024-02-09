@@ -1,0 +1,74 @@
+<!-- Main modal -->
+<div class="relative bg-white rounded-lg shadow w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12 m-auto">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+            <h3 class="text-lg font-semibold text-black-primary">
+                Crear Nuevo Campo
+            </h3>
+            <button type="button" (click)="closeModal()"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                <svg class="w-6 h-6 text-black-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18 18 6m0 12L6 6" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal body -->
+        <form [formGroup]="form" class="p-4 md:p-5">
+            <div class="grid gap-4 mb-4 grid-cols-2">
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+                    <input type="text" name="name" id="name" formControlName="name" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Nombre" >
+                </div>
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
+                    <textarea name="description" id="description" formControlName="description" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Nombre" rows="3" required></textarea>
+                </div>
+                <div class="col-span-2">
+                    <label for="institutions-user-modal" class="block mb-2 text-sm font-medium text-gray-900">
+                        Selecciona el tipo de dato
+                    </label>
+                    <select id="selectType" formControlName="selectType"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5 cursor-pointer">
+                        @for(option of inputType;track option.name; let i=$index){
+                        <option [selected]="i==0" value="{{option.value}}">{{option.name}}</option>
+                        }
+                    </select>
+                </div>
+                @if(form.value.selectType == 1){
+                <div class="flex items-center mb-4 col-span-2">
+                    <input formControlName="decimal" type="checkbox" value=""
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="decimal" class="ms-2 text-sm font-medium text-gray-900">Decimal</label>
+                </div>
+                @if(form.value.decimal){
+                <div class="relative mb-6 col-span-2">
+                    <label for="decimals" class="sr-only">Número de decimales</label>
+                    <input formControlName="decimals" type="range" step="1" value="1" min="1" max="4"
+                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <span class="text-sm text-gray-500 absolute start-0 -bottom-6">Min (1)</span>
+                    <span
+                        class="text-sm text-gray-500 absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">2</span>
+                    <span
+                        class="text-sm text-gray-500 absolute start-2/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">3</span>
+                    <span class="text-sm text-gray-500 absolute end-0 -bottom-6">Max (4)</span>
+                </div>
+                }
+                }
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Unidad de Medida</label>
+                    <input type="text" formControlName="unit" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Ejemplo: cm, kg">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -16,6 +16,8 @@ import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
 import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
+import { ModalService } from '../../services/modal/modal.service';
+import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
 
 @Component({
   selector: 'app-form',
@@ -32,6 +34,7 @@ export class FormComponent {
   outputsRelated:OutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
+  private readonly modalService = inject(ModalService);
 
   constructor(){
     this.formGroup=this.formBuilder.group({
@@ -126,6 +129,10 @@ export class FormComponent {
         this.inputsSelected.length,
       );
     }
+  }
+
+  openInfoModal(input: IInputData): void {
+    this.modalService.open(ShowInputModalComponent, input);
   }
 }
 
