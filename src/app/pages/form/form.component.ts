@@ -98,6 +98,35 @@ export class FormComponent {
     this.formService.addForm(form);
     //this.formGroup.reset();
   }
+
+  removeInput(input: IInputData): void {
+    const index = this.inputsSelected.indexOf(input);
+    if(this.inputsAvailable.length > 9){
+      this.inputsSelected.splice(index, 1);
+    }
+    else if (index >= 0) {
+      const index = this.inputsSelected.findIndex(selectedInput => selectedInput === input);
+      transferArrayItem(
+        this.inputsSelected,
+        this.inputsAvailable,
+        index,
+        this.inputsAvailable.length,
+      );
+    }
+  }
+
+  addInput(input: IInputData): void {
+    const index = this.inputsAvailable.indexOf(input);
+    if (index >= 0) {
+      const index = this.inputsAvailable.findIndex(availableInput => availableInput === input);
+      transferArrayItem(
+        this.inputsAvailable,
+        this.inputsSelected,
+        index,
+        this.inputsSelected.length,
+      );
+    }
+  }
 }
 
 
