@@ -59,8 +59,7 @@ export class FormComponent {
         event.previousIndex,
         event.currentIndex,
       );
-      const inputsId = this.inputsSelected.map(item => item.id);
-      this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+      this.checkOutputsDisponibility();
     }
   }
   onCheckChange(event:any) {
@@ -115,8 +114,7 @@ export class FormComponent {
         index,
         this.inputsAvailable.length,
       );
-      const inputsId = this.inputsSelected.map(item => item.id);
-      this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+      this.checkOutputsDisponibility();
     }
   }
 
@@ -130,8 +128,7 @@ export class FormComponent {
         index,
         this.inputsSelected.length,
       );
-      const inputsId = this.inputsSelected.map(item => item.id);
-      this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+      this.checkOutputsDisponibility();
     }
   }
 
@@ -139,7 +136,10 @@ export class FormComponent {
     this.modalService.open(ShowInputModalComponent, input);
   }
 
-
+  private checkOutputsDisponibility(): void {
+    const inputsId = this.inputsSelected.map(item => item.id);
+    this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+  }
 }
 
 
