@@ -59,8 +59,7 @@ export class FormComponent {
         event.previousIndex,
         event.currentIndex,
       );
-      const inputsId = this.inputsSelected.map(item => item.id);
-      this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+      this.checkOutputsDisponibility();
     }
   }
   onCheckChange(event:any) {
@@ -104,10 +103,10 @@ export class FormComponent {
 
   removeInput(input: IInputData): void {
     const index = this.inputsSelected.indexOf(input);
-    if(this.inputsAvailable.length > 9){
-      this.inputsSelected.splice(index, 1);
-    }
-    else if (index >= 0) {
+    // if(this.inputsAvailable.length > 9){
+    //   this.inputsSelected.splice(index, 1);
+    // }
+    if (index >= 0) {
       const index = this.inputsSelected.findIndex(selectedInput => selectedInput === input);
       transferArrayItem(
         this.inputsSelected,
@@ -115,6 +114,7 @@ export class FormComponent {
         index,
         this.inputsAvailable.length,
       );
+      this.checkOutputsDisponibility();
     }
   }
 
@@ -128,11 +128,17 @@ export class FormComponent {
         index,
         this.inputsSelected.length,
       );
+      this.checkOutputsDisponibility();
     }
   }
 
   openInfoModal(input: IInputData): void {
     this.modalService.open(ShowInputModalComponent, input);
+  }
+
+  private checkOutputsDisponibility(): void {
+    const inputsId = this.inputsSelected.map(item => item.id);
+    this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
   }
 }
 
