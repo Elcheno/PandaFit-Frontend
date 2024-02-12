@@ -45,11 +45,11 @@ export class OutputComponent {
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
       formula: this.form.get('calculation')?.value,
-      umbralList: this.umbralList
+      umbralList: this.umbralList,
+      unit: this.form.get('unit')?.value
     }
     // console.log(output);
     this.createOutput(output);
-    this.form.reset();
   }
 
   public setCalculation (data: any): void { 
@@ -100,7 +100,8 @@ export class OutputComponent {
     this.outputService.create(output).subscribe(
       (res: IOutputData) => {
         console.log(res);
+        this.form.reset();
       }
     );
-  } 
+  }
 }
