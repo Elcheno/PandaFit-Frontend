@@ -113,6 +113,7 @@ export class FormGeneratorComponent {
       this.items = this.items.map(i => { return { ...i, selected : i.id === item.id } });
       this.selectedItemId = item.id;
     } else {
+      console.log(item);
       this.items = this.items.map(i => { return { ...i, selected : false } });
       this.selectedItemId = null;
     }
@@ -136,11 +137,11 @@ export class FormGeneratorComponent {
   }
 
   evaluateFormulas() {
-    const concatenatedFormula = this.emulateInputsToValidate();
+    const concatenatedFormula = this.items.map(item => item.text).join('');
     this.changed.emit(concatenatedFormula);
 
-    try { // Intenta evaluar la fórmula completa
-      const result = eval(concatenatedFormula);
+    try { // Intenta evaluar la fórmula completa 
+      const result = eval(this.emulateInputsToValidate(concatenatedFormula));
       console.log('Resultado de la fórmula completa:', result);
       
       if (result) {
@@ -180,10 +181,9 @@ export class FormGeneratorComponent {
     }
   }
 
-  private emulateInputsToValidate() {
-    const concatenatedFormula = this.items.map(item => item.text).join('');
+  private emulateInputsToValidate(concatenatedFormula: string): string {
     const patronRegex = /#(\d+){([^}]+)}/g;
-    return concatenatedFormula.replaceAll(patronRegex, '1');
+    return concatenatedFormula.replaceAll(patronRegex, "1");
   }
 
   public checkSintaxis() {

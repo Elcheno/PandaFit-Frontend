@@ -41,7 +41,6 @@ export class OutputComponent {
 
   public onSubmit (): void {
     const output: OutputData = {
-      id: Math.floor(1000 + Math.random() * 9000),
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
@@ -49,12 +48,14 @@ export class OutputComponent {
       umbrals: this.umbralList
     }
     console.log(output);
-    this.outputService.addOutput(output);
+    //this.outputService.addOutput(output);
     this.form.reset();
   }
 
   public setCalculation (data: any): void { 
     this.form.get('calculation')?.setValue(data);
+    console.log(data);
+    console.log(this.form)
   }
 
   /**
@@ -85,6 +86,8 @@ export class OutputComponent {
         inputsValues.push(input[1]);
       }
       
+      console.log(inputs, inputsValues);
+
       return inputsValues;
     }
 
