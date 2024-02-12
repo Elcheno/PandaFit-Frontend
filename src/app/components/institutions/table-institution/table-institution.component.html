@@ -66,7 +66,7 @@
         }
     </table>
 </div>
-<nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+<!--<nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
     @if (data) {
         <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
             <span class="font-semibold text-gray-900 ">{{ data.content.length }}
@@ -93,4 +93,11 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav>-->
+
+<app-pagination
+  [data]="data"
+  (nextPageEvent)="handleNextPage()"
+  (previousPageEvent)="handlePreviousPage()"
+></app-pagination>
+
