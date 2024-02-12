@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { IPageable } from '../../../model/interfaces/i-pageable';
 import { IPage } from '../../../model/interfaces/i-page';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 @Component({
   selector: 'app-table-institution',
   standalone: true,
-  imports: [DropdownComponent, LoaderSpinnerComponent],
+  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent],
   templateUrl: './table-institution.component.html',
   styleUrl: './table-institution.component.scss'
 })
@@ -62,7 +63,7 @@ export class TableInstitutionComponent {
     ]
   };
 
-  public nextPage (): void { 
+  /*public nextPage (): void { 
     if ((this.data.page + 1) > this.data.totalPages) return;
     this.toggleTableLoader();
     const page: IPage = {  
@@ -84,10 +85,29 @@ export class TableInstitutionComponent {
     };
 
     this.onChangePage.emit(page);
+  }*/
+
+  public handleNextPage(): void {
+    const nextPage: IPage = {
+      page: this.data.page + 1,
+      size: this.data.size,
+      sort: this.data.sort
+    };
+    this.onChangePage.emit(nextPage);
+  }
+
+  public handlePreviousPage(): void {
+    const previousPage: IPage = {
+      page: this.data.page - 1,
+      size: this.data.size,
+      sort: this.data.sort
+    };
+    this.onChangePage.emit(previousPage);
   }
 
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');
   }
+
 }
