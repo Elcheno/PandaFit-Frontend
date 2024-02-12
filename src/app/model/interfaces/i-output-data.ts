@@ -1,11 +1,11 @@
 export interface IOutputData{
-    id?: number,
+    id?: string,
     name?: string,
     description?: string,
     inputsIds?: number[],
-    calculations?: string
-    umbrals: IUmbral[],
-    unit?:string
+    formula?: string
+    umbralList: IUmbral[],
+    unit?: string
 }
 
 export interface IUmbral {
