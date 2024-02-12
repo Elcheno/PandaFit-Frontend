@@ -58,7 +58,7 @@ export class CreateInputModalComponent {
     if (!this.form.valid) return;
 
     const newInput = {
-      id:Math.floor(1000 + Math.random() * 9000),
+      id:Math.floor(1000 + Math.random() * 9000) + "",
       name:this.form.get('name')?.value,
       description:this.form.get('description')?.value,
       type:this.form.get('type')?.value,

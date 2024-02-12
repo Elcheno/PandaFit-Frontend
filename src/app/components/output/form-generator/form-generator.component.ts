@@ -195,7 +195,7 @@ export class FormGeneratorComponent {
     for (const input of inputs) {
       const id = input[1];
       const name = input[2];
-      let inputData = this.inputService.searchInput(+id);
+      let inputData = this.inputService.searchInput(id);
       const v = prompt(`Inserte valor para la variable ${name} en ${inputData?.unit}`);
       const regex = RegExp(`#${id}{${name}}`, 'gi')
       console.log(newconcatenatedFormula)
