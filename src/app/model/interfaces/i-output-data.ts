@@ -1,4 +1,4 @@
-export interface OutputData{
+export interface IOutputData{
     id?: number,
     name?: string,
     description?: string,

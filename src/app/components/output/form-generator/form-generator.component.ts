@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, WritableSignal, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, WritableSignal, inject, signal } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
 import { CdkDrag, CdkDropList, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import {OverlayModule} from '@angular/cdk/overlay';
