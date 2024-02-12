@@ -16,13 +16,13 @@
     </div>
     <div cdkDropListGroup>
         <div #sidebar
-            class="xl:right-[10%] 2xl:right-[14%] xl:w-96 lg:fixed top-0 right-0 mt-10 z-40 lg:w-64 lg:h-screen lg:transition-transform  sm:translate-x-0"
+            class="xl:right-[10%] 2xl:right-[14%] xl:w-96 lg:fixed top-0 right-0 mt-5 z-40 lg:w-64 lg:h-screen lg:transition-transform  sm:translate-x-0"
             aria-label="Sidebar">
             <div class="example-container w-full p-2.5">
                 <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
                 <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
-                <div cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg" cdkDropListSortingDisabled
+                <div #scrollContainer (scroll)="onScroll($event)" cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg" cdkDropListSortingDisabled
                     (cdkDropListDropped)="drop($event)">
                     @for (item of inputsAvailable; track item.id) {
                     <div class="example-box bg-gray-100 my-2 rounded-lg" cdkDrag>{{item.name}}
@@ -39,25 +39,6 @@
                     }
                 </div>
             </div>
-            <nav class="flex p-2.5 items-center flex-column flex-wrap md:flex-row justify-end" aria-label="Table navigation">
-                <div class="float-end">
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                        <li>
-                            <button
-                                class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg nav-button">Previous</button>
-                        </li>
-                        <li>
-                            <span
-                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">0</span>
-                        </li>
-                        <li>
-                            <button
-                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg nav-button">Next</button>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
         </div>
 
         <div class="example-container">
