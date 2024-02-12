@@ -1,0 +1,29 @@
+<nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+    @if (data) {
+        <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
+            <span class="font-semibold text-gray-900 ">{{ data.content.length }}
+                - {{ data.size }}</span> de <span
+                class="font-semibold text-gray-900">{{ data.totalElements }}
+            </span>
+        </span>
+    } @else {
+        <span class="text-gray-500 text-sm font-normal">Cargando...</span>
+    }
+    <div class="float-end">
+        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <li>
+                <button (click)="previousPage()" [disabled]="this.data ? this.data.page === 0 : true"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg nav-button">Previous</button>
+            </li>
+            <li>
+                <span
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">{{ this.data ? this.data.page + 1 : 0}}</span>
+            </li>
+            <li>
+                <button (click)="nextPage()" [disabled]="this.data ? (this.data.page + 1) === this.data.totalPages : true"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg nav-button">Next</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
