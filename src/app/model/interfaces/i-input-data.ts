@@ -1,10 +1,10 @@
 import { IInputType } from "./i-input-type";
 export interface IInputData {
-    id?:number;
+    id?:string;
     name?:string;
     description?:string;
     type:IInputType;
     decimal:boolean;
-    decimals:number;
+    decimals?:number;
     unit?:string
 }

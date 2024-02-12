@@ -4,6 +4,7 @@ export const environment = {
     url: 'http://localhost:8080/',
     institution: 'institution',
     users: '/users',
-    schoolyear: '/schoolYear'
+    schoolyear: '/schoolYear',
+    input: '/inputs'
   }
 };
