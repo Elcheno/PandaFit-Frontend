@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormGeneratorComponent } from '../../components/output/form-generator/form-generator.component';
 import { ButtonComponent } from '../../components/button/button.component';
-import { IUmbral, OutputData } from '../../model/interfaces/i-output-data';
+import { IUmbral, IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
 import { UmbralGeneratorComponent } from '../../components/output/umbral-generator/umbral-generator.component';
 import { ModalService } from '../../services/modal/modal.service';
@@ -40,7 +40,7 @@ export class OutputComponent {
   }
 
   public onSubmit (): void {
-    const output: OutputData = {
+    const output: IOutputData = {
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
