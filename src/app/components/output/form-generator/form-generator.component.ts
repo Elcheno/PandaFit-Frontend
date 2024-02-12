@@ -64,7 +64,6 @@ export class FormGeneratorComponent {
 
     this.dropdownRows = this.inputData.map((input: IInputData) => {
       if (input.type === 1 || input.type === 2) {
-        console.log(input.type);
         return {
           title: input.name,
           fnc: () => this.insertInput(input)
@@ -79,7 +78,6 @@ export class FormGeneratorComponent {
       },
       rows: this.dropdownRows
     };
-    console.log(this.dropdownRows);
   }
 
   handleInputBuffer() {
@@ -115,7 +113,6 @@ export class FormGeneratorComponent {
       this.items = this.items.map(i => { return { ...i, selected : i.id === item.id } });
       this.selectedItemId = item.id;
     } else {
-      console.log(item);
       this.items = this.items.map(i => { return { ...i, selected : false } });
       this.selectedItemId = null;
     }

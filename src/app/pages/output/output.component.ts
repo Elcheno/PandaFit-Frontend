@@ -89,7 +89,6 @@ export class OutputComponent {
     }
 
     public async setThreshold (): Promise<void> {
-      console.log("umbrales");
       (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
         if (!umbralList) return;
         this.umbralList = umbralList;
