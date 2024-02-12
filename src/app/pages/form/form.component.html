@@ -22,7 +22,7 @@
                 <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
                 <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
-                <div cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg" cdkDropListSortingDisabled
+                <div #scrollContainer (scroll)="onScroll($event)" cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg" cdkDropListSortingDisabled
                     (cdkDropListDropped)="drop($event)">
                     @for (item of inputsAvailable; track item.id) {
                     <div class="example-box bg-gray-100 my-2 rounded-lg" cdkDrag>{{item.name}}
