@@ -13,45 +13,45 @@ export class OutputService {
   private readonly http = inject(HttpClient);
 
 
-  private _mockData: IOutputData[]=[
+  private _mockData: IOutputData[] = [
     {
-      id:1,
+      id: "1",
       name:'IMC',
       description:'Índice de masa muscular',
       inputsIds:[1,2],
-      calculations:"#1{Peso}/Math.pow(#2{Altura}/100,2)",
-      umbrals: [],
+      formula:"#1{Peso}/Math.pow(#2{Altura}/100,2)",
+      umbralList: [],
       unit:''
     }
   ]
   get mockData(): IOutputData[] {
     return this._mockData;
   }
-  set mockData(value: IOutputData[]) {
+  set mockData (value: IOutputData[]) {
     this._mockData = value;
   }
 
-  addOutput(output: IOutputData){
-    if(this.searchOutput(output.id)){
+  addOutput (output: IOutputData) {
+    if (this.searchOutput(output.id)) {
       return
     }
     this._mockData.push(output)
   }
 
-  removeOuput(id:number){
-    this._mockData=this._mockData.filter(input=>input.id!==id)
+  removeOuput (id: string) {
+    this._mockData = this._mockData.filter(input => input.id !== id);
   }
 
-  searchOutput(id:number|undefined):IOutputData|undefined{
-    return this._mockData.find(input=>input.id===id)
+  searchOutput (id: string | undefined): IOutputData | undefined {
+    return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId(ids:number[]){
-    let result:IOutputData[]=[];
-    this._mockData.forEach(output=>{
-      if(output.inputsIds && output.inputsIds.length>0){
+  getOutputsWithInputsId (ids: number[]) {
+    let result:IOutputData[] = [];
+    this._mockData.forEach(output => {
+      if(output.inputsIds && output.inputsIds.length>0) {
         const filteredArray = ids.filter(value => output.inputsIds?.includes(value));
-        if(filteredArray && filteredArray.length==output.inputsIds.length){
+        if(filteredArray && filteredArray.length==output.inputsIds.length) {
           result.push(output)
         }
       }
@@ -60,7 +60,7 @@ export class OutputService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IOutputData>> {
-    return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any })
+    return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.form}${env.api.output}/page`, { params: pageParams as any })
       .pipe(
         map((res: any) => {
           const response: IPageable<IOutputData> = {
@@ -78,7 +78,7 @@ export class OutputService {
   }
 
   public getById (id: string): Observable<IOutputData> {
-    return this.http.get<IOutputData>(`${env.api.url}${env.api.institution}/${id}`)
+    return this.http.get<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}/${id}`)
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };
@@ -89,8 +89,11 @@ export class OutputService {
   }
 
 
-  public create (data: any): Observable<IOutputData> {
-    return this.http.post<IOutputData>(`${env.api.url}${env.api.institution}`, data)
+  public create (data: IOutputData): Observable<IOutputData> {
+    const userId: string = '36887dc3-22d2-41d1-b69f-cd5d796530c2';
+    const newData = { ...data, userOwnerId: userId }
+    console.log(newData);
+    return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData)
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };
@@ -100,8 +103,8 @@ export class OutputService {
       );
   }
 
-  public delete (data: any): Observable<IOutputData> {
-    return this.http.delete<IOutputData>(`${env.api.url}${env.api.institution}`, { body: data })
+  public delete (data: IOutputData): Observable<IOutputData> {
+    return this.http.delete<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, { body: data })
     .pipe(
       map((res: any) => {
         const response: IOutputData = { ...res };
@@ -111,8 +114,8 @@ export class OutputService {
     );
   }
 
-  public update (data: any): Observable<IOutputData> {
-    return this.http.put<IOutputData>(`${env.api.url}${env.api.institution}`, data)
+  public update (data: IOutputData): Observable<IOutputData> {
+    return this.http.put<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, data)
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };

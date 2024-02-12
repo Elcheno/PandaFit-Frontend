@@ -44,12 +44,12 @@ export class OutputComponent {
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
-      calculations: this.form.get('calculation')?.value,
-      umbrals: this.umbralList
+      formula: this.form.get('calculation')?.value,
+      umbralList: this.umbralList,
+      unit: this.form.get('unit')?.value
     }
-    console.log(output);
-    //this.outputService.addOutput(output);
-    this.form.reset();
+    // console.log(output);
+    this.createOutput(output);
   }
 
   public setCalculation (data: any): void { 
@@ -62,39 +62,46 @@ export class OutputComponent {
    * Lee el valor del textarea y valida si es una expresión matemática correcta con eval
    * @param event 
    */
-    validCalculation (event: any) {
-      if (event.srcElement.value.trim().length == 0) {
-        this.form.get('calculation_valid')?.setValue(false);
-        return;
-      }
-      try {
-        const test = eval(event.srcElement.value);
-        this.form.get('calculation_valid')?.setValue(test === undefined ? false : true);
-
-      } catch(error) {
-        this.form.get('calculation_valid')?.setValue(false)
-        
-      } 
+  validCalculation (event: any) {
+    if (event.srcElement.value.trim().length == 0) {
+      this.form.get('calculation_valid')?.setValue(false);
+      return;
     }
+    try {
+      const test = eval(event.srcElement.value);
+      this.form.get('calculation_valid')?.setValue(test === undefined ? false : true);
 
-    getIdsFromCalculation () {
-      const patronRegex = /#(\d+){([^}]+)}/gi;
-      const inputs = [...this.form.get('calculation')?.value.matchAll(patronRegex)];
-      const inputsValues = [];
-
-      for (const input of inputs) {
-        inputsValues.push(input[1]);
-      }
+    } catch(error) {
+      this.form.get('calculation_valid')?.setValue(false)
       
-      console.log(inputs, inputsValues);
+    } 
+  }
 
-      return inputsValues;
-    }
+  getIdsFromCalculation () {
+    const patronRegex = /#(\d+){([^}]+)}/gi;
+    const inputs = [...this.form.get('calculation')?.value.matchAll(patronRegex)];
+    const inputsValues = [];
 
-    public async setThreshold (): Promise<void> {
-      (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
-        if (!umbralList) return;
-        this.umbralList = umbralList;
-      });
+    for (const input of inputs) {
+      inputsValues.push(input[1]);
     }
+    
+    return inputsValues;
+  }
+
+  public async setThreshold (): Promise<void> {
+    (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
+      if (!umbralList) return;
+      this.umbralList = umbralList;
+    });
+  }
+
+  private createOutput (output: IOutputData): void {
+    this.outputService.create(output).subscribe(
+      (res: IOutputData) => {
+        console.log(res);
+        this.form.reset();
+      }
+    );
+  }
 }
