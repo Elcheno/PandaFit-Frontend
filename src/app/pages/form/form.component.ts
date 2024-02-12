@@ -10,7 +10,7 @@ import { Component, ElementRef, HostListener, ViewChild, inject } from '@angular
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
-import { OutputData } from '../../model/interfaces/i-output-data';
+import { IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
 import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
@@ -31,7 +31,7 @@ export class FormComponent {
   formGroup!:FormGroup;
   inputsAvailable:IInputData[]=inject(InputService).mockData;
   inputsSelected:IInputData[]=[];
-  outputsRelated:OutputData[]=[];
+  outputsRelated:IOutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
   private readonly modalService = inject(ModalService);
@@ -118,7 +118,7 @@ export class FormComponent {
         this.inputsSelected,
         this.inputsAvailable,
         index,
-        this.inputsAvailable.length,
+        0,
       );
       this.checkOutputsDisponibility();
     }
