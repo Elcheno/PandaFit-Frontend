@@ -64,7 +64,6 @@ export class FormGeneratorComponent {
 
     this.dropdownRows = this.inputData.map((input: IInputData) => {
       if (input.type === 1 || input.type === 2) {
-        console.log(input.type);
         return {
           title: input.name,
           fnc: () => this.insertInput(input)
@@ -79,7 +78,6 @@ export class FormGeneratorComponent {
       },
       rows: this.dropdownRows
     };
-    console.log(this.dropdownRows);
   }
 
   handleInputBuffer() {
@@ -139,11 +137,11 @@ export class FormGeneratorComponent {
   }
 
   evaluateFormulas() {
-    const concatenatedFormula = this.emulateInputsToValidate();
+    const concatenatedFormula = this.items.map(item => item.text).join('');
     this.changed.emit(concatenatedFormula);
 
-    try { // Intenta evaluar la fórmula completa
-      const result = eval(concatenatedFormula);
+    try { // Intenta evaluar la fórmula completa 
+      const result = eval(this.emulateInputsToValidate(concatenatedFormula));
       console.log('Resultado de la fórmula completa:', result);
       
       if (result) {
@@ -183,10 +181,9 @@ export class FormGeneratorComponent {
     }
   }
 
-  private emulateInputsToValidate() {
-    const concatenatedFormula = this.items.map(item => item.text).join('');
+  private emulateInputsToValidate(concatenatedFormula: string): string {
     const patronRegex = /#(\d+){([^}]+)}/g;
-    return concatenatedFormula.replaceAll(patronRegex, '1');
+    return concatenatedFormula.replaceAll(patronRegex, "1");
   }
 
   public checkSintaxis() {
