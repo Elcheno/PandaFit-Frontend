@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
-import { DialogRef } from '@angular/cdk/dialog';
-import { IUmbral } from '../../../model/interfaces/i-output-data';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IUmbral } from '../../../model/interfaces/i-output-data';
 
 @Component({
   selector: 'app-umbral-generator',
@@ -19,9 +19,10 @@ export class UmbralGeneratorComponent {
   
   constructor(
     public dialogRef: DialogRef<any>,
+    @Inject(DIALOG_DATA) public umbrals: IUmbral[]
   ) {
     this.form = this.fb.group({
-      umbralList: this.fb.array([])
+      umbralList: this.fb.array(umbrals)
     });
     this.addUmbral();
     console.log(this.form);

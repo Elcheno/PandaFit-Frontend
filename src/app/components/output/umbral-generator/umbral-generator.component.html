@@ -45,7 +45,7 @@
                       <option value=">"> > </option>
                       <option value="<"> < </option>
                     </select>
-                    <span class="hover:text-red-500 cursor-pointer py-2 pl-4" (click)="deleteUmbral(index)">
+                    <span class="transition-colors hover:text-black-primary text-black-secondary cursor-pointer py-2 pl-4" (click)="deleteUmbral(index)">
                         <svg class="w-6 h-6 inline mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" /></svg>
                     </span>
                 </div>
@@ -56,7 +56,7 @@
         <div class="flex justify-center">
             <button type="button"
                 (click)="addUmbral()"
-                class="bg-green-primary hover:bg-green-light text-white font-medium rounded-full px-3 py-3 text-center">
+                class="transition-colors bg-green-primary hover:bg-green-light text-white font-medium rounded-full px-3 py-3 text-center">
                 <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -67,7 +67,7 @@
 
         <div>
             <button type="submit"
-                class="text-white inline-flex items-center bg-green-primary hover:bg-green-secondary font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                class="transition-colors text-white inline-flex items-center bg-green-primary hover:bg-green-light font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"

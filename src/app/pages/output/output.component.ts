@@ -23,6 +23,7 @@ export class OutputComponent {
   public form!: FormGroup;
 
   ids: number[] = [];
+  public umbralList: IUmbral[] = [];
 
   constructor() {
     this.form = this.fb.group({
@@ -45,7 +46,7 @@ export class OutputComponent {
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
       calculations: this.form.get('calculation')?.value,
-      umbrals: []
+      umbrals: this.umbralList
     }
     console.log(output);
     this.outputService.addOutput(output);
@@ -89,8 +90,9 @@ export class OutputComponent {
 
     public async setThreshold (): Promise<void> {
       console.log("umbrales");
-      (await this.modalService.open(UmbralGeneratorComponent)).closed.subscribe((umbralList: IUmbral[]) => {
-        if (umbralList) console.log(umbralList);
+      (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
+        if (!umbralList) return;
+        this.umbralList = umbralList;
       });
     }
 }
