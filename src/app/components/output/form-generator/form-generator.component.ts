@@ -14,6 +14,7 @@ interface Item {
   text: string;
   selected:boolean;
   input?: IInputData;
+  value?: string
 }
 
 @Component({
@@ -24,7 +25,7 @@ interface Item {
   styleUrl: './form-generator.component.scss'
 })
 export class FormGeneratorComponent {
-  @Output() changed = new EventEmitter();
+  @Output() changed = new EventEmitter<any>();
 
   private inputService = inject(InputService);
 
@@ -50,6 +51,10 @@ export class FormGeneratorComponent {
     rows: []
   };
 
+  private formula!: any;
+
+  private patronRegex = /#{([^}]+)}/g;
+
   ngOnInit () {
     this.inputBufferSubject
       .pipe(debounceTime(1000))
@@ -60,7 +65,7 @@ export class FormGeneratorComponent {
     this.inputService.getAll({ page: 0, size: 100, sort: ['name'] }).subscribe((res: any) => {
       this.inputData = res.content;
       this.generateDropdown();
-    });	
+    });
 
   }
 
@@ -98,7 +103,7 @@ export class FormGeneratorComponent {
   }
 
   insertElement(newText: string, input?: IInputData) {
-    const newItem: Item = { id: this.items.length, text: newText, selected: false, input: input };
+    const newItem: Item = { id: Math.round((Math.random() * 9000) + 1000), text: newText, selected: false, input: input, value:`#{${input?.id}}` };
     this.items.push(newItem);
     this.evaluateFormulas();
   }
@@ -108,7 +113,6 @@ export class FormGeneratorComponent {
       this.items = this.items.map(i => { return { ...i, selected : false } });
       this.items = this.items.map(i => { return { ...i, selected : i.id === item.id } });
     } else {
-      console.log(item);
       this.items = this.items.map(i => { return { ...i, selected : false } });
     }
   }
@@ -130,22 +134,27 @@ export class FormGeneratorComponent {
   }
 
   evaluateFormulas () {
-    const concatenatedFormula = this.items.map(item => item.text).join('');
-    this.changed.emit(concatenatedFormula);
+    const concatenatedFormula = this.items.map(item => item.input ? item.value : item.text).join('');
+
+    this.formula = { 
+      concatenatedFormula,
+      inputs: this.items.filter(item => item.input).map(item => item.input)
+    }
+
+    this.changed.emit(this.formula);
 
     try { // Intenta evaluar la fórmula completa 
       const result = eval(this.emulateInputsToValidate(concatenatedFormula));
-      console.log('Resultado de la fórmula completa:', result);
       
       if (result) {
-        this.status.update(()=>{
+        this.status.update(() => {
           return {
             error: false,
             inputs: this.items
           }
         });
       } else {
-        this.status.update(()=>{
+        this.status.update(() => {
           return {
             error:true,
             inputs:this.items
@@ -155,7 +164,7 @@ export class FormGeneratorComponent {
     } catch (error) {
       // Si hay un error al evaluar la fórmula, puedes manejarlo aquí
       //console.error('Error al evaluar la fórmula completa:', error);
-      this.status.update(()=>{
+      this.status.update(() => {
         return {
           error:true,
           inputs:this.items
@@ -165,35 +174,44 @@ export class FormGeneratorComponent {
   }
 
   private emulateInputsToValidate(concatenatedFormula: string): string {
-    const patronRegex = /#{([^}]+)}/g;
-    return concatenatedFormula.replaceAll(patronRegex, "1");
+    return concatenatedFormula.replaceAll(this.patronRegex, "1");
   }
 
-  public checkSintaxis() {
-    const concatenatedFormula = this.items.map(item => item.text).join('');
-    let newconcatenatedFormula =concatenatedFormula;
-    const patronRegex = /#{([^}]+)}/gi;
-    const inputs = [...concatenatedFormula.matchAll(patronRegex)];
-    for (const input of inputs) {
+  public async checkSintaxis() {
+    const concatenatedFormula = this.items.map(item => item.input ? item.value : item.text).join('');
+    let newconcatenatedFormula = concatenatedFormula;
+
+    const inputs = [...concatenatedFormula.matchAll(this.patronRegex)];
+
+    inputs.map(input => {
       const id = input[1];
-      const name = input[2];
-      let inputData = this.inputService.searchInput(+id);
-      const v = prompt(`Inserte valor para la variable ${name} en ${inputData?.unit}`);
-      const regex = RegExp(`#${id}{${name}}`, 'gi')
-      console.log(newconcatenatedFormula)
-      newconcatenatedFormula = newconcatenatedFormula.replace(regex,v+"");
-    }
-    let output=undefined;
-    try{
-      output=eval(newconcatenatedFormula)
-    }catch(err){
-      console.error(err);
-    }
-    if(output){
-      alert("La salida es :" + output);
-    }else{
-      alert("Existe un error en la fórmula");
-    }
-    
+
+      this.inputService.getById(id).subscribe((res: IInputData) => {
+        const v = prompt(`Inserte valor para la variable ${res.name} en ${res?.unit}`);
+        newconcatenatedFormula = newconcatenatedFormula.replace(`#{${id}}`, String(v));
+
+        if (!newconcatenatedFormula.matchAll(this.patronRegex).next().value) {
+          let output = undefined;
+      
+          try{
+            output = eval(newconcatenatedFormula)
+      
+          }catch (err) {
+            console.error(err);
+      
+          }
+        
+          if (output) {
+            alert("La salida es :" + output);
+      
+          } else {
+            alert("Existe un error en la fórmula");
+      
+          }
+        }
+
+      });
+    });
   }
+
 }

@@ -1,6 +1,8 @@
-<form [formGroup]="form" style="width:90%" class="mx-auto" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" class="w-full mx-auto lg:w-2/3" (ngSubmit)="onSubmit()">
 
-    <h2 class="font-bold text-lg">Outputs</h2>
+    <h3 class="text-lg font-semibold text-black-primary mb-5">
+        Crear Nueva Formula
+    </h3>
 
     <div class="mb-5">
         <input type="text" formControlName="name"
