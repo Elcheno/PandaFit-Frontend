@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormGeneratorComponent } from '../../components/output/form-generator/form-generator.component';
 import { ButtonComponent } from '../../components/button/button.component';
-import { IUmbral, OutputData } from '../../model/interfaces/i-output-data';
+import { IUmbral, IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
 import { UmbralGeneratorComponent } from '../../components/output/umbral-generator/umbral-generator.component';
 import { ModalService } from '../../services/modal/modal.service';
@@ -23,6 +23,7 @@ export class OutputComponent {
   public form!: FormGroup;
 
   ids: number[] = [];
+  public umbralList: IUmbral[] = [];
 
   constructor() {
     this.form = this.fb.group({
@@ -39,58 +40,68 @@ export class OutputComponent {
   }
 
   public onSubmit (): void {
-    const output: OutputData = {
-      id: Math.floor(1000 + Math.random() * 9000),
+    const output: IOutputData = {
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
       inputsIds: this.getIdsFromCalculation(),
-      calculations: this.form.get('calculation')?.value,
-      umbrals: []
+      formula: this.form.get('calculation')?.value,
+      umbralList: this.umbralList,
+      unit: this.form.get('unit')?.value
     }
-    console.log(output);
-    this.outputService.addOutput(output);
-    this.form.reset();
+    // console.log(output);
+    this.createOutput(output);
   }
 
   public setCalculation (data: any): void { 
     this.form.get('calculation')?.setValue(data);
+    console.log(data);
+    console.log(this.form)
   }
 
   /**
    * Lee el valor del textarea y valida si es una expresión matemática correcta con eval
    * @param event 
    */
-    validCalculation (event: any) {
-      if (event.srcElement.value.trim().length == 0) {
-        this.form.get('calculation_valid')?.setValue(false);
-        return;
-      }
-      try {
-        const test = eval(event.srcElement.value);
-        this.form.get('calculation_valid')?.setValue(test === undefined ? false : true);
-
-      } catch(error) {
-        this.form.get('calculation_valid')?.setValue(false)
-        
-      } 
+  validCalculation (event: any) {
+    if (event.srcElement.value.trim().length == 0) {
+      this.form.get('calculation_valid')?.setValue(false);
+      return;
     }
+    try {
+      const test = eval(event.srcElement.value);
+      this.form.get('calculation_valid')?.setValue(test === undefined ? false : true);
 
-    getIdsFromCalculation () {
-      const patronRegex = /#(\d+){([^}]+)}/gi;
-      const inputs = [...this.form.get('calculation')?.value.matchAll(patronRegex)];
-      const inputsValues = [];
-
-      for (const input of inputs) {
-        inputsValues.push(input[1]);
-      }
+    } catch(error) {
+      this.form.get('calculation_valid')?.setValue(false)
       
-      return inputsValues;
-    }
+    } 
+  }
 
-    public async setThreshold (): Promise<void> {
-      console.log("umbrales");
-      (await this.modalService.open(UmbralGeneratorComponent)).closed.subscribe((umbralList: IUmbral[]) => {
-        if (umbralList) console.log(umbralList);
-      });
+  getIdsFromCalculation () {
+    const patronRegex = /#(\d+){([^}]+)}/gi;
+    const inputs = [...this.form.get('calculation')?.value.matchAll(patronRegex)];
+    const inputsValues = [];
+
+    for (const input of inputs) {
+      inputsValues.push(input[1]);
     }
+    
+    return inputsValues;
+  }
+
+  public async setThreshold (): Promise<void> {
+    (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
+      if (!umbralList) return;
+      this.umbralList = umbralList;
+    });
+  }
+
+  private createOutput (output: IOutputData): void {
+    this.outputService.create(output).subscribe(
+      (res: IOutputData) => {
+        console.log(res);
+        this.form.reset();
+      }
+    );
+  }
 }

@@ -121,10 +121,10 @@ export class InputService {
     }
     this._mockData.push(input)
   }
-  removeInput(id:number){
+  removeInput(id:string){
     this._mockData=this._mockData.filter(input=>input.id!==id)
   }
-  searchInput(id:number|undefined):IInputData|undefined{
+  searchInput(id:string|undefined):IInputData|undefined{
     return this._mockData.find(input=>input.id===id)
   }
 

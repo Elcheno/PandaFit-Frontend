@@ -4,7 +4,7 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
 import { Observable, map, take } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment as env } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -120,7 +120,7 @@ export class InstitutionService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
-    return this.http.get<IPageable<IInstitution>>(`${environment.api.url}${environment.api.institution}/page`, { params: pageParams as any })
+    return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any })
       .pipe(
         map((res: any) => {
           const response: IPageable<IInstitution> = {
@@ -138,7 +138,7 @@ export class InstitutionService {
   }
 
   public getById (id: string): Observable<IInstitution> {
-    return this.http.get<IInstitution>(`${environment.api.url}${environment.api.institution}/${id}`)
+    return this.http.get<IInstitution>(`${env.api.url}${env.api.institution}/${id}`)
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };
@@ -149,7 +149,7 @@ export class InstitutionService {
   }
 
   public create (data: any): Observable<IInstitution> {
-    return this.http.post<IInstitution>(`${environment.api.url}${environment.api.institution}`, data)
+    return this.http.post<IInstitution>(`${env.api.url}${env.api.institution}`, data)
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };
@@ -160,7 +160,7 @@ export class InstitutionService {
   }
 
   public delete (data: any): Observable<IInstitution> {
-    return this.http.delete<IInstitution>(`${environment.api.url}${environment.api.institution}`, { body: data })
+    return this.http.delete<IInstitution>(`${env.api.url}${env.api.institution}`, { body: data })
     .pipe(
       map((res: any) => {
         const response: IInstitution = { ...res };
@@ -171,7 +171,7 @@ export class InstitutionService {
   }
 
   public update (data: any): Observable<IInstitution> {
-    return this.http.put<IInstitution>(`${environment.api.url}${environment.api.institution}`, data)
+    return this.http.put<IInstitution>(`${env.api.url}${env.api.institution}`, data)
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };
