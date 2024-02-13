@@ -36,7 +36,7 @@ export class ShowInputModalComponent {
     },
     {
       name:'Text',
-      value:IInputType.TEXT
+      value:IInputType.STRING
     }
   ];
 

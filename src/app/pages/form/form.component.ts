@@ -18,6 +18,8 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
+import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Component({
   selector: 'app-form',
@@ -184,6 +186,18 @@ export class FormComponent {
     }
     this.currentPage++;
     return moreItems;
+  }
+
+
+  private readonly inputService = inject(InputService);
+
+  public data!: IPageable<IInputData>;
+  public async createInput (): Promise<void> {
+    (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((institution: IInputData) => {
+      if (!institution) return;
+      institution.userOwnerId = '368948ea-5817-4ba9-94a4-67e6d94f794f';    
+      this.inputService.create(institution).subscribe((res: IInputData) => { });
+    });
   }
 }
 

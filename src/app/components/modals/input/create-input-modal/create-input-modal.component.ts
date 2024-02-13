@@ -36,7 +36,7 @@ export class CreateInputModalComponent {
     },
     {
       name:'Text',
-      value:IInputType.TEXT
+      value:IInputType.STRING
     }
   ];
 
@@ -48,7 +48,7 @@ export class CreateInputModalComponent {
       name:['',Validators.required],
       description:[''],
       selectType:['',Validators.required],
-      decimal:[''],
+      decimal:[false],
       decimals:[1],
       unit:['']
     })
@@ -61,12 +61,12 @@ export class CreateInputModalComponent {
       /*id:Math.floor(1000 + Math.random() * 9000),*/
       name:this.form.get('name')?.value,
       description:this.form.get('description')?.value,
-      type:this.form.get('type')?.value,
+      type:this.form.get('selectType')?.value,
       decimal:this.form.get('decimal')?.value,
       decimals:this.form.get('decimals')?.value,
       unit:this.form.get('unit')?.value,
-      userId:this.form.get('userId')?.value
-    };
+      userOwnerId:this.form.get('userId')?.value
+    };  
     this.form.reset();
     this.dialogRef.close(newInput);
 
