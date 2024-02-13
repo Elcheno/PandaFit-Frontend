@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { IFormData } from '../../model/interfaces/i-form-data';
 import { Observable, map, take } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment as env } from '../../../environments/environment.development';
 import { IPage } from '../../model/interfaces/i-page';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { HttpClient } from '@angular/common/http';
@@ -41,7 +41,7 @@ export class FormService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IFormData>> {
-    return this.http.get<IPageable<IFormData>>(`${environment.api.url}${environment.api.institution}/page`, { params: pageParams as any }) //cambiar URL
+    return this.http.get<IPageable<IFormData>>(`${env.api.url}${env.api.form}${env.api.formulary}/page`, { params: pageParams as any }) //cambiar URL
       .pipe(
         map((res: any) => {
           const response: IPageable<IFormData> = {
@@ -59,7 +59,7 @@ export class FormService {
   }
 
   public getById (id: string): Observable<IFormData> {
-    return this.http.get<IFormData>(`${environment.api.url}${environment.api.institution}/${id}`)
+    return this.http.get<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}/${id}`)
       .pipe(
         map((res: any) => {
           const response: IFormData = { ...res };
@@ -70,7 +70,7 @@ export class FormService {
   }
 
   public create (data: any): Observable<IFormData> {
-    return this.http.post<IFormData>(`${environment.api.url}${environment.api.institution}`, data)
+    return this.http.post<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, data)
       .pipe(
         map((res: any) => {
           const response: IFormData = { ...res };
@@ -81,7 +81,7 @@ export class FormService {
   }
 
   public delete (data: any): Observable<IFormData> {
-    return this.http.delete<IFormData>(`${environment.api.url}${environment.api.institution}`, { body: data })
+    return this.http.delete<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, { body: data })
     .pipe(
       map((res: any) => {
         const response: IFormData = { ...res };
@@ -92,7 +92,7 @@ export class FormService {
   }
 
   public update (data: any): Observable<IFormData> {
-    return this.http.put<IFormData>(`${environment.api.url}${environment.api.institution}`, data)
+    return this.http.put<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, data)
       .pipe(
         map((res: any) => {
           const response: IFormData = { ...res };

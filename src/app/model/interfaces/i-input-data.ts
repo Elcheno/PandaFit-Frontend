@@ -6,5 +6,6 @@ export interface IInputData {
     type:IInputType;
     decimal:boolean;
     decimals?:number;
-    unit?:string
+    unit?:string,
+    userOwnerId?:string
 }

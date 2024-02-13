@@ -6,7 +6,8 @@ export const environment = {
     users: '/users',
     schoolyear: '/schoolYear',
     form: 'form',
-    input: '/inputs',
+    input: '/input',
     output: '/output',
+    formulary: '/formulary'
   }
 };
