@@ -10,7 +10,7 @@
 
             <div class="flex content-start">
                 <div *ngFor="let item of items" cdkDragBoundary=".canvas" cdkDrag [attr.data-id]="item.id"
-                    class="items example-box rounded-lg flex justify-between items-center p-1"
+                    class="items example-box rounded-lg flex justify-between items-center p-1 transition-colors text-nowrap"
                     (click)="selectItem(item)" 
                     [class]="item.selected ? 'bg-green-light' : 'bg-white'">
                     {{ item.text }}

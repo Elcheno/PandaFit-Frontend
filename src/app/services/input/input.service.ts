@@ -323,7 +323,7 @@ export class InputService {
   }
 
   public getById (id: string): Observable<IInputData> {
-    return this.http.get<IInputData>(`${environment.api.url}${environment.api.input}/${id}`)
+    return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}/${id}`)
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res };

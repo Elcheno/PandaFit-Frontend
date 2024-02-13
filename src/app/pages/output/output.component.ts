@@ -6,6 +6,7 @@ import { IUmbral, IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
 import { UmbralGeneratorComponent } from '../../components/output/umbral-generator/umbral-generator.component';
 import { ModalService } from '../../services/modal/modal.service';
+import { IInputData } from '../../model/interfaces/i-input-data';
 
 @Component({
   selector: 'app-output',
@@ -24,6 +25,8 @@ export class OutputComponent {
 
   ids: number[] = [];
   public umbralList: IUmbral[] = [];
+
+  private inputs!: IInputData[];
 
   constructor() {
     this.form = this.fb.group({
@@ -53,9 +56,8 @@ export class OutputComponent {
   }
 
   public setCalculation (data: any): void { 
-    this.form.get('calculation')?.setValue(data);
-    console.log(data);
-    console.log(this.form)
+    this.inputs = data.inputs;
+    this.form.get('calculation')?.setValue(data.concatenatedFormula);
   }
 
   /**
@@ -78,12 +80,10 @@ export class OutputComponent {
   }
 
   getIdsFromCalculation () {
-    const patronRegex = /#(\d+){([^}]+)}/gi;
-    const inputs = [...this.form.get('calculation')?.value.matchAll(patronRegex)];
     const inputsValues = [];
 
-    for (const input of inputs) {
-      inputsValues.push(input[1]);
+    for (const input of this.inputs) {
+      if (input.id) inputsValues.push(input.id);
     }
     
     return inputsValues;

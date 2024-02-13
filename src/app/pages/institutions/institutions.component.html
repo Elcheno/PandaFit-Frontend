@@ -1,15 +1,11 @@
 <div class="w-full mx-auto lg:w-2/3">
     <h1 class="text-3xl font-bold mb-7 text-black-primary">Institutos</h1>
     <div class="flex items-center my-5">
-        
         <!-- Search Component -->
         <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
         <!-- Create Modal Component Trigger -->
-        <button type="button" (click)="create()"
-            class="p-2.5 ms-2 w-20 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
-            Crear
-        </button>
+        <buttonComp [text]="'Crear'" (click)="create()" [buttonStyle]="'ms-2'"></buttonComp>
     </div>
 
     <!-- Table Institutions Component -->

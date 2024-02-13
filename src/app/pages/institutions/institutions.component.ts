@@ -8,11 +8,12 @@ import { CreateInstitutionModalComponent } from '../../components/modals/institu
 import { UpdateInstitutionsModalComponent } from '../../components/modals/institutions/update-institutions-modal/update-institutions-modal.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
+import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-institutions',
   standalone: true,
-  imports: [TableInstitutionComponent, SearchEntityComponent],
+  imports: [TableInstitutionComponent, SearchEntityComponent, ButtonComponent],
   templateUrl: './institutions.component.html',
   styleUrl: './institutions.component.scss'
 })
