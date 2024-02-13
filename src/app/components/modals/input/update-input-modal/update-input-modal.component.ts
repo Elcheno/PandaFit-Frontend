@@ -66,7 +66,7 @@ export class UpdateInputModalComponent {
     this.initializeForm();
 }
 
-/*private initializeForm(): void {
+private initializeForm(): void {
     if (this.input) {
         this.form = this.formBuilder.group({
             name: [this.input.name, Validators.required],
@@ -88,11 +88,11 @@ export class UpdateInputModalComponent {
     }
 
     console.log(this.input.type);
-}*/
+}
 
-private initializeForm(): void {
+/*private initializeForm(): void {
   let typeValue = ''; 
-  
+
   if (typeof this.input.type === 'string') {
     switch (this.input.type) {
       case 'NUMBER':
@@ -117,7 +117,7 @@ private initializeForm(): void {
     decimals: [this.input.decimals],
     unit: [this.input.unit]
   });
-}
+}*/
 
   
 
