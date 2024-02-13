@@ -13,6 +13,7 @@ interface Item {
   id: number;
   text: string;
   selected:boolean;
+  input?: IInputData;
 }
 
 @Component({
@@ -34,10 +35,6 @@ export class FormGeneratorComponent {
     inputs: []
   });
 
-  private selectedItemId: number | null = null;
-
-  private itemsid: number = 0;
-
   public inputBuffer: string = '';
 
   public inputData!: any;
@@ -53,23 +50,26 @@ export class FormGeneratorComponent {
     rows: []
   };
 
-  ngOnInit() {
+  ngOnInit () {
     this.inputBufferSubject
       .pipe(debounceTime(1000))
       .subscribe(() => {
         this.handleInputBuffer();
       });
 
-    this.inputData = this.inputService.mockData;
+    this.inputService.getAll({ page: 0, size: 100, sort: ['name'] }).subscribe((res: any) => {
+      this.inputData = res.content;
+      this.generateDropdown();
+    });	
 
+  }
+
+  private generateDropdown (): void {
     this.dropdownRows = this.inputData.map((input: IInputData) => {
-      if (input.type === 1 || input.type === 2) {
-        return {
-          title: input.name,
-          fnc: () => this.insertInput(input)
-        };
-      }
-      return
+      return {
+        title: input.name,
+        fnc: () => this.insertInput(input)
+      };
     });
 
     this.dropdownData = {
@@ -80,63 +80,56 @@ export class FormGeneratorComponent {
     };
   }
 
-  handleInputBuffer() {
+  handleInputBuffer () {
     if (this.inputBuffer) {
       this.insertElement(this.inputBuffer);
       this.inputBuffer = '';
     }
   }
 
-  onDrop(event: any) {
+  onDrop (event: any) {
     moveItemInArray(this.items, event.previousIndex, event.currentIndex);
-    
-    //const draggedItemId = event.item.data.id;
     this.evaluateFormulas();
   }
 
-  insertInput(input: IInputData) {
+  insertInput (input: IInputData) {
     if(input && input.name)
-      this.insertElement('#'+input?.id+'{'+input?.name+'}');
+      this.insertElement(`#{${input?.name}}`, input);
   }
 
-  insertElement(newText: string) {
-    const newItem: Item = { id: this.itemsid++, text: newText, selected: false };
+  insertElement(newText: string, input?: IInputData) {
+    const newItem: Item = { id: this.items.length, text: newText, selected: false, input: input };
     this.items.push(newItem);
     this.evaluateFormulas();
-    
-    //this.evaluateFormulas();
   }
 
-  selectItem(item: any) {
+  selectItem (item: Item) {
     if (!item.selected) {
       this.items = this.items.map(i => { return { ...i, selected : false } });
       this.items = this.items.map(i => { return { ...i, selected : i.id === item.id } });
-      this.selectedItemId = item.id;
     } else {
       console.log(item);
       this.items = this.items.map(i => { return { ...i, selected : false } });
-      this.selectedItemId = null;
     }
   }
 
-  deleteItem(itemId: number) {
-    this.items = this.items.filter(item => item.id !== itemId);
-    this.selectedItemId = null;
+  deleteItem (data: Item) {
+    this.items = this.items.filter(item => item.id !== data.id);
     this.evaluateFormulas();
   }
 
-  handleKeyNumber(key: string) {
+  handleKeyNumber (key: string) {
     this.inputBuffer += key;
     this.inputBufferSubject.next('');
   }
 
-  handleKey(...key: string[]) {
+  handleKey (...key: string[]) { 
     for(const k of key){
       this.insertElement(k)
     }  
   }
 
-  evaluateFormulas() {
+  evaluateFormulas () {
     const concatenatedFormula = this.items.map(item => item.text).join('');
     this.changed.emit(concatenatedFormula);
 
@@ -171,27 +164,16 @@ export class FormGeneratorComponent {
     }
   }
 
-  /**
-   * Elimina de items el item seleccionado o no hace nada si no hay ninguno
-   */
-  public removeItem() {
-    if (this.selectedItemId) {
-      this.items = this.items.filter(item => item.id !== this.selectedItemId);
-      this.evaluateFormulas();
-    }
-  }
-
   private emulateInputsToValidate(concatenatedFormula: string): string {
-    const patronRegex = /#(\d+){([^}]+)}/g;
+    const patronRegex = /#{([^}]+)}/g;
     return concatenatedFormula.replaceAll(patronRegex, "1");
   }
 
   public checkSintaxis() {
     const concatenatedFormula = this.items.map(item => item.text).join('');
     let newconcatenatedFormula =concatenatedFormula;
-    const patronRegex = /#(\d+){([^}]+)}/gi;
+    const patronRegex = /#{([^}]+)}/gi;
     const inputs = [...concatenatedFormula.matchAll(patronRegex)];
-    const inputsValues = [];
     for (const input of inputs) {
       const id = input[1];
       const name = input[2];

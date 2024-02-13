@@ -15,7 +15,7 @@
                     [class]="item.selected ? 'bg-green-light' : 'bg-white'">
                     {{ item.text }}
                     @if (item.selected) {
-                        <button class="m-1 text-black-secondary hover:text-red-600" (click)="deleteItem(item.id)">
+                        <button class="m-1 text-black-secondary hover:text-red-600" (click)="deleteItem(item)">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -31,36 +31,6 @@
 
     <div class="grid grid-cols-2 bg-gray-50 p-4 gap-6 rounded-xl">
         <div class="grid grid-cols-3 gap-1 btn-parent">
-
-            <!-- <button type="button" class="col-span-2 bg-green-primary p-1 rounded-lg text-white hover:bg-green-light cursor-default"
-                (click)="isOpen = !isOpen" cdkOverlayOrigin #trigger="cdkOverlayOrigin">Inputs</button>
-            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen">
-
-                <ul class=" mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                    tabindex="-1" role="listbox" aria-labelledby="listbox-label"
-                    aria-activedescendant="listbox-option-3"> -->
-            <!--
-            Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
-            Highlighted: "bg-indigo-600 text-white", Not Highlighted: "text-gray-900"
-          -->
-            <!-- @for (input of inputService.mockData;track input.id) {
-                        @if (input.type == 1 || input.type == 2) {
-                            <li 
-                                (click)="insertInput(input)"
-                                class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9" id="listbox-option-0"
-                                role="option">
-
-                                <div class="flex items-center">
-                                    <span class="font-normal ml-3 block truncate">{{ input.name }}</span>
-                                </div>
-
-                            </li>
-                        }
-                    }
-                </ul>
-
-            </ng-template> -->
-
 
             <app-dropdown 
                 class="col-span-3" 

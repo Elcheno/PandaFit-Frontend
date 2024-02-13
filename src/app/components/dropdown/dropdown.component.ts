@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { type IDropdownButton, type IDropdownData, type IDropdownRow } from '../../model/interfaces/i-dropdown';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss'
 })
-export class DropdownComponent {
+export class DropdownComponent implements OnInit, OnChanges {
   @Input('rows') public dropdownData!: IDropdownData<any>;
   @Input('data') public data!: any;
   @Input('triggerStyle') public triggerStyle!: string;
@@ -28,17 +28,25 @@ export class DropdownComponent {
   }
 
   ngOnInit (): void {
+    this.loadData();
+  }
+
+  ngOnChanges (changes: SimpleChanges): void {
+    this.loadData();
+  }
+
+  private loadData (): void {
     this.button = {
       ...this.dropdownData.button,
       icon: this.dropdownData.button.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(this.dropdownData.button.icon) : ''
     };
-    console.log(this.dropdownData);
-    for (const row of this.dropdownData.rows) {
-      this.rows.push({
+
+    this.rows = this.dropdownData.rows.map(row => {
+      return {
         ...row,
         icon: row.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(row.icon) : ''
-      });
-    }
+      }
+    });
   }
 
   public async onClickRow (fnc?: (data?: any) => void | Promise<void>): Promise<void> {

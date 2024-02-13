@@ -11,15 +11,17 @@
       </div>
       <hr class="mb-2">
     }
+
     @for (row of rows; let index = $index; track index) {
-    <button 
-      class="example-menu-item hover:bg-gray-200"
-      [class]="dropdownStyle"
-      (click)="onClickRow(row.fnc)" 
-      [disabled]="row.disabled"
-      cdkMenuItem>
-        @if (row.icon !== undefined) { <div class="mr-1" [innerHTML]="row.icon"></div> } {{ row.title }}
-    </button>
+      <button 
+        class="example-menu-item hover:bg-gray-200"
+        [class]="dropdownStyle"
+        (click)="onClickRow(row.fnc)" 
+        [disabled]="row.disabled"
+        cdkMenuItem>
+          @if (row.icon !== undefined) { <div class="mr-1" [innerHTML]="row.icon"></div> } {{ row.title }}
+      </button>
     }
+
   </div>
 </ng-template>
