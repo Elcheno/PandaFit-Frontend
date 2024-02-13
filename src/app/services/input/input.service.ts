@@ -88,7 +88,7 @@ export class InputService {
             sort: pageParams?.sort ?? ['name'],
             totalElements: res['totalElements'],
             totalPages: res['totalPages'],
-            content: res.map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
+            content: res['content'].map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
           };
           return response;
         }),
