@@ -58,13 +58,14 @@ export class CreateInputModalComponent {
     if (!this.form.valid) return;
 
     const newInput = {
-      id:Math.floor(1000 + Math.random() * 9000) + "",
+      /*id:Math.floor(1000 + Math.random() * 9000),*/
       name:this.form.get('name')?.value,
       description:this.form.get('description')?.value,
       type:this.form.get('type')?.value,
       decimal:this.form.get('decimal')?.value,
       decimals:this.form.get('decimals')?.value,
-      unit:this.form.get('unit')?.value
+      unit:this.form.get('unit')?.value,
+      userId:this.form.get('userId')?.value
     };
     this.form.reset();
     this.dialogRef.close(newInput);
