@@ -2,7 +2,7 @@ export interface IOutputData{
     id?: string,
     name?: string,
     description?: string,
-    inputsIds?: number[],
+    inputsId?: string[],
     formula?: string
     umbralList: IUmbral[],
     unit?: string

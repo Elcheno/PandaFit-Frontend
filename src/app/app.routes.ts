@@ -5,6 +5,7 @@ import { ErrorComponent } from './pages/error/error.component';
 import { InputsComponent } from './pages/inputs/inputs.component';
 import { FormComponent } from './pages/form/form.component';
 import { OutputComponent } from './pages/output/output.component';
+import { FormularyComponent } from './pages/formulary/formulary.component';
 
 
 
@@ -32,6 +33,10 @@ export const routes: Routes = [
   {
     path: 'outputs',
     component: OutputComponent
+  },
+  {
+    path: 'formulary',
+    component: FormularyComponent
   },
   {
     path: '',

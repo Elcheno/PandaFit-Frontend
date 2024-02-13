@@ -43,7 +43,7 @@ export class OutputComponent {
     const output: IOutputData = {
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
-      inputsIds: this.getIdsFromCalculation(),
+      inputsId: this.getIdsFromCalculation(),
       formula: this.form.get('calculation')?.value,
       umbralList: this.umbralList,
       unit: this.form.get('unit')?.value

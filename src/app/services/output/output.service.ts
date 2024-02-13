@@ -18,7 +18,7 @@ export class OutputService {
       id: "1",
       name:'IMC',
       description:'Índice de masa muscular',
-      inputsIds:[1,2],
+      inputsId: ['1','2'],
       formula:"#1{Peso}/Math.pow(#2{Altura}/100,2)",
       umbralList: [],
       unit:''
@@ -46,12 +46,12 @@ export class OutputService {
     return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId (ids: number[]) {
+  getOutputsWithInputsId (ids: string[]) {
     let result:IOutputData[] = [];
     this._mockData.forEach(output => {
-      if(output.inputsIds && output.inputsIds.length>0) {
-        const filteredArray = ids.filter(value => output.inputsIds?.includes(value));
-        if(filteredArray && filteredArray.length==output.inputsIds.length) {
+      if(output.inputsId && output.inputsId.length > 0) {
+        const filteredArray = ids.filter(value => output.inputsId?.includes(value));
+        if(filteredArray && filteredArray.length==output.inputsId.length) {
           result.push(output)
         }
       }
@@ -90,7 +90,7 @@ export class OutputService {
 
 
   public create (data: IOutputData): Observable<IOutputData> {
-    const userId: string = '36887dc3-22d2-41d1-b69f-cd5d796530c2';
+    const userId: string = 'a03efe9f-f10c-43d3-9908-0eca94b35bed';
     const newData = { ...data, userOwnerId: userId }
     console.log(newData);
     return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData)
