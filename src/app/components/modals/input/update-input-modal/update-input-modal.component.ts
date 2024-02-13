@@ -38,7 +38,7 @@ export class UpdateInputModalComponent {
     },
     {
       name:'Text',
-      value:IInputType.TEXT
+      value:IInputType.STRING
     }
   ];
 
