@@ -27,7 +27,7 @@ export class UpdateInputModalComponent {
   });
 
   form!:FormGroup;
-  inputType:any[]=[
+  /*inputType:any[]=[
     {
       name:'Number',
       value:IInputType.NUMBER
@@ -40,21 +40,86 @@ export class UpdateInputModalComponent {
       name:'Text',
       value:IInputType.TEXT
     }
-  ];
+  ];*/
+
+  inputType: any[] = [
+    {
+      name: 'Number',
+      value: '0'  // Utiliza la misma representación de cadena que se encuentra en los datos del frontend
+    },
+    {
+      name: 'Boolean',
+      value: '1'  // Representación de cadena para booleanos
+    },
+    {
+      name: 'Text',
+      value: '2'  // Representación de cadena para texto
+    }
+];
+
 
   constructor (
     public dialogRef: DialogRef<IInputData>,
-    @Inject(DIALOG_DATA) public institutionList: IInstitution[]
-  ) {
-    this.form=this.formBuilder.group({
-      name:['',Validators.required],
-      description:[''],
-      selectType:['',Validators.required],
-      decimal:[''],
-      decimals:[1],
-      unit:['']
-    })
+    @Inject(DIALOG_DATA) public input: IInputData 
+) {
+
+    this.initializeForm();
+}
+
+/*private initializeForm(): void {
+    if (this.input) {
+        this.form = this.formBuilder.group({
+            name: [this.input.name, Validators.required],
+            description: [this.input.description],
+            selectType: [this.input.type.toString(), Validators.required],
+            decimal: [this.input.decimal],
+            decimals: [this.input.decimals],
+            unit: [this.input.unit]
+        });
+    } else {
+        this.form = this.formBuilder.group({
+            name: ['', Validators.required],
+            description: [''],
+            selectType: ['', Validators.required],
+            decimal: [false],
+            decimals: [0],
+            unit: ['']
+        });
+    }
+
+    console.log(this.input.type);
+}*/
+
+private initializeForm(): void {
+  let typeValue = ''; 
+  
+  if (typeof this.input.type === 'string') {
+    switch (this.input.type) {
+      case 'NUMBER':
+        typeValue = '0';
+        break;
+      case 'BOOLEAN':
+        typeValue = '1';
+        break;
+      case 'STRING':
+        typeValue = '2';
+        break;
+      default:
+        typeValue = ''; 
+    }
   }
+
+  this.form = this.formBuilder.group({
+    name: [this.input.name, Validators.required],
+    description: [this.input.description],
+    selectType: [typeValue, Validators.required], // Usar el tipo de valor convertido
+    decimal: [this.input.decimal],
+    decimals: [this.input.decimals],
+    unit: [this.input.unit]
+  });
+}
+
+  
 
   /*public submit (): void {
     if (!this.form.valid) return;
@@ -79,18 +144,18 @@ export class UpdateInputModalComponent {
     (await this.confirmService.open('¿Estás seguro de actualizar este input?')).closed.subscribe((res: boolean) => {
         if (!res) return;
 
-        const newInput = {
+        const updateInput = {
+            id: this.input.id,
             name: this.form.get('name')?.value,
             description: this.form.get('description')?.value,
-            type: this.form.get('type')?.value,
+            type: this.form.get('selectType')?.value,
             decimal: this.form.get('decimal')?.value,
             decimals: this.form.get('decimals')?.value,
-            unit: this.form.get('unit')?.value,
-            userId: this.form.get('userId')?.value
+            unit: this.form.get('unit')?.value
         };
 
         this.form.reset();
-        this.dialogRef.close(newInput);
+        this.dialogRef.close(updateInput);
     });
 }
 
