@@ -121,10 +121,10 @@ export class InputService {
     }
     this._mockData.push(input)
   }
-  removeInput(id:string){
+  removeInput(id:number){
     this._mockData=this._mockData.filter(input=>input.id!==id)
   }
-  searchInput(id:string|undefined):IInputData|undefined{
+  searchInput(id:number|undefined):IInputData|undefined{
     return this._mockData.find(input=>input.id===id)
   }
 
@@ -324,7 +324,7 @@ export class InputService {
 */
 
 public getAll (pageParams?: IPage): Observable<IPageable<IInputData>>{
-  return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.formsins}${environment.api.inputs}/page`, { params: pageParams as any})
+  return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.form}${environment.api.input}/page`, { params: pageParams as any})
     .pipe(
       map((res: any) => {
         const response: IPageable<IInputData> = {
@@ -350,7 +350,7 @@ public getAll (pageParams?: IPage): Observable<IPageable<IInputData>>{
 
 
   public getById (id: string): Observable<IInputData> {
-    return this.http.get<IInputData>(`${environment.api.url}${environment.api.inputs}/${id}`)
+    return this.http.get<IInputData>(`${environment.api.url}${environment.api.input}/${id}`)
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res };
@@ -361,7 +361,7 @@ public getAll (pageParams?: IPage): Observable<IPageable<IInputData>>{
   }
 
   public create (data: any): Observable<IInputData> {
-    return this.http.post<IInputData>(`${environment.api.url}${environment.api.formsins}${environment.api.inputsins}`, data)
+    return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res };
@@ -372,7 +372,7 @@ public getAll (pageParams?: IPage): Observable<IPageable<IInputData>>{
   }
 
   public delete (data: any): Observable<IInputData>{ 
-  return this.http.delete<IInputData>(`${environment.api.url}${environment.api.formsins}${environment.api.inputsins}`, { body: data })
+  return this.http.delete<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, { body: data })
     .pipe(
       map((res: any) => {
         const response: IInputData = { ...res };
@@ -383,7 +383,7 @@ public getAll (pageParams?: IPage): Observable<IPageable<IInputData>>{
   }
 
   public update (data: any): Observable<IInputData>{
-    return this.http.put<IInputData>(`${environment.api.url}${environment.api.formsins}${environment.api.inputsins}`, data)
+    return this.http.put<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res };

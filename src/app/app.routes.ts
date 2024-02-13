@@ -22,7 +22,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
   },
   {
-    path: 'form/inputs',
+    path: 'form/input',
     component: InputsComponent
   },
   {
