@@ -8,5 +8,6 @@ export const environment = {
     form: 'form',
     input: '/inputs',
     output: '/output',
+    formulary: '/formulary'
   }
 };
