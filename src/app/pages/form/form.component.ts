@@ -112,7 +112,7 @@ export class FormComponent {
       inputs:this.inputsSelected.map(item => item.id) as any
     };
     console.log(form)
-    this.formService.addForm(form);
+    this.formService.create(form);
     //this.formGroup.reset();
   }
 
