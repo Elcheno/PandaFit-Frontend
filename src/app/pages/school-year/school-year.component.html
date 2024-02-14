@@ -2,12 +2,12 @@
     <h1 class="text-3xl font-bold mb-7 text-black-primary">Cursos</h1>
     <div class="flex items-center my-5">
         <app-search-entity class="w-full"></app-search-entity>
-        <buttonComp [text]="'Crear'" (click)="create()"></buttonComp>
+        <buttonComp [text]="'Crear'" (click)="create()" [buttonStyle]="'ms-2'"></buttonComp>
     </div>
 </div>
-@if (data && data.length > 0) {
+@if (data && data.content.length > 0) {
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-    @for (item of data; track $index) {
+    @for (item of data.content; track $index) {
     <div class="w-full m-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow">
         <div class="flex justify-end px-4 pt-4">
             <!-- Dropdown menu -->
