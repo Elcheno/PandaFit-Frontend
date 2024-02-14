@@ -11,3 +11,21 @@
     --black-primary: #27272A;
     --black-secondary: #3F3F46;
 }
+
+
+
+@font-face {
+    font-family: 'geist-regular';
+    src: url('./assets/fonts/Geist-Regular.otf') format('otf'),
+      url('./assets/fonts/Geist-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'geist-black';
+    src: url('./assets/fonts/Geist-Black.otf') format('otf'),
+      url('./assets/fonts/Geist-Black.woff2') format('woff2');
+}
+
+:root {
+    font-family: geist-regular;	
+}
