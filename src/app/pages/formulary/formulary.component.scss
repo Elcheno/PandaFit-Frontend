@@ -1,0 +1,8 @@
+.active {
+    color: var(--green-primary);
+    text-decoration: underline;
+}
+
+.active:hover {
+    color: none;
+}
