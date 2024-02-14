@@ -27,16 +27,27 @@ export const routes: Routes = [
     component: InputsComponent
   },
   {
-    path: 'forms',
-    component: FormComponent
-  },
-  {
-    path: 'outputs',
-    component: OutputComponent
-  },
-  {
     path: 'formulary',
-    component: FormularyComponent
+    component: FormularyComponent,
+    children: [
+      {
+        path: 'inputs',
+        component: InputsComponent
+      },
+      {
+        path: 'outputs',
+        component: OutputComponent
+      },
+      {
+        path: 'forms',
+        component: FormComponent
+      },
+      {
+        path: '',
+        redirectTo: 'inputs',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
     path: '',
