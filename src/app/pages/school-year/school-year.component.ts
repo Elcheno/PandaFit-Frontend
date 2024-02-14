@@ -25,12 +25,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SchoolYearComponent {
   public form!: FormGroup;
-  private readonly shoolyearService = inject(SchoolyearService);
+  private readonly schoolYearService = inject(SchoolyearService);
   private readonly modalService = inject(ModalService);
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(ActivatedRoute);
 
-  public data: ISchoolYear[] = [];
+  // public data: ISchoolYear[] = [];
+  public data!: IPageable<ISchoolYear>;
   private route = this.router.snapshot.paramMap.get('institutionId');
 
   constructor(private readonly fb: FormBuilder) {
@@ -54,48 +55,40 @@ export class SchoolYearComponent {
   }
 
   public async loadTable(): Promise<void> {
-    this.pageable = await this.shoolyearService.getAllByInstitution({
+    this.pageable = await this.schoolYearService.getAllByInstitution({
       page: this.pageable.page,
       size: this.pageable.size,
       sort: this.pageable.sort
     } as IPage, this.route);
-    this.data = this.pageable.content;
+    this.data = this.pageable;
   }
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
-      if (!schoolYear) return;
+        if (!schoolYear) return;
 
-      this.shoolyearService.create(schoolYear, this.route)
-        .then((schoolYear: ISchoolYear) => {
-          console.log('SchoolYear created');
-          this.data.push(schoolYear);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
+        this.data.content.splice(0, 0, res);
+        this.data.totalElements += 1;
+      });
     });
   }
 
   public async delete(schoolYear: ISchoolYear): Promise<void> {
-    await this.shoolyearService.delete(schoolYear)
-      .then(() => {
-        console.log('SchoolYear deleted');
-        this.data = this.data.filter((item) => item.id !== schoolYear.id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      if (!schoolYear) return;
+
+    this.schoolYearService.delete(schoolYear).subscribe((res: ISchoolYear) => {
+      this.data.content = this.data.content.filter((item) => item.id !== schoolYear.id);
+      this.data.totalElements -= 1;
+    })
   }
 
   public async update(schoolYear: ISchoolYear): Promise<void> {
-    console.log(schoolYear);
-    (await this.modalService.open(UpdateSchoolYearModalComponent, schoolYear)).closed.subscribe((schoolYear: ISchoolYear) => {
-      if (!schoolYear) return;
+    (await this.modalService.open(UpdateSchoolYearModalComponent, schoolYear)).closed.subscribe(async (res: ISchoolYear) => {
+      if (!res) return;
       
-      this.shoolyearService.update(schoolYear)
-        .then((response) => {
-          this.data = this.data.map((item) => item.id === response.id ? response : item);
-        });
+      this.schoolYearService.update(res).subscribe((response: ISchoolYear) => {
+        this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+      });
     });
   }
 
@@ -106,9 +99,9 @@ export class SchoolYearComponent {
     });
   }
 
-  public async getMock(): Promise<void> {
-    this.data = await this.shoolyearService.getAllMock();
-  }
+  // public async getMock(): Promise<void> {
+  //   this.data = await this.schoolYearService.getAllMock();
+  // }
 
   public dropdownRows: IDropdownData<ISchoolYear> = {
     header: 'Curso',

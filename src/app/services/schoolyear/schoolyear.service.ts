@@ -4,6 +4,7 @@ import { environment as env, environment } from '../../../environments/environme
 import { type IPage } from '../../model/interfaces/i-page';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
+import { Observable, map, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -65,65 +66,45 @@ export class SchoolyearService {
     });
   }
 
-  public async create(schoolYear: any, id:any): Promise<ISchoolYear> {
-    return await new Promise<ISchoolYear>((resolve, reject) => {
-      const data: any = {
-        name: schoolYear.name,
-        institutionId: id
-      };
+  public create(schoolYear: any, id:any): Observable<ISchoolYear> {
+    const data: any = {
+      name: schoolYear.name,
+      institutionId: id
+    };
 
-      this.http.post(environment.api.url + environment.api.institution + environment.api.schoolyear, data)
-        .subscribe({
-          next: (res: any) => {
-            if (res != null) {
-              const schoolYearCreate: ISchoolYear = {
-                id: res.id,
-                name: res.name,
-                institutionId: res.institutionId
-              };
-              resolve(schoolYearCreate);
-            }
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+    return this.http.post<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, data)
+      .pipe(
+        map((res: any) => {
+          const response: ISchoolYear = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 
-  public async update(data: ISchoolYear): Promise<any> {
-    return await new Promise<any>((resolve, reject) => {
-      console.log(data);
-      this.http.put(environment.api.url + environment.api.institution + environment.api.schoolyear, data)
-        .subscribe({
-          next: (res: any) => {
-            if (res != null) {
-              const schoolYearCreate: ISchoolYear = {
-                id: data.id,
-                name: res.name,
-              };
-              resolve(schoolYearCreate);
-            }
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public update(data: ISchoolYear): Observable<any> {
+    const dataUpdate: any = {
+      id: data.id,
+      name: data.name,
+    }
+    console.log(dataUpdate)
+    return this.http.put<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, dataUpdate)
+      .pipe(
+        map((res: any) => {
+          const response: ISchoolYear = { ...res };
+          return response;
+        })
+      );
   }
 
-
-  public async delete(data: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.delete(env.api.url + env.api.institution + env.api.schoolyear, { body: data })
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public delete(data: ISchoolYear): Observable<ISchoolYear> {
+    return this.http.delete<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, { body: data })
+      .pipe(
+        map((res: any) => {
+          const response: ISchoolYear = { ...res };
+          return response;
+        }),
+        take(1)
+      );
   }
 }
