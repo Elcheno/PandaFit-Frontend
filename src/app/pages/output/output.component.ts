@@ -24,7 +24,6 @@ export class OutputComponent implements OnInit {
   ngOnInit (): void {
     this.outputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
       this.data = res;
-      console.log(this.data);
     });
   }
 

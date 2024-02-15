@@ -12,15 +12,9 @@ import { AuthService } from './services/auth/auth.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'Pandafit-Frontend';
-
   private readonly authService = inject(AuthService);
 
   ngOnInit (): void {
-    this.authService.login({ email: 'ruben@exmample.com' }).subscribe(
-      (res: any) => {
-        console.log(res);
-      }
-    );
+    this.authService.loadSessionData();
   }
 }

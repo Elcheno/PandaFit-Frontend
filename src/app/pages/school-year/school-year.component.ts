@@ -54,37 +54,32 @@ export class SchoolYearComponent {
   }
 
   public async loadTable(): Promise<void> {
-    this.pageable = await this.shoolyearService.getAllByInstitution({
-      page: this.pageable.page,
-      size: this.pageable.size,
-      sort: this.pageable.sort
-    } as IPage, this.route);
-    this.data = this.pageable.content;
+    this.shoolyearService.getAllByInstitution(
+      { 
+        page: this.pageable.page, 
+        size: this.pageable.size, 
+        sort: this.pageable.sort 
+      } as IPage, 
+    this.route
+    ).subscribe((res) => {
+      this.data = res.content;
+    });
   }
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
       if (!schoolYear) return;
 
-      this.shoolyearService.create(schoolYear, this.route)
-        .then((schoolYear: ISchoolYear) => {
-          console.log('SchoolYear created');
-          this.data.push(schoolYear);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      this.shoolyearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
+        this.data.push(schoolYear);
+      });
     });
   }
 
-  public async delete(schoolYear: ISchoolYear): Promise<void> {
-    await this.shoolyearService.delete(schoolYear)
-      .then(() => {
-        console.log('SchoolYear deleted');
-        this.data = this.data.filter((item) => item.id !== schoolYear.id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  public delete(schoolYear: ISchoolYear): void {
+    this.shoolyearService.delete(schoolYear).subscribe((res: boolean) => {
+      if (!res) return;
+      this.data = this.data.filter((item) => item.id !== schoolYear.id);
+    });
   }
 
   public async update(schoolYear: ISchoolYear): Promise<void> {
@@ -92,10 +87,10 @@ export class SchoolYearComponent {
     (await this.modalService.open(UpdateSchoolYearModalComponent, schoolYear)).closed.subscribe((schoolYear: ISchoolYear) => {
       if (!schoolYear) return;
       
-      this.shoolyearService.update(schoolYear)
-        .then((response) => {
-          this.data = this.data.map((item) => item.id === response.id ? response : item);
-        });
+      this.shoolyearService.update(schoolYear).subscribe((response: ISchoolYear) => {
+        this.data = this.data.map((item) => item.id === response.id ? response : item);
+
+      });
     });
   }
 

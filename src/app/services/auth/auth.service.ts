@@ -17,11 +17,18 @@ export class AuthService {
     this.sessionData.set(data);
   }
 
+  public loadSessionData (): void {
+    const sessionData = window.localStorage.getItem('sessionData');
+    if (sessionData) {
+      this.setSessionData(JSON.parse(sessionData));
+    }
+  }
+
   public login (data: any): Observable<any> {
     const body: any = {
-      email: 'ruben@example.com', 
-      uuid: '12345'
-    } 
+      email: data.email,
+      uuid: data.uuid
+    }
     return this.http.post<any>('http://localhost:8080/login', body)
       .pipe(
         catchError((error) => {
@@ -54,7 +61,8 @@ export class AuthService {
     try {
       const user = {
         email: data.email,
-        token: data.token
+        token: data.token,
+        roles: data.roles
       };
       this.setSessionData(user);
       window.localStorage.setItem('sessionData', JSON.stringify(user));
