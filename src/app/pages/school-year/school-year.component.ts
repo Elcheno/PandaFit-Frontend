@@ -55,7 +55,7 @@ export class SchoolYearComponent {
   }
 
   public async loadTable(): Promise<void> {
-    this.shoolyearService.getAllByInstitution(
+    this.schoolYearService.getAllByInstitution(
       { 
         page: this.pageable.page, 
         size: this.pageable.size, 
@@ -63,7 +63,7 @@ export class SchoolYearComponent {
       } as IPage, 
     this.route
     ).subscribe((res) => {
-      this.data = res.content;
+      this.data.content = res.content;
     });
   }
   public async create(): Promise<void> {
