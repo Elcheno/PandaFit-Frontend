@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthService } from './services/auth/auth.service';
+import { ToastService } from './services/modal/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,11 @@ import { AuthService } from './services/auth/auth.service';
 })
 export class AppComponent implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   ngOnInit (): void {
     this.authService.loadSessionData();
+    // this.toastService.showToast('Esto es un toast adsdasdasdasdadasdsa');
+    // setTimeout(() => this.toastService.showToast('Esto es un toast', 'error'), 2000);
   }
 }

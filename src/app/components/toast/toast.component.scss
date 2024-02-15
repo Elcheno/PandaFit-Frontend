@@ -1,0 +1,15 @@
+@keyframes showToastAnimation {
+  0% {
+    transform: translateY(75px);
+  } 25% {
+    transform: translateY(0);
+  } 90% {
+    transform: translateY(0);
+  } 100% {
+    transform: translateY(75px);
+  }
+}
+
+.showToast {
+  animation: showToastAnimation 3s ease-in-out
+}
