@@ -153,6 +153,17 @@ export class InputService {
       );
 }
 
+/*public show(data: any): Observable < IInputData > {
+  return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
+    .pipe(
+      map((res: any) => {
+        const response: IInputData = { ...res , type: IInputType[res.type].toString()};
+        return response;
+      }),
+      take(1)
+    );
+}*/
+
   public update(data: any): Observable < IInputData > {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;

@@ -31,11 +31,12 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 export class FormComponent {
   formBuilder = inject(FormBuilder);
   formGroup!:FormGroup;
-  inputsAvailable:IInputData[]=inject(InputService).mockData;
+  inputsAvailable:IInputData[]=[];
   inputsSelected:IInputData[]=[];
   outputsRelated:IOutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
+  institutionService = inject(InputService);
   private readonly modalService = inject(ModalService);
 
   totalInputs: number = 0; 
@@ -50,6 +51,12 @@ export class FormComponent {
       description:['']
     })
     this.loadMoreItems();
+  }
+
+  ngOnInit(): void {
+    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+      this.inputsAvailable.push(...res.content);
+    });
   }
 
   public search (value: string): void {
@@ -195,7 +202,7 @@ export class FormComponent {
   public async createInput (): Promise<void> {
     (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((institution: IInputData) => {
       if (!institution) return;
-      institution.userOwnerId = '368948ea-5817-4ba9-94a4-67e6d94f794f';    
+      institution.userOwnerId = '15ab7221-f8c2-4492-866e-2cf5594c3110';    
       this.inputService.create(institution).subscribe((res: IInputData) => { });
     });
   }

@@ -8,11 +8,12 @@ import { IInputData } from '../../model/interfaces/i-input-data';
 import { IPage } from '../../model/interfaces/i-page';
 import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
 import { UpdateInputModalComponent } from '../../components/modals/input/update-input-modal/update-input-modal.component';
+import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
 
 @Component({
   selector: 'app-inputs',
   standalone: true,
-  imports: [TableInputComponent, SearchEntityComponent],
+  imports: [TableInputComponent, SearchEntityComponent, ShowInputModalComponent],
   templateUrl: './inputs.component.html',
   styleUrl: './inputs.component.scss'
 })
@@ -36,16 +37,51 @@ export class InputsComponent {
     });
   }
 
+  public async show(input: IInputData): Promise<void> {
+    if (!input || !input.id) {
+      console.error("El input no es válido.");
+      return;
+    }
+  
+    try {
+      // Obtener los detalles del input usando su ID
+      const inputDetails: IInputData | undefined = await this.inputService.getById(input.id).toPromise();
+      
+      if (!inputDetails) {
+        console.error("No se encontraron detalles para el input.");
+        return;
+      }
+      
+      // Abrir el modal para mostrar los detalles del input
+      const modalRef = await this.modalService.open(ShowInputModalComponent, inputDetails);
+      // Escuchar cualquier evento de cierre del modal si es necesario
+      modalRef.closed.subscribe((result: any) => {
+        console.log("Modal cerrado con resultado:", result);
+      });
+    } catch (error) {
+      console.error("Error al obtener los detalles del input:", error);
+    }
+  }
+  
+  
+
+
+
   public async create (): Promise<void> {
     (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((input: IInputData) => {
       if(!input) return;
 
-      this.inputService.create(input).subscribe((res: IInputData) => {
+      /*this.inputService.create(input).subscribe((res: IInputData) => {
         this.data.content.splice(0,0, res);
         this.data.totalElements += 1;
-      });
+      });*/
+
+      input.userOwnerId = '49b0f874-d790-4e0e-be68-3446fcd7b928';    
+      this.inputService.create(input).subscribe((res: IInputData) => { });
     });
   }
+
+  
 
   public async update (input: IInputData): Promise<void> {
     (await this.modalService.open(UpdateInputModalComponent, input)).closed.subscribe((res: IInputData) => {
