@@ -6,6 +6,7 @@ import { InputsComponent } from './pages/inputs/inputs.component';
 import { FormComponent } from './pages/form/form.component';
 import { OutputComponent } from './pages/output/output.component';
 import { FormularyComponent } from './pages/formulary/formulary.component';
+import { CreateOutputComponent } from './components/output/create-output/create-output.component';
 
 
 
@@ -36,7 +37,11 @@ export const routes: Routes = [
       },
       {
         path: 'outputs',
-        component: OutputComponent
+        component: OutputComponent,
+      },
+      {
+        path: 'outputs/create',
+        component: CreateOutputComponent
       },
       {
         path: 'forms',

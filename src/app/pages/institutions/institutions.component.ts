@@ -26,25 +26,12 @@ export class InstitutionsComponent {
   public data!: IPageable<IInstitution>;
 
   public async ngOnInit (): Promise<void> {
-    // await this.institutionService.getAllMock(0)
-    //   .then((res: IPageable<IInstitution>) => {
-    //     this.data = res;
-    //   });
-
       this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
         this.data = res;
       });
   }
 
   public async getAll (page: IPage): Promise<void> {
-    // MOCK USER DATA
-    // await this.institutionService.getAllMock(page.page)
-    //   .then((res: IPageable<IInstitution>) => {
-    //     this.data = res;
-    //     this.table.toggleTableLoader();
-    //   }
-    // );
-
     this.institutionService.getAll(page).subscribe((res) => {
       this.data = res;
     });

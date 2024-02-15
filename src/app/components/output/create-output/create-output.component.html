@@ -1,0 +1,39 @@
+<form [formGroup]="form" class="w-full mx-auto lg:w-2/3" (ngSubmit)="onSubmit()">
+
+    <h1 class="text-3xl font-bold mb-7 text-black-primary">Crear Nuevo Resultado</h1>
+
+    <div class="mb-5">
+        <input type="text" formControlName="name"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Nombre">
+    </div>
+
+    <div class="mb-5">
+        <textarea formControlName="description" rows="4"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+            placeholder="Descripción"></textarea>
+    </div>
+
+    <div class="mb-5">
+        <app-form-generator (changed)="setCalculation($event)"></app-form-generator>
+        <textarea hidden formControlName="calculation"></textarea>
+    </div>
+
+    <div class="mb-5">
+        <input type="text" formControlName="unit"
+            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Unidad de medida, por ejemplo cms">
+    </div>
+
+    <buttonComp
+        [text]="'Definir Umbral'"
+        [buttonStyle]="'mx-0 w-full mb-5'"
+        (click)="setThreshold()"
+    ></buttonComp>
+
+    <buttonComp 
+        [text]="'Crear Output'" 
+        [buttonStyle]="'mx-0 w-full'"
+        (click)="onSubmit()">
+    </buttonComp>
+</form>

@@ -90,7 +90,7 @@ export class OutputService {
 
 
   public create (data: IOutputData): Observable<IOutputData> {
-    const userId: string = 'ec2384fe-1613-4f1c-8f15-3278b6c80d20';
+    const userId: string = '2c16a0d5-ea6a-408c-85d1-8d92b4bfdd7a';
     const newData = { ...data, userOwnerId: userId }
     console.log(newData);
     return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData)
