@@ -7,6 +7,7 @@ import { OutputService } from '../../../services/output/output.service';
 import { UmbralGeneratorComponent } from '../../output/umbral-generator/umbral-generator.component';
 import { ModalService } from '../../../services/modal/modal.service';
 import { IInputData } from '../../../model/interfaces/i-input-data';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-output',
@@ -19,6 +20,7 @@ export class CreateOutputComponent {
   private readonly outputService = inject(OutputService);
   private readonly fb = inject(FormBuilder);
   private readonly modalService = inject(ModalService);
+  private readonly router = inject(Router);
 
   public form!: FormGroup;
 
@@ -50,7 +52,7 @@ export class CreateOutputComponent {
       umbralList: this.umbralList,
       unit: this.form.get('unit')?.value
     }
-    // console.log(output);
+
     this.createOutput(output);
   }
 
@@ -98,8 +100,8 @@ export class CreateOutputComponent {
   private createOutput (output: IOutputData): void {
     this.outputService.create(output).subscribe(
       (res: IOutputData) => {
-        console.log(res);
         this.form.reset();
+        this.router.navigateByUrl('formulary/outputs');
       }
     );
   }

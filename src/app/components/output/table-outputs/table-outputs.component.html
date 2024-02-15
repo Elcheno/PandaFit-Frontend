@@ -66,3 +66,9 @@
         }
     </table>
 </div>
+
+<app-pagination
+  [data]="data"
+  (nextPageEvent)="handleNextPage()"
+  (previousPageEvent)="handlePreviousPage()"
+></app-pagination>

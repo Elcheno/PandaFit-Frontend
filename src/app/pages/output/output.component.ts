@@ -6,7 +6,7 @@ import { SearchEntityComponent } from '../../components/search-entity/search-ent
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { TableOutputsComponent } from '../../components/output/table-outputs/table-outputs.component';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-output',
@@ -17,6 +17,7 @@ import { RouterLink } from '@angular/router';
 })
 export class OutputComponent implements OnInit {
   private readonly outputService = inject(OutputService);
+  private readonly router = inject(Router);
 
   public data!: IPageable<IOutputData>;
 
@@ -32,8 +33,6 @@ export class OutputComponent implements OnInit {
       this.data = res;
     });
   }
-
-  public async create (): Promise<void> { }
 
   public async update (output: IOutputData): Promise<void> {
     if (!output) return;

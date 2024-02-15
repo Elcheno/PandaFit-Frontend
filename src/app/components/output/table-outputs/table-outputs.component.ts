@@ -6,11 +6,12 @@ import { ModalConfirmService } from '../../../services/modal/modal-confirm.servi
 import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 @Component({
   selector: 'app-table-outputs',
   standalone: true,
-  imports: [DropdownComponent, LoaderSpinnerComponent],
+  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent],
   templateUrl: './table-outputs.component.html',
   styleUrl: './table-outputs.component.scss'
 })
