@@ -76,8 +76,11 @@ export class InputsComponent {
         this.data.totalElements += 1;
       });*/
 
-      input.userOwnerId = '17a7f91d-b8eb-45f5-b8ce-084c0a23cf61';    
-      this.inputService.create(input).subscribe((res: IInputData) => { });
+      input.userOwnerId = 'f92e0e1c-17d0-4396-a012-26826952a441';    
+      this.inputService.create(input).subscribe((res: IInputData) => { 
+        this.data.content.unshift(res); 
+      this.data.totalElements++
+      });
     });
   }
 
