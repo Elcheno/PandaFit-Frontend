@@ -5,13 +5,14 @@ import { IPage } from '../../model/interfaces/i-page';
 import { Observable, map, take } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { environment as env } from '../../../environments/environment.development';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OutputService {
   private readonly http = inject(HttpClient);
-
+  private readonly authService = inject(AuthService);
 
   private _mockData: IOutputData[] = [
     {
@@ -60,7 +61,10 @@ export class OutputService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IOutputData>> {
-    return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.form}${env.api.output}/page`, { params: pageParams as any })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.form}${env.api.output}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IOutputData> = {
@@ -78,7 +82,10 @@ export class OutputService {
   }
 
   public getById (id: string): Observable<IOutputData> {
-    return this.http.get<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}/${id}`)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };
@@ -90,10 +97,13 @@ export class OutputService {
 
 
   public create (data: IOutputData): Observable<IOutputData> {
-    const userId: string = 'ec2384fe-1613-4f1c-8f15-3278b6c80d20';
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const userId: string = '2c16a0d5-ea6a-408c-85d1-8d92b4bfdd7a';
     const newData = { ...data, userOwnerId: userId }
     console.log(newData);
-    return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData)
+    return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };
@@ -104,7 +114,10 @@ export class OutputService {
   }
 
   public delete (data: IOutputData): Observable<IOutputData> {
-    return this.http.delete<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, { body: data })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, { body: data, headers: { Authorization: token ?? "" } })
     .pipe(
       map((res: any) => {
         const response: IOutputData = { ...res };
@@ -115,7 +128,10 @@ export class OutputService {
   }
 
   public update (data: IOutputData): Observable<IOutputData> {
-    return this.http.put<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, data)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.put<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IOutputData = { ...res };

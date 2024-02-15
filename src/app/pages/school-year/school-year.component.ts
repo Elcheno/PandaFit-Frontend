@@ -55,17 +55,21 @@ export class SchoolYearComponent {
   }
 
   public async loadTable(): Promise<void> {
-    this.pageable = await this.schoolYearService.getAllByInstitution({
-      page: this.pageable.page,
-      size: this.pageable.size,
-      sort: this.pageable.sort
-    } as IPage, this.route);
-    this.data = this.pageable;
+    this.shoolyearService.getAllByInstitution(
+      { 
+        page: this.pageable.page, 
+        size: this.pageable.size, 
+        sort: this.pageable.sort 
+      } as IPage, 
+    this.route
+    ).subscribe((res) => {
+      this.data = res.content;
+    });
   }
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
         if (!schoolYear) return;
-
+      
       this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
@@ -76,7 +80,8 @@ export class SchoolYearComponent {
   public async delete(schoolYear: ISchoolYear): Promise<void> {
       if (!schoolYear) return;
 
-    this.schoolYearService.delete(schoolYear).subscribe((res: ISchoolYear) => {
+    this.schoolYearService.delete(schoolYear).subscribe((res: boolean) => {
+      if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== schoolYear.id);
       this.data.totalElements -= 1;
     })

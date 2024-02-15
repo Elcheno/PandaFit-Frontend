@@ -1,107 +1,59 @@
-import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FormGeneratorComponent } from '../../components/output/form-generator/form-generator.component';
+import { Component, OnInit, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
-import { IUmbral, IOutputData } from '../../model/interfaces/i-output-data';
+import { IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
-import { UmbralGeneratorComponent } from '../../components/output/umbral-generator/umbral-generator.component';
-import { ModalService } from '../../services/modal/modal.service';
-import { IInputData } from '../../model/interfaces/i-input-data';
+import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
+import { IPageable } from '../../model/interfaces/i-pageable';
+import { IPage } from '../../model/interfaces/i-page';
+import { TableOutputsComponent } from '../../components/output/table-outputs/table-outputs.component';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-output',
   standalone: true,
-  imports: [ReactiveFormsModule, FormGeneratorComponent, ButtonComponent, UmbralGeneratorComponent],
+  imports: [ButtonComponent, SearchEntityComponent, TableOutputsComponent, RouterLink],
   templateUrl: './output.component.html',
   styleUrl: './output.component.scss'
 })
-export class OutputComponent {
-
+export class OutputComponent implements OnInit {
   private readonly outputService = inject(OutputService);
-  private readonly fb = inject(FormBuilder);
-  private readonly modalService = inject(ModalService);
+  private readonly router = inject(Router);
 
-  public form!: FormGroup;
+  public data!: IPageable<IOutputData>;
 
-  ids: number[] = [];
-  public umbralList: IUmbral[] = [];
-
-  private inputs!: IInputData[];
-
-  constructor() {
-    this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      description: [''],
-      calculation: ['', [Validators.required]],
-      calculation_valid:[false, [Validators.required]],
-      text_lower:[''],
-      value_lower:[0],
-      text_upper:[''],
-      value_upper:[0],
-      unit:['', [Validators.required]]
+  ngOnInit (): void {
+    this.outputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+      this.data = res;
     });
   }
 
-  public onSubmit (): void {
-    const output: IOutputData = {
-      name: this.form.get('name')?.value,
-      description: this.form.get('description')?.value,
-      inputsId: this.getIdsFromCalculation(),
-      formula: this.form.get('calculation')?.value,
-      umbralList: this.umbralList,
-      unit: this.form.get('unit')?.value
-    }
-    // console.log(output);
-    this.createOutput(output);
+  public async getAll (page: IPage): Promise<void> {
+    this.outputService.getAll(page).subscribe((res) => {
+      this.data = res;
+    });
   }
 
-  public setCalculation (data: any): void { 
-    this.inputs = data.inputs;
-    this.form.get('calculation')?.setValue(data.concatenatedFormula);
+  public async update (output: IOutputData): Promise<void> {
+    if (!output) return;
+
+    // (await this.modalService.open(UpdateInstitutionsModalComponent, institution)).closed.subscribe((res: IInstitution) => {
+    //   this.institutionService.update(res).subscribe((response: IInstitution) => {
+    //     this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+    //   });
+    // });
   }
 
-  /**
-   * Lee el valor del textarea y valida si es una expresión matemática correcta con eval
-   * @param event 
-   */
-  validCalculation (event: any) {
-    if (event.srcElement.value.trim().length == 0) {
-      this.form.get('calculation_valid')?.setValue(false);
-      return;
-    }
-    try {
-      const test = eval(event.srcElement.value);
-      this.form.get('calculation_valid')?.setValue(test === undefined ? false : true);
-
-    } catch(error) {
-      this.form.get('calculation_valid')?.setValue(false)
-      
-    } 
-  }
-
-  getIdsFromCalculation () {
-    const inputsValues = [];
-
-    for (const input of this.inputs) {
-      if (input.id) inputsValues.push(input.id);
-    }
+  public async delete (output: IOutputData): Promise<void> {
+    if (!output) return;
     
-    return inputsValues;
+    this.outputService.delete(output).subscribe((res: IOutputData) => {
+      this.data.content = this.data.content.filter((item) => item.id !== res.id);
+      this.data.totalElements -= 1;
+    })
   }
 
-  public async setThreshold (): Promise<void> {
-    (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
-      if (!umbralList) return;
-      this.umbralList = umbralList;
-    });
+  public search (value: string): void {
+    console.log(value);
   }
 
-  private createOutput (output: IOutputData): void {
-    this.outputService.create(output).subscribe(
-      (res: IOutputData) => {
-        console.log(res);
-        this.form.reset();
-      }
-    );
-  }
 }
