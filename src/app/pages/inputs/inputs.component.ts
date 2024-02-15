@@ -76,20 +76,36 @@ export class InputsComponent {
         this.data.totalElements += 1;
       });*/
 
-      input.userOwnerId = '49b0f874-d790-4e0e-be68-3446fcd7b928';    
+      input.userOwnerId = '17a7f91d-b8eb-45f5-b8ce-084c0a23cf61';    
       this.inputService.create(input).subscribe((res: IInputData) => { });
     });
   }
 
   
 
-  public async update (input: IInputData): Promise<void> {
+  /*public async update (input: IInputData): Promise<void> {
     (await this.modalService.open(UpdateInputModalComponent, input)).closed.subscribe((res: IInputData) => {
       this.inputService.update(res).subscribe((response: IInputData) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
       });
     });
+  }*/
+
+  public async update(input: IInputData): Promise<void> {
+    if (!input) {
+      console.error("El input es inválido.");
+      return;
+    }
+    const modalRef = await this.modalService.open(UpdateInputModalComponent, input);
+    modalRef.closed.subscribe((res: IInputData) => {
+      if (res) {
+        this.inputService.update(res).subscribe((response: IInputData) => {
+          this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        });
+      }
+    });
   }
+ 
 
   public async delete (input: IInputData): Promise<void> {
     if(!input) return;
