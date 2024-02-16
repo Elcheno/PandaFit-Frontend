@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit (): void {
     this.authService.loadSessionData();
-    // this.toastService.showToast('Esto es un toast adsdasdasdasdadasdsa');
-    // setTimeout(() => this.toastService.showToast('Esto es un toast', 'error'), 2000);
+    // this.toastService.showToast('Esto es un toast', 'success');
+    // this.toastService.showToast('Esto es un toast', 'error');
   }
 }
