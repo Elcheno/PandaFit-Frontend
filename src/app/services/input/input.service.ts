@@ -126,7 +126,7 @@ export class InputService {
       decimal: input.decimal,
       decimals: input.decimals,
       unit: input.unit,
-      userOwnerId: input.userOwnerId
+      userOwnerId: '8570f04f-c55c-4cee-b9b7-32bb492faf74'
     };
 
     return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
@@ -152,17 +152,6 @@ export class InputService {
         take(1)
       );
 }
-
-/*public show(data: any): Observable < IInputData > {
-  return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
-    .pipe(
-      map((res: any) => {
-        const response: IInputData = { ...res , type: IInputType[res.type].toString()};
-        return response;
-      }),
-      take(1)
-    );
-}*/
 
   public update(data: any): Observable < IInputData > {
     const sessionData = this.authService.sessionData();

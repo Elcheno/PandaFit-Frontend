@@ -42,20 +42,11 @@ export class UpdateInputModalComponent {
     }
   ];*/
 
-  inputType: any[] = [
-    {
-      name: 'Number',
-      value: '0'  // Utiliza la misma representación de cadena que se encuentra en los datos del frontend
-    },
-    {
-      name: 'Boolean',
-      value: '1'  // Representación de cadena para booleanos
-    },
-    {
-      name: 'Text',
-      value: '2'  // Representación de cadena para texto
-    }
-];
+  inputType = [
+    { name: 'Number', value: IInputType.NUMBER },
+    { name: 'Boolean', value: IInputType.BOOLEAN },
+    { name: 'Text', value: IInputType.STRING }
+  ];
 
 
   constructor (
@@ -66,12 +57,12 @@ export class UpdateInputModalComponent {
     this.initializeForm();
 }
 
-private initializeForm(): void {
+/*private initializeForm(): void {
     if (this.input) {
         this.form = this.formBuilder.group({
             name: [this.input.name, Validators.required],
             description: [this.input.description],
-            selectType: [this.input.type.toString(), Validators.required],
+            selectType: [this.input.type, Validators.required],
             decimal: [this.input.decimal],
             decimals: [this.input.decimals],
             unit: [this.input.unit]
@@ -88,6 +79,30 @@ private initializeForm(): void {
     }
 
     console.log(this.input.type);
+}*/
+
+private initializeForm(): void {
+  if (this.input) {
+      this.form = this.formBuilder.group({
+          name: [this.input.name, Validators.required],
+          description: [this.input.description],
+          selectType: [(this.input.type === 2) ? '2' : this.input.type.toString(), Validators.required], // Condición para establecer 'Texto' si el valor es 2
+          decimal: [this.input.decimal],
+          decimals: [this.input.decimals],
+          unit: [this.input.unit]
+      });
+
+      console.log("Valor de this.input.type:", this.input.type);
+  } else {
+      this.form = this.formBuilder.group({
+          name: ['', Validators.required],
+          description: [''],
+          selectType: ['', Validators.required],
+          decimal: [false],
+          decimals: [0],
+          unit: ['']
+      });
+  }
 }
 
 /*private initializeForm(): void {
