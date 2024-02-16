@@ -49,12 +49,11 @@ export class SchoolYearComponent {
     content: []
   };
 
-  public async ngOnInit(): Promise<void> {
-    // await this.loadTable();
-    await this.loadTable();
+  public ngOnInit(): void {
+    this.loadTable();
   }
 
-  public async loadTable(): Promise<void> {
+  public loadTable(): void {
     this.schoolYearService.getAllByInstitution(
       { 
         page: this.pageable.page, 
@@ -63,7 +62,7 @@ export class SchoolYearComponent {
       } as IPage, 
     this.route
     ).subscribe((res) => {
-      this.data.content = res.content;
+      this.data = res;
     });
   }
   public async create(): Promise<void> {

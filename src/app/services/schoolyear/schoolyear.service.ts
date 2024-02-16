@@ -4,7 +4,7 @@ import { environment as env } from '../../../environments/environment.developmen
 import { type IPage } from '../../model/interfaces/i-page';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
 import { AuthService } from '../auth/auth.service';
-import { Observable, map, take } from 'rxjs';
+import { Observable, catchError, map, take } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Injectable({
@@ -36,8 +36,11 @@ export class SchoolyearService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IPageable<ISchoolYear>>(env.api.url + env.api.institution + "/" + id + env.api.schoolyear +'/page', { params: pageParams as any, headers: { Authorization: token ?? "" } })
-      .pipe(
+    return this.http.get<IPageable<ISchoolYear>>(env.api.url + env.api.institution + "/" + id + env.api.schoolyear +'/page', { params: pageParams as any, headers: { Authorization: token ?? "" } })  
+    .pipe(
+        catchError((error) => {
+          return error;
+        }),
         map((res: any) => {
           return res as IPageable<ISchoolYear>;
         }),
