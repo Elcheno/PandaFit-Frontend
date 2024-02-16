@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
-import { DropdownComponent } from '../../components/dropdown/dropdown.component';
-import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
-import { PaginationComponent } from '../../components/pagination/pagination.component';
-import { IPageable } from '../../model/interfaces/i-pageable';
-import { IInputData } from '../../model/interfaces/i-input-data';
-import { IPage } from '../../model/interfaces/i-page';
-import { ModalConfirmService } from '../../services/modal/modal-confirm.service';
+import { DropdownComponent } from '../../dropdown/dropdown.component';
+import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
+import { PaginationComponent } from '../../pagination/pagination.component';
+import { IPageable } from '../../../model/interfaces/i-pageable';
+import { IInputData } from '../../../model/interfaces/i-input-data';
+import { IPage } from '../../../model/interfaces/i-page';
+import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { Router } from '@angular/router';
-import { IDropdownData } from '../../model/interfaces/i-dropdown';
+import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 
 @Component({
   selector: 'app-table-input',

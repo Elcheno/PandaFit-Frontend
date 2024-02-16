@@ -1,6 +1,6 @@
 import { Component, ViewChild, inject, input } from '@angular/core';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
-import { TableInputComponent } from '../../inputs/table-input/table-input.component';
+import { TableInputComponent } from '../../components/inputs/table-input/table-input.component';
 import { InputService } from '../../services/input/input.service';
 import { ModalService } from '../../services/modal/modal.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -9,11 +9,13 @@ import { IPage } from '../../model/interfaces/i-page';
 import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
 import { UpdateInputModalComponent } from '../../components/modals/input/update-input-modal/update-input-modal.component';
 import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
+import { ToastService } from '../../services/modal/toast.service';
+import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-inputs',
   standalone: true,
-  imports: [TableInputComponent, SearchEntityComponent, ShowInputModalComponent],
+  imports: [TableInputComponent, SearchEntityComponent, ShowInputModalComponent, ButtonComponent],
   templateUrl: './inputs.component.html',
   styleUrl: './inputs.component.scss'
 })
@@ -22,6 +24,7 @@ export class InputsComponent {
 
   private readonly inputService = inject(InputService);
   private readonly modalService = inject(ModalService);
+  private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IInputData>;
 
@@ -79,7 +82,8 @@ export class InputsComponent {
       input.userOwnerId = 'f92e0e1c-17d0-4396-a012-26826952a441';    
       this.inputService.create(input).subscribe((res: IInputData) => { 
         this.data.content.unshift(res); 
-      this.data.totalElements++
+        this.data.totalElements++
+        this.toastService.showToast('Campo creado', 'success');
       });
     });
   }
@@ -104,6 +108,7 @@ export class InputsComponent {
       if (res) {
         this.inputService.update(res).subscribe((response: IInputData) => {
           this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+          this.toastService.showToast('Campo actualizado', 'success');
         });
       }
     });
@@ -116,6 +121,7 @@ export class InputsComponent {
     this.inputService.delete(input).subscribe((res: IInputData) => {
       this.data.content = this.data.content.filter((item) => item.id !== input.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Campo eliminado', 'success');
     })
   }
 

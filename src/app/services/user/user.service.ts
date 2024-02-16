@@ -208,15 +208,14 @@ export class UserService {
       );
   }
 
-  public delete (data: IUser): Observable<IUser> {
+  public delete (data: IUser): Observable<boolean> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.delete<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data, headers: { Authorization: token ?? "" } })
+    return this.http.delete<boolean>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data, headers: { Authorization: token ?? "" } })
       .pipe(
-        map((res: any) => {
-          const response: IUser = { ...res };
-          return response;
+        map((res: boolean) => {
+          return res;
         }),
         take(1)
       );

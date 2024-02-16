@@ -9,6 +9,7 @@ import { UpdateInstitutionsModalComponent } from '../../components/modals/instit
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { ButtonComponent } from '../../components/button/button.component';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-institutions',
@@ -22,6 +23,7 @@ export class InstitutionsComponent {
 
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
+  private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IInstitution>;
 
@@ -44,6 +46,7 @@ export class InstitutionsComponent {
       this.institutionService.create(institution).subscribe((res: IInstitution) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.toastService.showToast('Instituto creado', 'success');
       });
     });
   }
@@ -54,6 +57,7 @@ export class InstitutionsComponent {
     (await this.modalService.open(UpdateInstitutionsModalComponent, institution)).closed.subscribe((res: IInstitution) => {
       this.institutionService.update(res).subscribe((response: IInstitution) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.toastService.showToast('Instituto actualizado', 'success');
       });
     });
   }
@@ -64,6 +68,7 @@ export class InstitutionsComponent {
     this.institutionService.delete(institution).subscribe((res: IInstitution) => {
       this.data.content = this.data.content.filter((item) => item.id !== institution.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Instituto eliminado', 'success');
     })
   }
 

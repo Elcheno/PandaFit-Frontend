@@ -1,5 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   public logginStatus: boolean;
 
@@ -21,9 +23,10 @@ export class LoginComponent {
   }
 
   public login (): void {
-    this.authService.login({ email: 'admin@example.com', uuid: 'admin' }).subscribe(
+    this.authService.login({ email: 'admin@example.com', uuid: '12345' }).subscribe(
       (res: any) => {
         console.log(res);
+        this.toastService.showToast('Sesión iniciada correctamente', 'success');
       }
     );
   }
