@@ -15,6 +15,7 @@ import { IDropdownData } from '../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../services/modal/modal-confirm.service';
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-school-year',
@@ -29,6 +30,7 @@ export class SchoolYearComponent {
   private readonly modalService = inject(ModalService);
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(ActivatedRoute);
+  private readonly toastService = inject(ToastService);
 
   // public data: ISchoolYear[] = [];
   public data!: IPageable<ISchoolYear>;
@@ -72,6 +74,7 @@ export class SchoolYearComponent {
       this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.toastService.showToast('Curso creado', 'success');
       });
     });
   }
@@ -83,6 +86,7 @@ export class SchoolYearComponent {
       if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== schoolYear.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Curso eliminado', 'success');
     })
   }
 
@@ -92,6 +96,7 @@ export class SchoolYearComponent {
       
       this.schoolYearService.update(res).subscribe((response: ISchoolYear) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.toastService.showToast('Curso actualizado', 'success');
       });
     });
   }

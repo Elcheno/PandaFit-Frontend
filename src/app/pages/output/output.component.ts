@@ -7,6 +7,7 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { TableOutputsComponent } from '../../components/output/table-outputs/table-outputs.component';
 import { RouterLink, Router } from '@angular/router';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-output',
@@ -17,7 +18,7 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class OutputComponent implements OnInit {
   private readonly outputService = inject(OutputService);
-  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IOutputData>;
 
@@ -49,6 +50,7 @@ export class OutputComponent implements OnInit {
     this.outputService.delete(output).subscribe((res: IOutputData) => {
       this.data.content = this.data.content.filter((item) => item.id !== res.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Respuesta eliminada', 'success');
     })
   }
 

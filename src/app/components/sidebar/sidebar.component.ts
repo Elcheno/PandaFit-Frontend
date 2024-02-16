@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, ViewChild, effect, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +16,7 @@ export class SidebarComponent {
   @ViewChild('overlay') overlay: any;
 
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   public logginStatus: boolean;
 
@@ -33,6 +35,8 @@ export class SidebarComponent {
   }
 
   public logout(): void {
-    this.authService.logOut();
+    this.authService.logOut()
+      .then(() => this.toastService.showToast('Sesión cerrada correctamente', 'success'));
+    
   }
 }
