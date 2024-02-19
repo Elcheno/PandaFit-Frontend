@@ -6,29 +6,29 @@
     </div>
 </div>
 @if (data && data.content.length > 0) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 mt-10 lg:w-2/3 mx-auto">
         @for (item of data.content; track $index) {
-        <div class="w-full m-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-            <div class="flex justify-end px-4 pt-4">
-                <!-- Dropdown menu -->
-                <app-dropdown
-                    [rows]="dropdownRows"
-                    [data]="item"
-                    [triggerStyle]="'text-gray-800'"
-                    [dropdownStyle]="'text-black-primary'"
-                ></app-dropdown>
-            </div>
-            <div class="flex flex-col items-center pb-10">
-                <h5 class="mb-1 text-4xl font-medium text-gray-900">{{item.name}}</h5>
-                <div class="flex mt-4 md:mt-6">
-                    <buttonComp [text]="'Gestión Respuestas'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
-                    <buttonComp [text]="'Gestión Formularios'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
+            <div class="w-full m-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                <div class="flex justify-end px-4 pt-4">
+                    <!-- Dropdown menu -->
+                    <app-dropdown
+                        [rows]="dropdownRows"
+                        [data]="item"
+                        [triggerStyle]="'text-gray-800'"
+                        [dropdownStyle]="'text-black-primary'"
+                    ></app-dropdown>
+                </div>
+                <div class="flex flex-col items-center pb-10">
+                    <h5 class="mb-1 text-4xl font-medium text-gray-900">{{item.name}}</h5>
+                    <div class="flex mt-4 md:mt-6">
+                        <buttonComp [text]="'Gestión Respuestas'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
+                        <buttonComp [text]="'Gestión Formularios'" (click)="create()" [buttonStyle]="'w-8/12 sm:w-10/12'" class="flex justify-center"></buttonComp>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
-    }@else {
+}@else {
     <div class="m-auto mt-10">
         <h3 class="text-center font-bold mb-7 text-black-primary">No hay Cursos</h3>
     </div>

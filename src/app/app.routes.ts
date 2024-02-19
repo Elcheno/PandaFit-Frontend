@@ -20,13 +20,25 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard]
   },
   {
-    path: 'users',
-    component: UsersComponent,
-    canActivate: [authGuard, roleGuard]
+    path: 'institutions',
+    loadComponent: () => import('./pages/institutions/info-institution/info-institution.component').then(m => m.InfoInstitutionComponent),
+    canActivate: [authGuard, roleGuard],
+    children: [
+      {
+        path: 'schoolyear',
+        loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
+        canActivate: [authGuard, roleGuard]
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
+        canActivate: [authGuard, roleGuard]
+      }
+    ]
   },
   {
-    path: 'institutions/:institutionId/schoolyear',
-    loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
+    path: 'users',
+    component: UsersComponent,
     canActivate: [authGuard, roleGuard]
   },
   {
