@@ -8,6 +8,8 @@ import { OutputComponent } from './pages/output/output.component';
 import { FormularyComponent } from './pages/formulary/formulary.component';
 import { CreateOutputComponent } from './components/output/create-output/create-output.component';
 import { LoginComponent } from './pages/login/login.component';
+import { authGuard } from './guards/auth-guard.guard';
+import { roleGuard } from './guards/role.guard';
 
 
 
@@ -15,38 +17,47 @@ export const routes: Routes = [
   {
     path: 'institutions',
     component: InstitutionsComponent,
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'institutions/:institutionId/schoolyear',
-    loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent)
+    loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'form/input',
-    component: InputsComponent
+    component: InputsComponent,
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'formulary',
     component: FormularyComponent,
+    canActivate: [authGuard, roleGuard],
     children: [
       {
         path: 'inputs',
-        component: InputsComponent
+        component: InputsComponent,
+        canActivate: [authGuard, roleGuard]
       },
       {
         path: 'outputs',
         component: OutputComponent,
+        canActivate: [authGuard, roleGuard]
       },
       {
         path: 'outputs/create',
-        component: CreateOutputComponent
+        component: CreateOutputComponent,
+        canActivate: [authGuard, roleGuard]
       },
       {
         path: 'forms',
-        component: FormComponent
+        component: FormComponent,
+        canActivate: [authGuard, roleGuard]
       },
       {
         path: '',
