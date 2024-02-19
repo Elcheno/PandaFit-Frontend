@@ -1,30 +1,25 @@
 import { Injectable, inject } from '@angular/core';
 import { IFormData } from '../../model/interfaces/i-form-data';
-import { Observable, map, take } from 'rxjs';
+import { Observable, catchError, map, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { IPage } from '../../model/interfaces/i-page';
 import { IPageable } from '../../model/interfaces/i-pageable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormService {
 
+  private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
 
   private _mockData:IFormData[]=[
     {
       "id": "5799",
       "name": "Calculo de IMC",
-      "description": "",
-      "outputs": [
-          1
-      ],
-      "inputs": [
-          1,
-          2
-      ]
+      "description": ""
   }
   ]
   constructor() { }
@@ -70,7 +65,12 @@ export class FormService {
   }
 
   public create (data: any): Observable<IFormData> {
-    return this.http.post<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, data)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const userId: string = 'bc442e83-12a3-495e-a527-96734da75abb';
+    const newData: any = { ...data, userId: userId }
+    return this.http.post<IFormData>(`http://localhost:8080/form/formulary`, newData, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IFormData = { ...res };
@@ -81,7 +81,10 @@ export class FormService {
   }
 
   public delete (data: any): Observable<IFormData> {
-    return this.http.delete<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, { body: data })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, { body: data, headers: { Authorization: token ?? "" } })
     .pipe(
       map((res: any) => {
         const response: IFormData = { ...res };

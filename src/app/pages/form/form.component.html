@@ -1,95 +1,18 @@
-<form [formGroup]="formGroup" class="xl:ms-[10%] 2xl:ms-[14%] w-10/12 md:w-3/5 xl:w-2/5 m-auto lg:m-0" (ngSubmit)="onSubmit()">
-    <h1
-        class="mt-4 text-3xl font-bold mb-7 text-black-primary">
-        Creación de Formularios</h1>
-    <div class="mb-5">
-        <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Nombre</label>
-        <input type="text" formControlName="name"
-            class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-            placeholder="nombre">
-    </div>
-    <div class="mb-5">
-        <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Descripción</label>
-        <textarea formControlName="description" rows="4"
-            class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-            placeholder="Write your thoughts here..."></textarea>
-    </div>
-    <div cdkDropListGroup>
-        <div #sidebar
-            class="xl:right-[10%] 2xl:right-[14%] xl:w-96 lg:fixed top-0 right-0 mt-20 z-40 lg:w-64 lg:h-screen lg:transition-transform  sm:translate-x-0"
-            aria-label="Sidebar">
-            <div class="example-container w-full p-2.5">
-                <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
-                <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
+<div class="w-full mx-auto lg:w-2/3">
+    <h1 class="text-3xl font-bold mb-7 text-black-primary">Resultados</h1>
+    <div class="flex items-center my-5">
+        <!-- Search component -->
+        <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
-                <div #scrollContainer (scroll)="onScroll($event)" cdkDropList [cdkDropListData]="inputsAvailable" class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg" cdkDropListSortingDisabled
-                    (cdkDropListDropped)="drop($event)">
-                    @for (item of inputsAvailable; track item.id) {
-                    <div class="example-box bg-gray-100 my-2 rounded-lg" cdkDrag>{{item.name}}
-
-                        <div class="flex gap-2">
-                            <svg (click)="addInput(item)" class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                              </svg>
-                            <svg (click)="openInfoModal(item)" class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M10 11h2v5m-2 0h4m-2.6-8.5h0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                              </svg>
-                        </div>
-                    </div>
-                    }
-                </div>
-            </div>
-        </div>
-
-        <div class="example-container">
-            <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos Seleccionados:</label>
-
-            <div cdkDropList [cdkDropListData]="inputsSelected" class="example-list p-2 rounded-lg"
-                (cdkDropListDropped)="drop($event)">
-                @for (item of inputsSelected; track item.id) {
-                <div class="example-box bg-gray-100 my-2 rounded" cdkDrag>{{item.name}}
-                    <div class="flex gap-2">
-                        <svg (click)="removeInput(item)" class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                          </svg>
-                        <svg (click)="openInfoModal(item)" class="w-6 h-6 text-black-primary hover:text-green-primary hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M10 11h2v5m-2 0h4m-2.6-8.5h0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                          </svg>
-                    </div>
-                </div>
-                }
-            </div>
-        </div>
+        <!-- Create Modal Component Trigger -->
+        <buttonComp [text]="'Crear'" [buttonStyle]="'ms-2'" routerLink="create"></buttonComp>
     </div>
 
-
-
-    <div class="mb-4 mt-5">
-        <h3 class="font-semibold text-black-primary">Respuestas posibles según los campos:</h3>
-        <ul
-            class="w-48 text-sm font-medium text-black-primary bg-white rounded-lg">
-            @for (item of outputsRelated; track item.id) {
-            <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
-                <div class="flex items-center ps-3">
-                    <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                    <label for="vue-checkbox"
-                        class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
-                </div>
-            </li>
-            }
-        </ul>
-    </div>
-
-
-
-    <button type="submit" [disabled]="!formGroup.valid && inputsSelected.length > 0"
-        class="p-2.5 w-40 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
-        Crear Formulario</button>
-
-</form>
-
-<button type="button" (click)="createInput()"
-            class="p-2.5 ms-2 w-20 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
-            Crear
-        </button>
+    <!-- Table Institutions Component -->
+    <app-table-form
+        [data]="data"
+        (onDelete)="delete($event)"
+        (onUpdate)="update($event)"
+        (onChangePage)="getAll($event)"
+    ></app-table-form>
+</div>
