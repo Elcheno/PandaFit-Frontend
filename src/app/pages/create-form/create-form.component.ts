@@ -21,6 +21,7 @@ import { ShowInputModalComponent } from '../../components/modals/input/show-inpu
 import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { Router, RouterLink } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-create-form',
@@ -37,7 +38,7 @@ export class CreateFormComponent {
   outputsRelated:IOutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
-  institutionService = inject(InputService);
+  inputService = inject(InputService);
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
 
@@ -56,7 +57,7 @@ export class CreateFormComponent {
   }
 
   ngOnInit(): void {
-    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+    this.inputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
       this.inputsAvailable.push(...res.content);
     });
   }
@@ -103,7 +104,7 @@ export class CreateFormComponent {
       });
     }
   }
-  onSubmit(){
+  async onSubmit(){
     //https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
   
     const form:IFormData = {
@@ -113,9 +114,9 @@ export class CreateFormComponent {
       inputIdList:this.inputsSelected.map(item => item.id) as any
     };
     // console.log(form)
-    this.formService.create(form).subscribe((res: any ) => { });
-    //this.formGroup.reset();
-    this.router.navigateByUrl('/formulary/forms')
+    await lastValueFrom(this.formService.create(form))
+    this.formGroup.reset();
+    await this.router.navigateByUrl('formulary/forms')
   }
 
   removeInput(input: IInputData): void {
@@ -195,17 +196,5 @@ export class CreateFormComponent {
     }
     this.currentPage++;
     return moreItems;
-  }
-
-
-  private readonly inputService = inject(InputService);
-
-  public data!: IPageable<IInputData>;
-  public async createInput (): Promise<void> {
-    (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((institution: IInputData) => {
-      if (!institution) return;
-      institution.userOwnerId = '15ab7221-f8c2-4492-866e-2cf5594c3110';    
-      this.inputService.create(institution).subscribe((res: IInputData) => { });
-    });
   }
 }

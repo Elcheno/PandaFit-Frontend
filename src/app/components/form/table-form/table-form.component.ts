@@ -7,6 +7,7 @@ import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table-form',
@@ -20,20 +21,32 @@ export class TableFormComponent {
 
   @Input() public data!: IPageable<IFormData>;
 
+  @Output() public onShow = new EventEmitter<IFormData>();
   @Output() public onDelete = new EventEmitter<IFormData>();
   @Output() public onUpdate = new EventEmitter<IFormData>(); 
   @Output() public onChangePage = new EventEmitter<IPage>();
 
+  private readonly router = inject(Router);
+
   private readonly confirmService = inject(ModalConfirmService);
 
   public dropdownData: IDropdownData<IFormData> = {
-    header: 'Resultado',
+    header: 'Formulario',
     button: {
       icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>',
     },
     rows: [
       {
+        title: 'Ver',
+        icon: '<svg class="w-6 h-6inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"/><path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>',
+        fnc: (data: any) => {
+          if (data == null) return;
+          this.router.navigateByUrl('/formulary/forms/view/' + data.id);
+        }
+      },
+      {
         title: 'Editar',
+        disabled: true,
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z" /></svg>',
         fnc: (data: any) => { 
           if (data == null) return;

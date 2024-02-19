@@ -57,6 +57,7 @@ export class FormService {
     return this.http.get<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}/${id}`)
       .pipe(
         map((res: any) => {
+          console.log(res);
           const response: IFormData = { ...res };
           return response;
         }),
