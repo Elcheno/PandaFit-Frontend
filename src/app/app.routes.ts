@@ -49,6 +49,10 @@ export const routes: Routes = [
         component: FormComponent
       },
       {
+        path: 'forms/create',
+        loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'inputs',
         pathMatch: 'full'
