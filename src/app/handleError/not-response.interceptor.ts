@@ -19,11 +19,6 @@ export const notResponseInterceptor: HttpInterceptorFn = (req, next) => {
         toastService.showToast('Error de conexión con el servidor', 'error');
         return throwError(() => errorMessage);
 
-      } else if (error.status === 500) {
-        errorMessage = `Error: ${error.message}`;
-        toastService.showToast('Error al conectar con el servidor', 'error');
-        return throwError(() => errorMessage);
-
       } else if (error.status === 403) {
         const isLoggerIn = authService.sessionData() ? true : false;
         if (!isLoggerIn) {
