@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SchoolyearService } from '../../services/schoolyear/schoolyear.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -34,9 +34,15 @@ export class SchoolYearComponent {
 
   // public data: ISchoolYear[] = [];
   public data!: IPageable<ISchoolYear>;
-  private route = this.router.snapshot.paramMap.get('institutionId');
+  private institutionId!: string;
 
   constructor(private readonly fb: FormBuilder) {
+    this.router.queryParams.subscribe((params) => {
+      this.institutionId = params['id'] ?? '';
+      if (this.institutionId) {
+        this.loadTable();
+      }
+    })
     this.form = this.fb.group({
       name: ''
     });
@@ -62,7 +68,7 @@ export class SchoolYearComponent {
         size: this.pageable.size, 
         sort: this.pageable.sort 
       } as IPage, 
-    this.route
+    this.institutionId
     ).subscribe((res) => {
       this.data = res;
     });
@@ -71,7 +77,7 @@ export class SchoolYearComponent {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
         if (!schoolYear) return;
       
-      this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
+      this.schoolYearService.create(schoolYear, this.institutionId).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
         this.toastService.showToast('Curso creado', 'success');

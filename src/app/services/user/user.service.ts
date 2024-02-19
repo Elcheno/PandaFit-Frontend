@@ -147,11 +147,11 @@ export class UserService {
       );
   }
 
-  public getAllByInstitution (institution: IInstitution, pageParams?: IPage, ): Observable<IPageable<IUser>> {
+  public getAllByInstitution (institutionId: string, pageParams?: IPage, ): Observable<IPageable<IUser>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institution.id}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institutionId}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IUser> = {
