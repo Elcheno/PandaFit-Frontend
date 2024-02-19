@@ -53,6 +53,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent)
       },
       {
+        path: 'forms/view/:formId',
+        loadComponent: () => import('./components/form/view-form/view-form.component').then(m => m.ViewFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'inputs',
         pathMatch: 'full'

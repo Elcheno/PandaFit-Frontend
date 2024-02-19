@@ -18,7 +18,7 @@
         <div #sidebar
             class="xl:right-[10%] 2xl:right-[14%] xl:w-96 lg:fixed top-0 right-0 mt-20 z-40 lg:w-64 lg:h-screen lg:transition-transform  sm:translate-x-0"
             aria-label="Sidebar">
-            <div class="example-container w-full p-2.5">
+            <div class="example-container w-full">
                 <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
                 <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
@@ -88,8 +88,3 @@
         Crear Formulario</button>
 
 </form>
-
-<button type="button" (click)="createInput()"
-            class="p-2.5 ms-2 w-20 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light">
-            Crear
-        </button>
