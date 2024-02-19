@@ -1,16 +1,18 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment as env, environment } from '../../../environments/environment.development';
+import { environment as env } from '../../../environments/environment.development';
 import { type IPage } from '../../model/interfaces/i-page';
-import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
-import { Observable, map, take } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { Observable, catchError, map, take } from 'rxjs';
+import { IPageable } from '../../model/interfaces/i-pageable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchoolyearService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   public async getAllMock(): Promise<ISchoolYear[]> {
     return await new Promise((resolve, _reject) => {
@@ -30,81 +32,86 @@ export class SchoolyearService {
     });
   }
 
-  public async getAllByInstitution(pageParams: IPage, id: any): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      const pageable: any = {
-        page: pageParams.page,
-        size: pageParams.size,
-        sort: pageParams.sort
-      };
+  public getAllByInstitution(pageParams: IPage, id: any): Observable<IPageable<ISchoolYear>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
 
-      // this.http.get('http://localhost:8080/institution/' + institution.id + '/schoolYear/page', { params: pageable })
-      this.http.get('http://localhost:8080/institution/' + id + '/schoolYear/page', { params: pageable })
-        .subscribe({
-          next: (data) => {
-            // console.log(data);
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+    return this.http.get<IPageable<ISchoolYear>>(env.api.url + env.api.institution + "/" + id + env.api.schoolyear +'/page', { params: pageParams as any, headers: { Authorization: token ?? "" } })  
+    .pipe(
+        catchError((error) => {
+          return error;
+        }),
+        map((res: any) => {
+          return res as IPageable<ISchoolYear>;
+        }),
+        take(1)
+      );
   }
 
-  public async getById(id: string): Promise<any> {
-    return await new Promise((resolve, reject) => {
-      this.http.get(env.api.url + env.api.schoolyear + id)
-        .subscribe({
-          next: (data) => {
-            resolve(data);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  public getById(id: string): Observable<ISchoolYear> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+    
+    return this.http.get<ISchoolYear>(env.api.url + env.api.schoolyear + id, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        map((res: any) => {
+          return res as ISchoolYear;
+        }),
+        take(1)
+      )
   }
 
-  public create(schoolYear: any, id:any): Observable<ISchoolYear> {
+  public create(schoolYear: any, id: any): Observable<ISchoolYear> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
     const data: any = {
       name: schoolYear.name,
       institutionId: id
     };
 
-    return this.http.post<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, data)
+    return this.http.post<ISchoolYear>(env.api.url + env.api.institution + env.api.schoolyear, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
-          const response: ISchoolYear = { ...res };
+          const response: ISchoolYear = {
+            id: res.id,
+            name: res.name,
+            institutionId: res.institutionId
+          }
           return response;
         }),
         take(1)
-      );
+      )
   }
 
-  public update(data: ISchoolYear): Observable<any> {
-    const dataUpdate: any = {
-      id: data.id,
-      name: data.name,
-    }
-    console.log(dataUpdate)
-    return this.http.put<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, dataUpdate)
-      .pipe(
-        map((res: any) => {
-          const response: ISchoolYear = { ...res };
-          return response;
-        })
-      );
-  }
+  public update(data: ISchoolYear): Observable<ISchoolYear> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
 
-  public delete(data: ISchoolYear): Observable<ISchoolYear> {
-    return this.http.delete<ISchoolYear>(`${environment.api.url}${environment.api.institution}${environment.api.schoolyear}`, { body: data })
+    return this.http.put<ISchoolYear>(env.api.url + env.api.institution + env.api.schoolyear, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
-          const response: ISchoolYear = { ...res };
+          const response: ISchoolYear = {
+            id: res.id,
+            name: res.name,
+            institutionId: res.institutionId
+          }
           return response;
         }),
         take(1)
-      );
+      )
+  }
+
+  public delete(data: ISchoolYear): Observable<boolean> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<boolean>(env.api.url + env.api.institution + env.api.schoolyear, { body: data, headers: { Authorization: token ?? "" } })
+      .pipe(
+        map((res: boolean) => {
+          return res;
+        }),
+        take(1)
+      )
   }
 }

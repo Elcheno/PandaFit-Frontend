@@ -5,10 +5,10 @@
                 <thead class="text-xs text-white uppercase bg-black-primary">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Email
+                            Nombre
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Options</span>
+                            <span class="sr-only">Borrar</span>
                         </th>
                     </tr>
                 </thead>
@@ -17,11 +17,15 @@
                     @for (item of data.content; track index; let index = $index) {
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ item.email }}
+                                {{ item.name }}
                             </th>
                             <td class="px-6 py-4 text-right flex justify-end">
-                                <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
-                                    [dropdownStyle]="'text-black-primary'"></app-dropdown>
+                                <app-dropdown
+                                    [rows]="dropdownData"
+                                    [data]="item"
+                                    [triggerStyle]="'text-gray-800'"
+                                    [dropdownStyle]="'text-black-primary'"
+                                ></app-dropdown>
                             </td>
                         </tr>
                     }
@@ -36,12 +40,13 @@
                 </thead>
                 <tbody>
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td scope="row" class="w-full px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap">
+                        <td scope="row"
+                            class="w-full px-6 py-4 font-medium text-center text-black-primary whitespace-nowrap">
                             Ningún elemento para mostrar
                         </td>
                     </tr>
                 </tbody>
-            }
+            }    
         } @placeholder (minimum 0.5s) {
             <thead class="text-xs text-white uppercase bg-black-primary">
                 <tr>
@@ -59,11 +64,11 @@
                 </tr>
             </tbody>
         }
-
     </table>
 </div>
+
 <app-pagination
   [data]="data"
-  (nextPageEvent)="nextPage()"
-  (previousPageEvent)="previousPage()"
+  (nextPageEvent)="handleNextPage()"
+  (previousPageEvent)="handlePreviousPage()"
 ></app-pagination>

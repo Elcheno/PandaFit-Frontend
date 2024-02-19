@@ -5,12 +5,14 @@ import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
 import { Observable, map, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstitutionService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   public async getAllMock (page?: number): Promise<IPageable<IInstitution>> {
     return await new Promise((resolve, _reject) => {
@@ -120,7 +122,10 @@ export class InstitutionService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
-    return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IInstitution> = {
@@ -138,7 +143,10 @@ export class InstitutionService {
   }
 
   public getById (id: string): Observable<IInstitution> {
-    return this.http.get<IInstitution>(`${env.api.url}${env.api.institution}/${id}`)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IInstitution>(`${env.api.url}${env.api.institution}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };
@@ -149,7 +157,10 @@ export class InstitutionService {
   }
 
   public create (data: any): Observable<IInstitution> {
-    return this.http.post<IInstitution>(`${env.api.url}${env.api.institution}`, data)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.post<IInstitution>(`${env.api.url}${env.api.institution}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };
@@ -160,7 +171,10 @@ export class InstitutionService {
   }
 
   public delete (data: any): Observable<IInstitution> {
-    return this.http.delete<IInstitution>(`${env.api.url}${env.api.institution}`, { body: data })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<IInstitution>(`${env.api.url}${env.api.institution}`, { body: data , headers: { Authorization: token ?? "" } })
     .pipe(
       map((res: any) => {
         const response: IInstitution = { ...res };
@@ -171,7 +185,10 @@ export class InstitutionService {
   }
 
   public update (data: any): Observable<IInstitution> {
-    return this.http.put<IInstitution>(`${env.api.url}${env.api.institution}`, data)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.put<IInstitution>(`${env.api.url}${env.api.institution}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInstitution = { ...res };

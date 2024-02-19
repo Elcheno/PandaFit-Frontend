@@ -15,6 +15,7 @@ import { IDropdownData } from '../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../services/modal/modal-confirm.service';
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-school-year',
@@ -29,6 +30,7 @@ export class SchoolYearComponent {
   private readonly modalService = inject(ModalService);
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(ActivatedRoute);
+  private readonly toastService = inject(ToastService);
 
   // public data: ISchoolYear[] = [];
   public data!: IPageable<ISchoolYear>;
@@ -49,26 +51,30 @@ export class SchoolYearComponent {
     content: []
   };
 
-  public async ngOnInit(): Promise<void> {
-    // await this.loadTable();
-    await this.loadTable();
+  public ngOnInit(): void {
+    this.loadTable();
   }
 
-  public async loadTable(): Promise<void> {
-    this.pageable = await this.schoolYearService.getAllByInstitution({
-      page: this.pageable.page,
-      size: this.pageable.size,
-      sort: this.pageable.sort
-    } as IPage, this.route);
-    this.data = this.pageable;
+  public loadTable(): void {
+    this.schoolYearService.getAllByInstitution(
+      { 
+        page: this.pageable.page, 
+        size: this.pageable.size, 
+        sort: this.pageable.sort 
+      } as IPage, 
+    this.route
+    ).subscribe((res) => {
+      this.data = res;
+    });
   }
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
         if (!schoolYear) return;
-
+      
       this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.toastService.showToast('Curso creado', 'success');
       });
     });
   }
@@ -76,9 +82,11 @@ export class SchoolYearComponent {
   public async delete(schoolYear: ISchoolYear): Promise<void> {
       if (!schoolYear) return;
 
-    this.schoolYearService.delete(schoolYear).subscribe((res: ISchoolYear) => {
+    this.schoolYearService.delete(schoolYear).subscribe((res: boolean) => {
+      if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== schoolYear.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Curso eliminado', 'success');
     })
   }
 
@@ -88,6 +96,7 @@ export class SchoolYearComponent {
       
       this.schoolYearService.update(res).subscribe((response: ISchoolYear) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.toastService.showToast('Curso actualizado', 'success');
       });
     });
   }

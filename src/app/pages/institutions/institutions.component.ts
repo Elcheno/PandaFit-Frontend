@@ -9,6 +9,7 @@ import { UpdateInstitutionsModalComponent } from '../../components/modals/instit
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { ButtonComponent } from '../../components/button/button.component';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-institutions',
@@ -22,29 +23,17 @@ export class InstitutionsComponent {
 
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
+  private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IInstitution>;
 
   public async ngOnInit (): Promise<void> {
-    // await this.institutionService.getAllMock(0)
-    //   .then((res: IPageable<IInstitution>) => {
-    //     this.data = res;
-    //   });
-
       this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
         this.data = res;
       });
   }
 
   public async getAll (page: IPage): Promise<void> {
-    // MOCK USER DATA
-    // await this.institutionService.getAllMock(page.page)
-    //   .then((res: IPageable<IInstitution>) => {
-    //     this.data = res;
-    //     this.table.toggleTableLoader();
-    //   }
-    // );
-
     this.institutionService.getAll(page).subscribe((res) => {
       this.data = res;
     });
@@ -57,6 +46,7 @@ export class InstitutionsComponent {
       this.institutionService.create(institution).subscribe((res: IInstitution) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.toastService.showToast('Instituto creado', 'success');
       });
     });
   }
@@ -67,6 +57,7 @@ export class InstitutionsComponent {
     (await this.modalService.open(UpdateInstitutionsModalComponent, institution)).closed.subscribe((res: IInstitution) => {
       this.institutionService.update(res).subscribe((response: IInstitution) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.toastService.showToast('Instituto actualizado', 'success');
       });
     });
   }
@@ -77,6 +68,7 @@ export class InstitutionsComponent {
     this.institutionService.delete(institution).subscribe((res: IInstitution) => {
       this.data.content = this.data.content.filter((item) => item.id !== institution.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Instituto eliminado', 'success');
     })
   }
 

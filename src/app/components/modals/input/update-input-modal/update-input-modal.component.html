@@ -29,7 +29,7 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
                     <textarea name="description" id="description" formControlName="description" matInput
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
-                        placeholder="Nombre" rows="3" required></textarea>
+                        placeholder="Descripción" rows="3" required></textarea>
                 </div>
                 <div class="col-span-2">
                     <label for="institutions-user-modal" class="block mb-2 text-sm font-medium text-gray-900">
@@ -37,9 +37,9 @@
                     </label>
                     <select id="selectType" formControlName="selectType"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5 cursor-pointer">
-                        @for(option of inputType;track option.name; let i=$index){
-                        <option [selected]="i==0" value="{{option.value}}">{{option.name}}</option>
-                        }
+                        <option *ngFor="let option of inputType; let i=index" [selected]="i === 0" [value]="option.value">
+                            {{ option.name }}
+                        </option>
                     </select>
                 </div>
                 <!-- Mostrar campos de decimal y decimales solo cuando se selecciona "Number" -->

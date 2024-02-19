@@ -12,6 +12,7 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { IPage } from '../../model/interfaces/i-page';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-users',
@@ -26,6 +27,7 @@ export class UsersComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
+  private readonly toastService = inject(ToastService);
 
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
@@ -45,14 +47,6 @@ export class UsersComponent implements OnInit {
   }
 
   public async getAll (page: IPage): Promise<void> {
-    // MOCK USER DATA
-    // await this.userService.getAllMock(page.page)
-    //   .then((res: IPageable<IUser>) => {
-    //     this.data = res;
-    //     this.table.toggleTableLoader();
-    //   }
-    // );
-
     this.userService.getAll(page).subscribe((res) => {
       this.data = res;
       this.table.toggleTableLoader(); 
@@ -66,6 +60,7 @@ export class UsersComponent implements OnInit {
       this.userService.create(user).subscribe((res: IUser) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.toastService.showToast('Usuario creado', 'success');
       });
     });
   }
@@ -73,9 +68,11 @@ export class UsersComponent implements OnInit {
   public async delete (user: IUser): Promise<void> {
     if (!user) return;
 
-    this.userService.delete(user).subscribe((res: IUser) => {
+    this.userService.delete(user).subscribe((res: boolean) => {
+      if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== user.id);
       this.data.totalElements -= 1;
+      this.toastService.showToast('Usuario eliminado', 'success');
     })
   }
 
@@ -85,6 +82,7 @@ export class UsersComponent implements OnInit {
       
       this.userService.update(res).subscribe((response: IUser) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.toastService.showToast('Usuario actualizado', 'success');
       });
     });
   }

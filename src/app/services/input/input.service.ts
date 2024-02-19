@@ -6,6 +6,7 @@ import { type IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { Observable, map, take } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { AuthService } from '../auth/auth.service';
 
 
 
@@ -77,9 +78,13 @@ export class InputService {
   // Hacer servicio completo
 
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   public getAll(pageParams?: IPage): Observable<IPageable<IInputData>> {
-    return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.form}${environment.api.input}/page`, { params: pageParams as any })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.form}${environment.api.input}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IInputData> = {
@@ -97,7 +102,10 @@ export class InputService {
   }
 
   public getById (id: string): Observable<IInputData> {
-    return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}/${id}`)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};
@@ -108,6 +116,9 @@ export class InputService {
   }
 
   public create(input: IInputData): Observable<IInputData> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+  
     const data: any = {
       name: input.name,
       description: input.description,
@@ -115,10 +126,10 @@ export class InputService {
       decimal: input.decimal,
       decimals: input.decimals,
       unit: input.unit,
-      userOwnerId: input.userOwnerId
+      userOwnerId: '8570f04f-c55c-4cee-b9b7-32bb492faf74'
     };
 
-    return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
+    return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};
@@ -129,25 +140,31 @@ export class InputService {
   };
 
   public delete (data: any): Observable < IInputData > {
-  return this.http.delete<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, { body: data })
-    .pipe(
-      map((res: any) => {
-        const response: IInputData = { ...res , type: IInputType[res.type].toString()};
-        return response;
-      }),
-      take(1)
-    );
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, { body: data, headers: { Authorization: token ?? "" } })
+      .pipe(
+        map((res: any) => {
+          const response: IInputData = { ...res , type: IInputType[res.type].toString()};
+          return response;
+        }),
+        take(1)
+      );
 }
 
   public update(data: any): Observable < IInputData > {
-  return this.http.put<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data)
-    .pipe(
-      map((res: any) => {
-        const response: IInputData = { ...res , type: IInputType[res.type].toString()};
-        return response;
-      }),
-      take(1)
-    );
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.put<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        map((res: any) => {
+          const response: IInputData = { ...res , type: IInputType[res.type].toString()};
+          return response;
+        }),
+        take(1)
+      );
 }
 
 }

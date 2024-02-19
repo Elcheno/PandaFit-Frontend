@@ -7,12 +7,14 @@ import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { environment } from '../../../environments/environment.development';
 import { Observable, map, take } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   public async getAllMock (page: number): Promise<any> {
     return await new Promise((resolve, _reject) => {
@@ -125,7 +127,10 @@ export class UserService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IUser>> {
-    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}${environment.api.users}/page`, { params: pageParams as any })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IUser> = {
@@ -143,7 +148,10 @@ export class UserService {
   }
 
   public getAllByInstitution (institution: IInstitution, pageParams?: IPage, ): Observable<IPageable<IUser>> {
-    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institution.id}${environment.api.users}/page`, { params: pageParams as any })
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institution.id}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IUser> = {
@@ -161,7 +169,10 @@ export class UserService {
   }
 
   public getById (id: string): Observable<IUser> {
-    return this.http.get<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}/${id}`)
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = {
@@ -177,6 +188,9 @@ export class UserService {
   }
 
   public create (user: IUser): Observable<IUser> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
     const data: any = {
       email: user.email,
       password: user.password,
@@ -184,7 +198,7 @@ export class UserService {
       institutionId: user.institutionId
     };
 
-    return this.http.post<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data)
+    return this.http.post<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = { ...res };
@@ -194,24 +208,29 @@ export class UserService {
       );
   }
 
-  public delete (data: IUser): Observable<IUser> {
-    return this.http.delete<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data })
+  public delete (data: IUser): Observable<boolean> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.delete<boolean>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data, headers: { Authorization: token ?? "" } })
       .pipe(
-        map((res: any) => {
-          const response: IUser = { ...res };
-          return response;
+        map((res: boolean) => {
+          return res;
         }),
         take(1)
       );
   }
 
   public update (data: IUser): Observable<IUser> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
     const dataUpdate: any = {
       id: data.id,
       email: data.email,
       password: data.password,
     }
-    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, dataUpdate)
+    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, dataUpdate, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = { ...res };

@@ -1,9 +1,9 @@
-import { Component, inject, ViewChild, type OnInit, ViewContainerRef } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { InstitutionService } from './services/institution/institution.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { UserService } from './services/user/user.service';
+import { AuthService } from './services/auth/auth.service';
+import { ToastService } from './services/modal/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +13,11 @@ import { UserService } from './services/user/user.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'Pandafit-Frontend';
-  private readonly institutionService = inject(InstitutionService);
-  private readonly usersService = inject(UserService);
+  private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
-  ngOnInit (): void { }
+  ngOnInit (): void {
+    this.authService.loadSessionData();
+    this.toastService.showToast('Esto es un toast', 'success');
+  }
 }
