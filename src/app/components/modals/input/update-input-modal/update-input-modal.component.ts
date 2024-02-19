@@ -42,12 +42,19 @@ export class UpdateInputModalComponent {
     }
   ];*/
 
+  private inputTypeNames: { [key: number]: string } = {
+    [IInputType.NUMBER]: 'NUMBER',
+    [IInputType.BOOLEAN]: 'BOOLEAN',
+    [IInputType.STRING]: 'STRING'
+  };
+  
+
   inputType = [
     { name: 'Number', value: IInputType.NUMBER },
     { name: 'Boolean', value: IInputType.BOOLEAN },
     { name: 'Text', value: IInputType.STRING }
   ];
-
+  
 
   constructor (
     public dialogRef: DialogRef<IInputData>,
@@ -81,18 +88,22 @@ export class UpdateInputModalComponent {
     console.log(this.input.type);
 }*/
 
+
+
 private initializeForm(): void {
   if (this.input) {
       this.form = this.formBuilder.group({
           name: [this.input.name, Validators.required],
           description: [this.input.description],
-          selectType: [(this.input.type === 2) ? '2' : this.input.type.toString(), Validators.required], // Condición para establecer 'Texto' si el valor es 2
+          /*selectType: [(this.input.type === 2) ? '2' : this.input.type.toString(), Validators.required], // Condición para establecer 'Texto' si el valor es 2*/
+          selectType: [this.getInputTypeName(this.input.type), Validators.required],
           decimal: [this.input.decimal],
           decimals: [this.input.decimals],
           unit: [this.input.unit]
       });
 
       console.log("Valor de this.input.type:", this.input.type);
+      console.log("Nombre del tipo obtenido:", this.getInputTypeName(this.input.type));
   } else {
       this.form = this.formBuilder.group({
           name: ['', Validators.required],
@@ -103,6 +114,14 @@ private initializeForm(): void {
           unit: ['']
       });
   }
+}
+
+private getInputTypeName(type: number): string {
+  // Obtiene el nombre del tipo del objeto inputTypeNames
+  const typeName = this.inputTypeNames[type];
+
+  // Retorna el nombre del tipo si es STRING, de lo contrario, devuelve el valor numérico como string
+  return type === IInputType.STRING ? "Text" : type.toString();
 }
 
 /*private initializeForm(): void {
