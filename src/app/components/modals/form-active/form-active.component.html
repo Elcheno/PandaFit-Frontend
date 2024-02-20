@@ -4,7 +4,7 @@
         <!-- Modal header -->
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
             <h3 class="text-lg font-semibold text-black-primary">
-                Activar Formulario
+                Abrir Formulario
             </h3>
             <button type="button" (click)="closeModal()"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
@@ -18,18 +18,39 @@
 
         <form [formGroup]="form">
 
-            <div>
-                <span>Curso {{ schoolYear.name }}</span>
-            </div>
+            <div class="flex flex-col p-4">
+                <div class="flex flex-row bg-gray-100 rounded-lg p-2">
+                    <span>Curso {{ schoolYear.name }}</span>
+                </div>
+                
+                <div class="my-4">
+                    <hr>
+                </div>
 
-            <div>
-                @for (item of formList; track index; let index = $index) {
-                    <div>
-                        <span>{{ item.name }}</span>
+                <div class="flex flex-row justify-between items-center gap-4">
+                    <buttonComp [text]="'Seleccionar Formulario'" (click)="handlerSelectForm()"></buttonComp>
+                    <div class="rounded-lg p-4 bg-gray-100 w-full h-[60px] flex justify-center items-center">
+                        @if (formulary) {
+                            <span>{{ formulary?.name }}</span>
+                        } @else {
+                            <span>No hay un formulario seleccionado</span>
+                        }
                     </div>
-                }
-            </div>
+                </div>
 
+                <div class="my-4">
+                    <hr>
+                </div>
+
+                <div class="flex flex-row bg-gray-100 rounded-lg p-2 justify-between gap-4">
+                    <span>Desde {{ startDate | date: 'short' }}</span>
+                    <span>Hasta {{ expirationDate | date: 'short' }}</span>
+
+                </div>
+
+                <buttonComp class="mt-4" [text]="'Abrir Formulario'" (click)="onSubmit()"></buttonComp>
+
+            </div>
 
         </form>
 

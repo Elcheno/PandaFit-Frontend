@@ -5,20 +5,28 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ISchoolYear } from '../../../model/interfaces/i-school-year';
 import { FormService } from '../../../services/form/form.service';
 import { IFormData } from '../../../model/interfaces/i-form-data';
+import { ButtonComponent } from '../../button/button.component';
+import { ModalService } from '../../../services/modal/modal.service';
+import { SelectFormComponent } from './select-form/select-form.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-form-active',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonComponent, DatePipe],
   templateUrl: './form-active.component.html',
   styleUrl: './form-active.component.scss'
 })
 export class FormActiveComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly formService = inject(FormService);
+  private readonly modalService = inject(ModalService);
 
+  public formulary!: IFormData;
   public form!: FormGroup;
   public formList!: IFormData[];
+  public expirationDate!: Date;
+  public startDate!: Date;
 
   constructor (
     public dialogRef: DialogRef<IInputData>,
@@ -33,14 +41,27 @@ export class FormActiveComponent implements OnInit {
       schoolYearId: [this.schoolYear?.id, [Validators.required]]
     });
 
+    this.startDate = new Date(Date.now());
+    this.expirationDate = new Date(this.startDate);
+    this.expirationDate.setHours(this.expirationDate.getHours() + 1);
+
     this.formService.getAll({page: 0, size: 100, sort: ['name']}).subscribe((data: any) => {
       this.formList = data.content;
+    });
+  }
+
+  public async handlerSelectForm (): Promise<void> {
+    (await this.modalService.open(SelectFormComponent)).closed.subscribe((res: IFormData) => {
+      if (!res) return;
+      this.form.controls['formId'].setValue(res.id);
+      this.formulary = res;
     })
   }
 
   public onSubmit (): void {
     console.log(this.form)
     if (!this.form.valid) return;
+    // logica de abrir formulario
   }
 
   public closeModal (): void {
