@@ -8,6 +8,9 @@
                             Email
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Rol
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             <span class="sr-only">Options</span>
                         </th>
                     </tr>
@@ -18,6 +21,9 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ item.email }}
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ item.role | role }}
                             </th>
                             <td class="px-6 py-4 text-right flex justify-end">
                                 <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"

@@ -18,6 +18,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit (): void {
     this.authService.loadSessionData();
-    this.toastService.showToast('Esto es un toast', 'success');
+    // this.toastService.showToast('Esto es un toast', 'success');
   }
 }

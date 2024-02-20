@@ -38,7 +38,6 @@ export class ToastService implements OnInit {
       })
     );
     overlay.attach(toastPortal);
-    console.log(this.toastList$())
   }
 
   ngOnInit(): void { }

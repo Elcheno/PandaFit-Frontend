@@ -7,11 +7,12 @@ import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { IPage } from '../../../model/interfaces/i-page';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { RolePipe } from '../../../pipes/role.pipe';
 
 @Component({
   selector: 'app-table-users',
   standalone: true,
-  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent],
+  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent, RolePipe],
   templateUrl: './table-users.component.html',
   styleUrl: './table-users.component.scss'
 })
