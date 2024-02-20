@@ -17,7 +17,7 @@
         <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
         <!-- <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity> -->
 
-        <div class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg">
+        <div class="example-list mt-5 p-2 rounded-lg">
             @for (item of inputs; track item.id) {
             <div class="example-box bg-gray-100 my-2 rounded-lg" cdkDrag>{{item.name}}
 
@@ -50,11 +50,5 @@
             }
         </ul>
     </div>
-
-
-
-    <button
-        class="p-2.5 w-40 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light fixed bottom-5 right-5 xl:bottom-20 xl:right-12">
-        Volver</button>
 
 </form>

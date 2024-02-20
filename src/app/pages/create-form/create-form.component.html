@@ -67,13 +67,13 @@
     <div class="mb-4 mt-5">
         <h3 class="text-black-primary">Respuestas posibles según los campos:</h3>
         <ul
-            class="w-48 text-sm font-medium text-black-primary bg-white rounded-lg">
+            class="w-full text-sm font-medium text-black-primary bg-white rounded-lg">
             @for (item of outputsRelated; track item.id) {
-            <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
+            <li class="w-full border border-gray-200 rounded-lg border-gray-800">
                 <div class="flex items-center ps-3">
-                    <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)"
+                    <input type="checkbox" [value]="item.id" (change)="onCheckChange($event)" [id]="item.id"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                    <label for="vue-checkbox"
+                    <label for="vue-checkbox" (click)="changeCheckBoxActivate(item)"
                         class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
                 </div>
             </li>
