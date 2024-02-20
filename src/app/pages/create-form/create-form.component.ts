@@ -6,7 +6,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostListener, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Output, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
@@ -80,6 +80,12 @@ export class CreateFormComponent {
       this.checkOutputsDisponibility();
     }
   }
+
+  changeCheckBoxActivate(item:any){
+    const checkbox = document.getElementById(item.id);
+    checkbox?.click();
+  }
+
   onCheckChange(event:any) {
     const formArray: FormArray = this.formGroup.get('outputsSelected') as FormArray;
   
@@ -104,9 +110,7 @@ export class CreateFormComponent {
       });
     }
   }
-  async onSubmit(){
-    //https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
-  
+  async onSubmit(){  
     const form:IFormData = {
       name:this.formGroup.get('name')?.value,
       description:this.formGroup.get('description')?.value,
@@ -156,7 +160,7 @@ export class CreateFormComponent {
 
   private checkOutputsDisponibility(): void {
     const inputsId = this.inputsSelected.map(item => item.id);
-    this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any);
+    this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any) as any;
   }
 
   @HostListener('scroll', ['$event'])
