@@ -1,11 +1,13 @@
 import { Component, effect, inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToastService } from '../../services/modal/toast.service';
+import { SocialLoginModule } from '@abacritt/angularx-social-login';
+import {  GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [SocialLoginModule, GoogleSigninButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
