@@ -11,6 +11,7 @@
     <!-- Table Institutions Component -->
     <app-table-outputs 
         [data]="data"
+        (onShow)="show($event)"
         (onDelete)="delete($event)"
         (onUpdate)="update($event)"
         (onChangePage)="getAll($event)"
