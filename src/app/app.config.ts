@@ -2,7 +2,8 @@ import { type ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { notResponseInterceptor } from './handleError/not-response.interceptor';
 
 import {SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
@@ -11,7 +12,13 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors(
+      [
+        notResponseInterceptor,
+      ]
+      )
+    ),
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

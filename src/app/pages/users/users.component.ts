@@ -13,6 +13,7 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { IPage } from '../../model/interfaces/i-page';
 import { ToastService } from '../../services/modal/toast.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -28,21 +29,38 @@ export class UsersComponent implements OnInit {
   private readonly institutionService = inject(InstitutionService);
   private readonly modalService = inject(ModalService);
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(ActivatedRoute);
+
+  public institutionId!: string;
 
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
 
   public async ngOnInit (): Promise<void> {
-    // MOCK USER DATA AND INSTITUTION DATA
-    // this.data = (await this.userService.getAllMock(0));
-    // this.institutionList = (await this.institutionService.getAllMock());
-
-    this.userService.getAll({ page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
-      this.data = res;
-    });
-
-    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
-      this.institutionList = res;
+    this.router.queryParams.subscribe((param) => {
+      this.institutionId = param['id'] ?? '';
+      if (this.institutionId) {
+        this.userService.getAllByInstitution(this.institutionId, { page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
+          this.data = res;
+        });
+        this.institutionService.getById(this.institutionId).subscribe((res) => {
+          this.institutionList = {
+            page: 0,
+            size: 10,
+            sort: ['name'],
+            totalElements: 0,
+            totalPages: 0,
+            content: [res]
+          }; 
+        });
+      } else {
+        this.userService.getAll({ page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
+          this.data = res;
+        });
+        this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+          this.institutionList = res;
+        });
+      }
     });
   }
 

@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
-import { Observable, map, take } from 'rxjs';
+import { Observable, catchError, map, take, throwError } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
+import { ToastService } from '../modal/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import { AuthService } from '../auth/auth.service';
 export class InstitutionService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   public async getAllMock (page?: number): Promise<IPageable<IInstitution>> {
     return await new Promise((resolve, _reject) => {
@@ -127,6 +129,11 @@ export class InstitutionService {
 
     return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const errorMessage = `Error al cargar los registros. ${error.message}`
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return throwError(() => errorMessage);
+        }),
         map((res: any) => {
           const response: IPageable<IInstitution> = {
             page: res['number'],

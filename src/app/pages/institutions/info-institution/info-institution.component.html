@@ -1,0 +1,25 @@
+<main>
+  <div class="mb-[2em] mt-[-1em] mx-[-1em]">
+      <ul class="flex flex-row flex-nowrap gap-12 xl:gap-24 lg:gap-18 justify-center  py-4 w-3/3 m-auto">
+          <li class="cursor-pointer"><a routerLink="schoolyear" [queryParams]="{ id: institution?.id }" class="text-lg hover:text-green-dark px-4 py-2 transition-colors" routerLinkActive="active">Cursos</a></li>
+          <li class="cursor-pointer"><a routerLink="users" [queryParams]="{ id: institution?.id }" class="text-lg hover:text-green-dark px-4 py-2 transition-colors" routerLinkActive="active">Usuarios</a></li>
+      </ul>
+  </div>
+
+  <div class="h-[10vh] lg:w-2/3 m-auto flex flex-row justify-between gap-4 xs:mb-5">
+    <h1 class="text-2xl text-center">{{ institution?.name }}</h1>
+
+    <div class="flex flex-col lg:flex-row gap-4 xl:gap-40 lg:gap-8 justify-center">
+      <div class="flex flex-col items-center">
+        <p class="text-lg">Cursos</p>
+        <span class="text-xl">{{ this.institution?.schoolYearQuantity ?? 'N/A' }}</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <p class="text-lg">Usuarios</p>
+        <span class="text-xl">{{ this.institution?.userQuantity ?? 'N/A' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</main>

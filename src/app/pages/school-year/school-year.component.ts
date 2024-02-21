@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SchoolyearService } from '../../services/schoolyear/schoolyear.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -34,9 +34,15 @@ export class SchoolYearComponent {
 
   // public data: ISchoolYear[] = [];
   public data!: IPageable<ISchoolYear>;
-  private route = this.router.snapshot.paramMap.get('institutionId');
+  private institutionId!: string;
 
   constructor(private readonly fb: FormBuilder) {
+    this.router.queryParams.subscribe((params) => {
+      this.institutionId = params['id'] ?? '';
+      if (this.institutionId) {
+        this.loadTable();
+      }
+    })
     this.form = this.fb.group({
       name: ''
     });
@@ -62,7 +68,7 @@ export class SchoolYearComponent {
         size: this.pageable.size, 
         sort: this.pageable.sort 
       } as IPage, 
-    this.route
+    this.institutionId
     ).subscribe((res) => {
       this.data = res;
     });
@@ -71,7 +77,7 @@ export class SchoolYearComponent {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
         if (!schoolYear) return;
       
-      this.schoolYearService.create(schoolYear, this.route).subscribe((res: ISchoolYear) => {
+      this.schoolYearService.create(schoolYear, this.institutionId).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
         this.toastService.showToast('Curso creado', 'success');
@@ -119,7 +125,7 @@ export class SchoolYearComponent {
     },
     rows: [
       {
-        title: 'Update',
+        title: 'Editar',
         disabled: false,
         fnc: (data: any) => {
           if (data == null) return;
@@ -129,7 +135,7 @@ export class SchoolYearComponent {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z" /></svg>'
       },
       {
-        title: 'Delete',
+        title: 'Eliminar',
         fnc: async (data: any) => {
           if (data == null) return;
           (await (this.confirmService.open('Estas seguro de eliminar este usuario'))).closed.subscribe((res: boolean) => {
