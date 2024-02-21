@@ -8,16 +8,19 @@ import { IPage } from '../../model/interfaces/i-page';
 import { TableOutputsComponent } from '../../components/output/table-outputs/table-outputs.component';
 import { RouterLink, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
+import { OutputInfoComponent } from '../../components/modals/output/output-info/output-info.component';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-output',
   standalone: true,
-  imports: [ButtonComponent, SearchEntityComponent, TableOutputsComponent, RouterLink],
+  imports: [ButtonComponent, SearchEntityComponent, TableOutputsComponent, RouterLink, OutputInfoComponent],
   templateUrl: './output.component.html',
   styleUrl: './output.component.scss'
 })
 export class OutputComponent implements OnInit {
   private readonly outputService = inject(OutputService);
+  private readonly modalService = inject(ModalService);
   private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IOutputData>;
@@ -32,6 +35,32 @@ export class OutputComponent implements OnInit {
     this.outputService.getAll(page).subscribe((res) => {
       this.data = res;
     });
+  }
+
+  public async show(output: IOutputData): Promise<void> {
+    if (!output || !output.id) {
+      console.error("El output no es válido.");
+      return;
+    }
+  
+    try {
+      // Obtener los detalles del output usando su ID
+      const outputDetails: IOutputData | undefined = await this.outputService.getById(output.id).toPromise();
+      
+      if (!outputDetails) {
+        console.error("No se encontraron detalles para el output.");
+        return;
+      }
+      
+      // Abrir el modal para mostrar los detalles del input
+      const modalRef = await this.modalService.open(OutputInfoComponent, outputDetails);
+      // Escuchar cualquier evento de cierre del modal si es necesario
+      modalRef.closed.subscribe((result: any) => {
+        console.log("Modal cerrado con resultado:", result);
+      });
+    } catch (error) {
+      console.error("Error al obtener los detalles del output:", error);
+    }
   }
 
   public async update (output: IOutputData): Promise<void> {
