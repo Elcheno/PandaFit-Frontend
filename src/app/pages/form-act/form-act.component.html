@@ -1,0 +1,13 @@
+<div class="w-full mx-auto lg:w-2/3">
+    <h1 class="text-3xl font-bold mb-7 text-black-primary">Gestión de Formularios Abiertos</h1>
+
+    <div class="flex items-center my-5">
+        <!-- Search component -->
+        <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
+
+        <!-- Modal component create user -->
+        <buttonComp [text]="'Abrir'" (click)="openForm()" [buttonStyle]="'ms-2'"></buttonComp>
+    </div>
+
+    
+</div>

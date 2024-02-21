@@ -32,6 +32,7 @@ export class SchoolYearComponent {
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(ActivatedRoute);
   private readonly toastService = inject(ToastService);
+  private readonly routerService = inject(Router);
 
   // public data: ISchoolYear[] = [];
   public data!: IPageable<ISchoolYear>;
@@ -116,9 +117,7 @@ export class SchoolYearComponent {
   }
 
   public async handlerFormActive (data: ISchoolYear): Promise<void> {
-    (await this.modalService.open(FormActiveComponent, data)).closed.subscribe((res: any) => {
-      console.log(res);
-    })
+    this.routerService.navigate(['institutions/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
   }
 
   public dropdownRows: IDropdownData<ISchoolYear> = {

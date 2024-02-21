@@ -27,12 +27,17 @@ export const routes: Routes = [
       {
         path: 'schoolyear',
         loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
-        canActivate: [authGuard, roleGuard]
+        canActivate: [authGuard, roleGuard],
       },
       {
         path: 'users',
         loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
         canActivate: [authGuard, roleGuard]
+      },
+      {
+        path: 'formactive',
+        loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
+        canActivate: [authGuard, roleGuard],
       }
     ]
   },

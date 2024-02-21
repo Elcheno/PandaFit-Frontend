@@ -9,6 +9,8 @@ import { ButtonComponent } from '../../button/button.component';
 import { ModalService } from '../../../services/modal/modal.service';
 import { SelectFormComponent } from './select-form/select-form.component';
 import { DatePipe } from '@angular/common';
+import { FormActiveService } from '../../../services/form/form-active.service';
+import { ToastService } from '../../../services/modal/toast.service';
 
 @Component({
   selector: 'app-form-active',
@@ -20,13 +22,13 @@ import { DatePipe } from '@angular/common';
 export class FormActiveComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly formService = inject(FormService);
+  private readonly formActiveService = inject(FormActiveService);
   private readonly modalService = inject(ModalService);
+  private readonly toastService = inject(ToastService);
 
   public formulary!: IFormData;
   public form!: FormGroup;
   public formList!: IFormData[];
-  public expirationDate!: Date;
-  public startDate!: Date;
 
   constructor (
     public dialogRef: DialogRef<IInputData>,
@@ -35,15 +37,11 @@ export class FormActiveComponent implements OnInit {
 
   ngOnInit (): void {
     this.form = this.fb.group({
-      startDate: [''],
-      expirationDate: [''],
+      startDate: ['', [Validators.required]],
+      expirationDate: ['', [Validators.required]],
       formId: ['', [Validators.required]],
       schoolYearId: [this.schoolYear?.id, [Validators.required]]
     });
-
-    this.startDate = new Date(Date.now());
-    this.expirationDate = new Date(this.startDate);
-    this.expirationDate.setHours(this.expirationDate.getHours() + 1);
 
     this.formService.getAll({page: 0, size: 100, sort: ['name']}).subscribe((data: any) => {
       this.formList = data.content;
@@ -61,7 +59,19 @@ export class FormActiveComponent implements OnInit {
   public onSubmit (): void {
     console.log(this.form)
     if (!this.form.valid) return;
-    // logica de abrir formulario
+
+    const formActive: any = {
+      startDate: this.form.get('startDate')?.value,
+      expirationDate: this.form.get('expirationDate')?.value,
+      formId: this.form.get('formId')?.value,
+      schoolYearId: this.form.get('schoolYearId')?.value
+    }
+
+    this.formActiveService.formActive(formActive).subscribe((res: any) => {
+      if (!res) return;
+      this.toastService.showToast('Formulario activado');
+      this.closeModal();
+    });
   }
 
   public closeModal (): void {
