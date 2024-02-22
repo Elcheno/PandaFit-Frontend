@@ -31,7 +31,7 @@
                     <buttonComp [text]="'Seleccionar Formulario'" (click)="handlerSelectForm()"></buttonComp>
                     <div class="rounded-lg p-4 bg-gray-100 w-full h-[60px] flex justify-center items-center">
                         @if (formulary) {
-                            <span>{{ formulary?.name }}</span>
+                            <span>{{ formulary.name }}</span>
                         } @else {
                             <span>No hay un formulario seleccionado</span>
                         }

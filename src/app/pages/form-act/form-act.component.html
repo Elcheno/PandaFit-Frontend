@@ -5,13 +5,20 @@
         <!-- Search component -->
         <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
 
+        <select id="selectState" [(ngModel)]="selectState" (ngModelChange)="onChangeStateOrPage()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block p-2.5 cursor-pointer ms-2">
+            <option value="all">Todos</option>
+            <option selected value="active">Abiertos</option>
+            <option value="inactive">Cerrados</option>
+        </select>
+
         <!-- Modal component create user -->
         <buttonComp [text]="'Abrir'" (click)="openForm()" [buttonStyle]="'ms-2'"></buttonComp>
     </div>
 
     <app-table-form-act
-        [data]="data" 
-
+        [data]="data"
+        (onChangePage)="onChangeStateOrPage($event)"
     ></app-table-form-act>
     
 </div>

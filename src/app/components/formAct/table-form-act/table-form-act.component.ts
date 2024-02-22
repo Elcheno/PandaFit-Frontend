@@ -10,11 +10,12 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ISchoolYear } from '../../../model/interfaces/i-school-year';
 import { SchoolyearService } from '../../../services/schoolyear/schoolyear.service';
+import { StateFormActPipe } from '../../../pipes/state-form-act.pipe';
 
 @Component({
   selector: 'app-table-form-act',
   standalone: true,
-  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent, DatePipe],
+  imports: [DropdownComponent, LoaderSpinnerComponent, PaginationComponent, DatePipe, StateFormActPipe],
   templateUrl: './table-form-act.component.html',
   styleUrl: './table-form-act.component.scss'
 })
@@ -44,7 +45,7 @@ export class TableFormActComponent implements OnInit {
   }
 
   public dropdownRows: IDropdownData<any> = {
-    header: 'Usuario',
+    header: 'Formulario',
     button: {
       icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
     },
@@ -60,19 +61,11 @@ export class TableFormActComponent implements OnInit {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.6 8.5h8m-8 3.5H12m7.1-7H5c-.2 0-.5 0-.6.3-.2.1-.3.3-.3.6V15c0 .3 0 .5.3.6.1.2.4.3.6.3h4l3 4 3-4h4.1c.2 0 .5 0 .6-.3.2-.1.3-.3.3-.6V6c0-.3 0-.5-.3-.6a.9.9 0 0 0-.6-.3Z"/></svg>'
       },
       {
-        title: 'Update',
-        fnc: (data: any) => {
-          if (data == null) return;
-          console.log(data);
-          // this.onUpdate.emit(data);
-        },
-        icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z" /></svg>'
-      },
-      {
-        title: 'Delete',
+        title: 'Cerrar Formulario',
+        disabled: true,
         fnc: async (data: any) => {
           if (data == null) return;
-          (await (this.confirmService.open('Estas seguro de eliminar este usuario'))).closed.subscribe((res: boolean) => {
+          (await (this.confirmService.open('Estas seguro de cerra este formulario'))).closed.subscribe((res: boolean) => {
             if (!res) return;
             // this.onDelete.emit(data);
           });

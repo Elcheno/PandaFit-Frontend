@@ -61,4 +61,56 @@ export class FormActiveService {
         take(1)
       )
   }
+
+  public getAllBySchoolYearAfter (id: any, pageParams?: IPage): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`http://localhost:8080/active/page/schoolyear/after/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          const response: IPageable<any> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      )
+  }
+
+  public getAllBySchoolYearBefore (id: any, pageParams?: IPage): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`http://localhost:8080/active/page/schoolyear/before/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          const response: IPageable<any> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      )
+  }
 }
