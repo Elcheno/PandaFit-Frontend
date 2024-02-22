@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ViewChild } from '@angular/core';
 import { type IUser } from '../../../model/interfaces/i-user';
 import { type IPageable } from '../../../model/interfaces/i-pageable';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';

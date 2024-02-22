@@ -1,0 +1,24 @@
+<div class="w-full mx-auto lg:w-2/3">
+    <h1 class="text-3xl font-bold mb-7 text-black-primary">Gestión de Formularios Abiertos</h1>
+
+    <div class="flex items-center my-5">
+        <!-- Search component -->
+        <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
+
+        <select id="selectState" [(ngModel)]="selectState" (ngModelChange)="onChangeStateOrPage()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block p-2.5 cursor-pointer ms-2">
+            <option value="all">Todos</option>
+            <option selected value="active">Abiertos</option>
+            <option value="inactive">Cerrados</option>
+        </select>
+
+        <!-- Modal component create user -->
+        <buttonComp [text]="'Abrir'" (click)="openForm()" [buttonStyle]="'ms-2'"></buttonComp>
+    </div>
+
+    <app-table-form-act
+        [data]="data"
+        (onChangePage)="onChangeStateOrPage($event)"
+    ></app-table-form-act>
+    
+</div>
