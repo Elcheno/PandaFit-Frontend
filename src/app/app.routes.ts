@@ -96,6 +96,10 @@ export const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'active/:id',
+    loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dinamic-active.component').then(m => m.FormularyDinamicActiveComponent)
+  },
+  {
     path: '',
     redirectTo: 'institutions',
     pathMatch: 'full'

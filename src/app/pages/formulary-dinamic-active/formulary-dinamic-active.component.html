@@ -1,0 +1,17 @@
+<div class="w-full mx-auto lg:w-2/3">
+  <h1 class="text-3xl font-bold mb-7 text-black-primary">{{ formularyActive?.formName }}</h1>
+  <h4 class="text-lg font-medium mb-7 text-black-primary">
+    {{ formulary?.description }}
+  </h4>
+  <div class="flex flex-col gap-12">
+    @for (input of inputList; track index; let index = $index) {
+      @if (input.inputField) {
+        <div>
+          <inputField 
+            [data]="input.inputField"
+          />
+        </div>
+      }
+    }
+  </div>
+</div>

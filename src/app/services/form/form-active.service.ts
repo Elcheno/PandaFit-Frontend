@@ -36,6 +36,20 @@ export class FormActiveService {
       );
   }
 
+  public getById (id: string): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/active/' + id)
+      .pipe(
+        catchError((error) => {
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          throw error;
+        }),
+        map((res: any) => {
+          return res;
+        }),
+        take(1)
+      );
+  }
+
   public getAllBySchoolYear (id: any, pageParams?: IPage): Observable<IPageable<any>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -59,7 +73,7 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
 
   public getAllBySchoolYearAfter (id: any, pageParams?: IPage): Observable<IPageable<any>> {
@@ -85,7 +99,7 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
 
   public getAllBySchoolYearBefore (id: any, pageParams?: IPage): Observable<IPageable<any>> {
@@ -111,6 +125,6 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
 }
