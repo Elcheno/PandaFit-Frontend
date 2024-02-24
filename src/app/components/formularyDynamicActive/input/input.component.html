@@ -3,7 +3,7 @@
   [type]="this.data.type"
   id="inputField" 
   class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
-  [placeholder]="this.data.text + ' en ' + this.data.unit"
+  [placeholder]="this.data.unit ? this.data.text + ' en ' + this.data.unit : this.data.text"
   [required]="this.data.required ? this.data.required : false" 
-  [value]="this.data.value"
+  [value]="this.data.value ?? ''"
 />

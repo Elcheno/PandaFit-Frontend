@@ -3,15 +3,38 @@
   <h4 class="text-lg font-medium mb-7 text-black-primary">
     {{ formulary?.description }}
   </h4>
-  <div class="flex flex-col gap-12">
-    @for (input of inputList; track index; let index = $index) {
-      @if (input.inputField) {
+  <div class="flex flex-col gap-6">
+
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg text-black-primary">Datos personales</h4>
+      <div class="flex flex-row gap-4">
+        <inputField [data]="inputName" class="w-2/3"/>
         <div>
-          <inputField 
-            [data]="input.inputField"
-          />
+          <label for="birthDate" class="block mb-2 text-sm font-medium text-black-primary">Fecha de Nacimiento</label>
+          <input id="birthDate" type="datetime-local" class="datepicker">
         </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h4 class="text-lg text-black-primary">Datos del formulario</h4>
+
+      @for (input of inputList; track index; let index = $index) {
+        @if (input.inputField) {
+          <div>
+            <inputField 
+              [data]="input.inputField"
+            />
+          </div>
+        }
       }
-    }
+    </div>
+
+    <buttonComp
+      [text]="'Enviar Formulario'"
+      [buttonStyle]="'text-nowrap'"
+      class="w-min"
+      (click)="onSubmit()"
+    ></buttonComp>
   </div>
 </div>

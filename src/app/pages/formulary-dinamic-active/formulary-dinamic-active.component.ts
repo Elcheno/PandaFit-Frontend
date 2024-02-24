@@ -7,11 +7,13 @@ import { IInputData } from '../../model/interfaces/i-input-data';
 import { InputService } from '../../services/input/input.service';
 import { IInputField, InputComponent } from '../../components/formularyDynamicActive/input/input.component';
 import { IInputType } from '../../model/interfaces/i-input-type';
+import { ButtonComponent } from '../../components/button/button.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-formulary-dinamic-active',
   standalone: true,
-  imports: [InputComponent],
+  imports: [InputComponent, ButtonComponent],
   templateUrl: './formulary-dinamic-active.component.html',
   styleUrl: './formulary-dinamic-active.component.scss'
 })
@@ -20,13 +22,25 @@ export class FormularyDinamicActiveComponent implements OnInit {
   private readonly formActiveService = inject(FormActiveService);
   private readonly formService = inject(FormService);
   private readonly inputService = inject(InputService);
+  private readonly fb = inject(FormBuilder);
 
   public formularyActive!: any;
   public formulary!: IFormData;
   public inputList!: IInputData[];
+  public form!: FormGroup;
+
+  public inputName: IInputField<any> = {
+    type: 'text',
+    unit: '',
+    text: 'Nombre Completo',
+  }
 
   constructor() {
     this.inputList = [];
+
+    this.form = this.fb.group({
+      answers: this.fb.array([])
+    });
   }
 
   ngOnInit(): void {
@@ -55,6 +69,10 @@ export class FormularyDinamicActiveComponent implements OnInit {
         });
       });
     });
+  }
+
+  public onSubmit (): void {
+    console.log('Enviando formulario');
   }
 
 }
