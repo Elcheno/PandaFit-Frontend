@@ -1,11 +1,15 @@
 import { GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Injectable } from '@angular/core';
+import { Injectable, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { ToastService } from '../modal/toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+  private readonly authS = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   checked = false;
   user!: SocialUser;
@@ -14,6 +18,10 @@ export class LoginService {
 
   constructor(private authService: SocialAuthService,
     private router: Router) {
+    //   this.loggedIn = false;
+    // effect(() => {
+    //   this.loggedIn = this.authS.sessionData() ? true : false;
+    // })
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
@@ -27,6 +35,7 @@ export class LoginService {
         this.router.navigate(['/']);
       }
       console.log(user);
+      this.login();
     });
 
   }
@@ -45,5 +54,14 @@ export class LoginService {
 
   async getSrc(): Promise<string> {
     return await this.user.photoUrl;
+  }
+
+  public login (): void {
+    this.authS.login({ email: this.user.email, uuid: this.user.idToken }).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.toastService.showToast('Sesión iniciada correctamente', 'success');
+      }
+    );
   }
 }
