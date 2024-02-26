@@ -10,46 +10,43 @@ import { ToastService } from '../modal/toast.service';
 export class LoginService {
   private readonly authS = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
+  private readonly authService = inject(SocialAuthService);
 
-  checked = false;
   user!: SocialUser;
   loggedIn!: boolean;
   originalPath!: string;
 
-  constructor(private authService: SocialAuthService,
-    private router: Router) {
-    //   this.loggedIn = false;
-    // effect(() => {
-    //   this.loggedIn = this.authS.sessionData() ? true : false;
-    // })
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-      if (this.loggedIn) {
-        if (this.originalPath) {
-          this.router.navigate([this.originalPath]);
-          this.originalPath = '';
-        } else
-          this.router.navigate(['']);
-      } else {
-        this.router.navigate(['/']);
+  constructor() {
+      this.authS.loadSessionData();
+      
+      if (!this.authS.sessionData() || this.authS.sessionData() === null) {
+        console.log("Entra");
+        
+        this.authService.authState.subscribe((user) => {
+          this.user = user;
+          this.loggedIn = (user != null);
+          if (this.loggedIn) {
+            if (this.originalPath) {
+              this.router.navigate([this.originalPath]);
+              this.originalPath = '';
+            } else
+              this.router.navigate(['']);
+          } else {
+            this.router.navigate(['/']);
+          }
+          // console.log(user);
+          this.login();
+        });
       }
-      console.log(user);
-      this.login();
-    });
-
-  }
-
-  isAuth(): boolean {
-    return this.loggedIn;
   }
 
   async refreshToken(): Promise<void> {
     return this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID)
   }
 
-  async singOut(): Promise<void> {
-    return await this.authService.signOut();
+  async logOut(): Promise<void> {
+    return await this.authS.logOut();
   }
 
   async getSrc(): Promise<string> {
@@ -57,9 +54,10 @@ export class LoginService {
   }
 
   public login (): void {
-    this.authS.login({ email: this.user.email, uuid: this.user.idToken }).subscribe(
+    this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
+        this.router.navigateByUrl('/institutions');
         this.toastService.showToast('Sesión iniciada correctamente', 'success');
       }
     );

@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, catchError, map, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   public sessionData = signal<any>(null);
 
@@ -47,8 +49,10 @@ export class AuthService {
     await new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         try {
-          this.setSessionData(null);
+          // this.setSessionData(null);
+          this.sessionData.set(null);
           window.localStorage.removeItem('sessionData');
+          this.router.navigateByUrl('/login');
           resolve();
         } catch (error) {
           reject(error);
