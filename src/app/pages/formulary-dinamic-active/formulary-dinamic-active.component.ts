@@ -8,12 +8,13 @@ import { InputService } from '../../services/input/input.service';
 import { IInputField, InputComponent } from '../../components/formularyDynamicActive/input/input.component';
 import { IInputType } from '../../model/interfaces/i-input-type';
 import { ButtonComponent } from '../../components/button/button.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from '../../services/modal/toast.service';
 
 @Component({
   selector: 'app-formulary-dinamic-active',
   standalone: true,
-  imports: [InputComponent, ButtonComponent],
+  imports: [InputComponent, ButtonComponent, ReactiveFormsModule],
   templateUrl: './formulary-dinamic-active.component.html',
   styleUrl: './formulary-dinamic-active.component.scss'
 })
@@ -23,6 +24,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
   private readonly formService = inject(FormService);
   private readonly inputService = inject(InputService);
   private readonly fb = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
 
   public formularyActive!: any;
   public formulary!: IFormData;
@@ -39,6 +41,8 @@ export class FormularyDinamicActiveComponent implements OnInit {
     this.inputList = [];
 
     this.form = this.fb.group({
+      name: [''],
+      birthdate: [''],
       answers: this.fb.array([])
     });
   }
@@ -63,7 +67,14 @@ export class FormularyDinamicActiveComponent implements OnInit {
                 unit: res.unit ?? '',
                 text: res.name ?? '',
               }
-              this.inputList.push({ ...res, inputField  });
+              this.answers.push(
+                this.fb.group({
+                  type: [inputField.type],
+                  unit: [inputField.unit],
+                  text: [inputField.text],
+                  value: ['', [Validators.required]]
+                })
+              );
             });
           });
         });
@@ -72,7 +83,15 @@ export class FormularyDinamicActiveComponent implements OnInit {
   }
 
   public onSubmit (): void {
-    console.log('Enviando formulario');
+    console.log(this.form);
+    if (this.form.invalid) {
+      this.toastService.showToast('Todos los campos son obligatorios', 'error');
+      return;
+    }
+  }
+
+  get answers (): FormArray {
+    return this.form.get('answers') as FormArray;
   }
 
 }

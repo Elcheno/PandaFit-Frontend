@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export interface IInputField <T> {
   type: string;
@@ -12,10 +13,11 @@ export interface IInputField <T> {
 @Component({
   selector: 'inputField',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss'
 })
 export class InputComponent {
-  @Input() data!: IInputField<any>; 
+  @Input() data!: IInputField<any>;
+
 }
