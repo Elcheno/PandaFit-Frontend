@@ -34,7 +34,6 @@ export class AuthService {
     return this.http.post<any>('http://localhost:8080/login', body)
       .pipe(
         catchError((error) => {
-          console.error(error);
           return error;
         }),
         map((res: any) => {

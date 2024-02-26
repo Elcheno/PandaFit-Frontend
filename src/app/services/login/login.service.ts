@@ -21,20 +21,18 @@ export class LoginService {
       this.authS.loadSessionData();
       
       if (!this.authS.sessionData() || this.authS.sessionData() === null) {
-        console.log("Entra");
-        
         this.authService.authState.subscribe((user) => {
           this.user = user;
-          this.loggedIn = (user != null);
-          if (this.loggedIn) {
-            if (this.originalPath) {
-              this.router.navigate([this.originalPath]);
-              this.originalPath = '';
-            } else
-              this.router.navigate(['']);
-          } else {
-            this.router.navigate(['/']);
-          }
+          // this.loggedIn = (user != null);
+          // if (this.loggedIn) {
+          //   if (this.originalPath) {
+          //     this.router.navigate([this.originalPath]);
+          //     this.originalPath = '';
+          //   } else
+          //     this.router.navigate(['']);
+          // } else {
+          //   this.router.navigate(['/']);
+          // }
           // console.log(user);
           this.login();
         });
@@ -56,9 +54,11 @@ export class LoginService {
   public login (): void {
     this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
-        // console.log(res);
         this.router.navigateByUrl('/institutions');
         this.toastService.showToast('Sesión iniciada correctamente', 'success');
+      },
+      (error) => {
+        this.toastService.showToast('No existe el usuario', 'error');
       }
     );
   }
