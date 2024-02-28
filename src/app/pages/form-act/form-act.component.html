@@ -18,6 +18,7 @@
 
     <app-table-form-act
         [data]="data"
+        (onDelete)="close($event)"
         (onChangePage)="onChangeStateOrPage($event)"
     ></app-table-form-act>
     
