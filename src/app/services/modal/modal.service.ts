@@ -13,7 +13,8 @@ export class ModalService {
   public async open (component: ComponentType<any>, data?: any): Promise<DialogRef<any>> {
     return await new Promise((resolve, _reject) => {
       this.dialogRef = this.dialog.open(component, {
-        width: '100vw',
+        maxWidth: '600px',
+        width: '-webkit-fill-available',
         data
       });
       resolve(this.dialogRef);
