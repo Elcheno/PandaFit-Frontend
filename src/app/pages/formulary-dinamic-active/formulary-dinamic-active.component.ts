@@ -72,6 +72,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
                   type: [inputField.type],
                   unit: [inputField.unit],
                   text: [inputField.text],
+                  decimal: [res.decimal],
                   value: ['', [Validators.required]]
                 })
               );

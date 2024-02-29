@@ -42,6 +42,7 @@
                   class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
                   [placeholder]="answer.get('text')?.value ? answer.get('text')?.value + ' en ' + answer.get('unit')?.value : answer.get('text')?.value"
                   required
+                  [step]="answer.get('decimal')?.value ? '0.01' : '1'"
                   formControlName="value"
                 />
               </ng-container>

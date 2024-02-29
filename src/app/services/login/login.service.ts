@@ -57,7 +57,7 @@ export class LoginService {
   }
 
   public login (): void {
-    this.authS.login({ email: this.user.email, uuid: this.user.idToken }).subscribe(
+    this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
         console.log(res);
         this.toastService.showToast('Sesión iniciada correctamente', 'success');

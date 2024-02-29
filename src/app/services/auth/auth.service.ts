@@ -60,6 +60,7 @@ export class AuthService {
   public setSession (data: any): void {
     try {
       const user = {
+        id: data.id,
         email: data.email,
         token: data.token,
         roles: data.roles
