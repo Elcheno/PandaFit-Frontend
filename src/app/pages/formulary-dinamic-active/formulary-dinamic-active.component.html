@@ -1,64 +1,94 @@
 <div class="w-full mx-auto lg:w-2/3">
-  <h1 class="text-3xl font-bold mb-7 text-black-primary text-balance">{{ formularyActive?.formName }}</h1>
+  <h1 class="text-3xl font-bold mb-7 text-black-primary text-balance">{{ formulary ? formulary.name : 'Formulario' }}</h1>
   <h2 class="text-lg font-medium mb-7 text-black-primary text-pretty">
     {{ formulary ? formulary.description : '' }}
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="flex flex-col gap-6">
+    @defer () {
+      <div class="flex flex-col gap-6">
 
-      <div class="flex flex-col gap-4">
-        <h4 class="text-lg text-black-primary">Datos personales</h4>
-        <div class="flex flex-col md:flex-row gap-4">
-          <div class="md:w-2/3">
-            <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">Nombre completo</label>
-            <input 
-              type="text"
-              id="inputField" 
-              class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
-              placeholder="Nombre completo"
-              formControlName="name"
-              required
-            />
-          </div>
-          <div class="md:w-1/3">
-            <label for="birthDate" class="block mb-2 text-sm font-medium text-black-primary">Fecha de Nacimiento</label>
-            <input id="birthDate" type="date" formControlName="birthdate" class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5">
+        <div class="flex flex-col gap-4">
+          <h4 class="text-lg text-black-primary">Datos personales</h4>
+          <div class="flex flex-col xl:flex-row gap-4">
+            <div class="xl:w-3/4 grid md:grid-cols-3 gap-4">
+              <div>
+                <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">Nombre</label>
+                <input 
+                  type="text"
+                  id="inputField" 
+                  class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
+                  placeholder="Nombre"
+                  formControlName="name"
+                  required
+                />
+              </div>
+  
+              <div>
+                <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">Primer apellido</label>
+                <input 
+                  type="text"
+                  id="inputField" 
+                  class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
+                  placeholder="Primer apellido"
+                  formControlName="surname1"
+                  required
+                />
+              </div>
+  
+              <div>
+                <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">Segundo apellido</label>
+                <input 
+                  type="text"
+                  id="inputField" 
+                  class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
+                  placeholder="Segundo apellido"
+                  formControlName="surname2"
+                  required
+                />
+              </div>
+            </div>
+            <div class="xl:w-1/4">
+              <label for="birthDate" class="block mb-2 text-sm font-medium text-black-primary">Fecha de Nacimiento</label>
+              <input id="birthDate" type="date" formControlName="birthdate" class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5">
+            </div>
           </div>
         </div>
-      </div>
+    
+        <div class="flex flex-col gap-4">
+          <h4 class="text-lg text-black-primary">Datos del formulario</h4>
+          
+          <ng-container formArrayName="answers">
+            @for (answer of answers.controls; track index; let index = $index) {
+              <div>
+                <ng-container [formGroupName]="index">
+                  <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">{{answer.get('text')?.value}}</label>
+                  <input 
+                    [type]="answer.get('type')?.value"
+                    id="inputField_{{ index }}" 
+                    class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
+                    [placeholder]="answer.get('text')?.value ? answer.get('text')?.value + ' en ' + answer.get('unit')?.value : answer.get('text')?.value"
+                    required
+                    [step]="answer.get('decimal')?.value ? '0.01' : '1'"
+                    formControlName="value"
+                  />
+                </ng-container>
+              </div>
+            }
+          </ng-container>
   
-      <div class="flex flex-col gap-4">
-        <h4 class="text-lg text-black-primary">Datos del formulario</h4>
-        
-        <ng-container formArrayName="answers">
-          @for (answer of answers.controls; track index; let index = $index) {
-            <div>
-              <ng-container [formGroupName]="index">
-                <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">{{answer.get('text')?.value}}</label>
-                <input 
-                  [type]="answer.get('type')?.value"
-                  id="inputField_{{ index }}" 
-                  class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
-                  [placeholder]="answer.get('text')?.value ? answer.get('text')?.value + ' en ' + answer.get('unit')?.value : answer.get('text')?.value"
-                  required
-                  [step]="answer.get('decimal')?.value ? '0.01' : '1'"
-                  formControlName="value"
-                />
-              </ng-container>
-            </div>
-          }
-        </ng-container>
-
+        </div>
+  
+        <button 
+          type="submit" 
+          class="w-full md:w-fit p-2.5 px-4 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light"
+          >
+          Enviar Formulario
+        </button>
       </div>
-
-      <button 
-        type="submit" 
-        class="w-full md:w-fit p-2.5 px-4 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light"
-        >
-        Enviar Formulario
-      </button>
-    </div>
+    } @placeholder (minimum 0.5s) {
+      
+    }
   </form>
 
 </div>

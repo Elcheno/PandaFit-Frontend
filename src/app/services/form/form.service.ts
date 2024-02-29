@@ -4,7 +4,7 @@ import { Observable, catchError, map, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { IPage } from '../../model/interfaces/i-page';
 import { IPageable } from '../../model/interfaces/i-pageable';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -70,7 +70,7 @@ export class FormService {
 
     const userId: string = sessionData.id;
     const newData: any = { ...data, userId: userId }
-    return this.http.post<IFormData>(`http://localhost:8080/form/formulary`, newData, { headers: { Authorization: token ?? "" } })
+    return this.http.post<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, newData, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IFormData = { ...res };
