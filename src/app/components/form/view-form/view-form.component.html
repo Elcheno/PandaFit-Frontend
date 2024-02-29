@@ -17,7 +17,7 @@
         <label for="name" class="block mb-2 text-sm font-medium text-black-primary">Campos disponibles:</label>
         <!-- <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity> -->
 
-        <div class="example-list mt-5 max-h-[500px] overflow-auto p-2 rounded-lg">
+        <div class="example-list mt-5 p-2 rounded-lg">
             @for (item of inputs; track item.id) {
             <div class="example-box bg-gray-100 my-2 rounded-lg" cdkDrag>{{item.name}}
 
@@ -37,24 +37,17 @@
 
     <div class="mb-4 mt-5">
         <h3 class="text-black-primary">Respuestas posibles según los campos:</h3>
-        <ul class="w-48 text-sm font-medium text-black-primary bg-white rounded-lg">
+        <ul
+            class="w-full text-sm font-medium text-black-primary bg-white rounded-lg">
             @for (item of outputs; track item.id) {
-            <li class="w-full border border-gray-200 rounded-lg bg-green-primary">
+            <li class="w-full border rounded-lg border-gray-300 mt-3">
                 <div class="flex items-center ps-3">
-                    <input type="checkbox" [value]="item.id"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
                     <label for="vue-checkbox"
-                        class="w-full py-3 ms-2 text-sm font-medium text-white">{{item.name}}</label>
+                        class="w-full py-3 text-sm font-medium text-black-primary">{{item.name}}</label>
                 </div>
             </li>
             }
         </ul>
     </div>
-
-
-
-    <button
-        class="p-2.5 w-40 text-sm font-medium text-white rounded-lg bg-green-primary hover:bg-green-light fixed bottom-5 right-5 xl:bottom-20 xl:right-12">
-        Volver</button>
 
 </form>

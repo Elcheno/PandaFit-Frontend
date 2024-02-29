@@ -52,7 +52,7 @@ export class SchoolyearService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
     
-    return this.http.get<ISchoolYear>(env.api.url + env.api.schoolyear + id, { headers: { Authorization: token ?? "" } })
+    return this.http.get<ISchoolYear>(`${env.api.url}${env.api.institution}${env.api.schoolyear}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           return res as ISchoolYear;

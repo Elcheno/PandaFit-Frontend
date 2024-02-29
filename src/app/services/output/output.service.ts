@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { IOutputData } from '../../model/interfaces/i-output-data';
 import { HttpClient } from '@angular/common/http';
 import { IPage } from '../../model/interfaces/i-page';
-import { Observable, map, take } from 'rxjs';
+import { Observable, lastValueFrom, map, take } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
@@ -13,6 +13,7 @@ import { AuthService } from '../auth/auth.service';
 export class OutputService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private allOutputs: IOutputData[] = [];
 
   private _mockData: IOutputData[] = [
     {
@@ -49,14 +50,25 @@ export class OutputService {
 
   getOutputsWithInputsId (ids: string[]) {
     let result:IOutputData[] = [];
-    this._mockData.forEach(output => {
+    if(this.allOutputs.length == 0) {
+      this.getAll(
+        { page: 0, size: 1000, sort: ['name'] }
+      ).subscribe((res) => {
+        this.allOutputs = res.content;
+      })
+    }
+    this.allOutputs.forEach(output => {      
       if(output.inputsId && output.inputsId.length > 0) {
         const filteredArray = ids.filter(value => output.inputsId?.includes(value));
+        // console.log(filteredArray);
+        
         if(filteredArray && filteredArray.length==output.inputsId.length) {
           result.push(output)
         }
       }
     })
+    // console.log(this.allOutputs);
+    
     return result;
   }
 
@@ -100,9 +112,11 @@ export class OutputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    const userId: string = '928f00aa-ad9d-450c-9203-855568e8b8c3';
+
+    const userId: string = '3630fe4b-d2c5-4336-aae3-c9a2352c24bf';
+
     const newData = { ...data, userOwnerId: userId }
-    console.log(newData);
+    // console.log(newData);
     return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
