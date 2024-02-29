@@ -13,7 +13,8 @@ export class ModalConfirmService {
   public async open (msg?: string): Promise<DialogRef<any, ConfirmModalComponent>> {
     return await new Promise((resolve, _reject) => {
       this.dialogRef = this.dialog.open(ConfirmModalComponent, {
-        width: '100vw',
+        maxWidth: '600px',
+        width: '-webkit-fill-available',
         data: msg
       });
       resolve(this.dialogRef);
