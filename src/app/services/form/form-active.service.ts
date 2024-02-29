@@ -5,6 +5,7 @@ import { ToastService } from '../modal/toast.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -113,4 +114,23 @@ export class FormActiveService {
         take(1)
       )
   }
+
+  public close(data: any): Observable<any> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+  
+    return this.http.put<any>('http://localhost:8080/active/close', data, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cerrar formulario', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          return res;
+        }),
+        take(1)
+      );
+  }
+  
 }
