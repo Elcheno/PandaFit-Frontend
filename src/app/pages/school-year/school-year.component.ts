@@ -117,7 +117,7 @@ export class SchoolYearComponent {
   }
 
   public async handlerFormActive (data: ISchoolYear): Promise<void> {
-    this.routerService.navigate(['institutions/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
+    this.routerService.navigate(['/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
   }
 
   public dropdownRows: IDropdownData<ISchoolYear> = {

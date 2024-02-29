@@ -101,16 +101,15 @@ export class FormActComponent implements OnInit {
     })
   }
 
-  public async close(formAct: any): Promise<void> {
+  public close(formAct: any): void {
     const currentDate = new Date(); 
     formAct.expirationDate = currentDate.toISOString();
     
-    try {
-      await this.formActiveService.close(formAct).toPromise();
-    } catch (error) {
-      console.error(error);
-      this.toastService.showToast('Error al cerrar formulario', 'error');
-    }
+    this.formActiveService.close(formAct).subscribe(() => {
+      this.toastService.showToast('Formulario cerrado', 'success');
+      this.data.content = this.data.content.filter((item) => item.id !== formAct.id);
+    });
+    
   }
   
 

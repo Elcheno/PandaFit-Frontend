@@ -33,11 +33,6 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
         canActivate: [authGuard, roleGuard]
-      },
-      {
-        path: 'formactive',
-        loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
-        canActivate: [authGuard, roleGuard],
       }
     ]
   },
@@ -90,6 +85,11 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: 'formactive',
+    loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: 'login',

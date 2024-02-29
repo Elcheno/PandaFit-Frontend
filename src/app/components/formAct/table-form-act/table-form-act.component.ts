@@ -7,7 +7,7 @@ import { ModalConfirmService } from '../../../services/modal/modal-confirm.servi
 import { type IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { IPage } from '../../../model/interfaces/i-page';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ISchoolYear } from '../../../model/interfaces/i-school-year';
 import { SchoolyearService } from '../../../services/schoolyear/schoolyear.service';
 import { StateFormActPipe } from '../../../pipes/state-form-act.pipe';
@@ -30,6 +30,7 @@ export class TableFormActComponent implements OnInit {
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly routerActiveService = inject(ActivatedRoute);
+  private readonly routerService = inject(Router);
   private readonly schoolYearService = inject(SchoolyearService);
 
   public schoolYear!: ISchoolYear;
@@ -44,12 +45,39 @@ export class TableFormActComponent implements OnInit {
     })
   }
 
-  public dropdownRows: IDropdownData<any> = {
+  public dropdownRowsInactive: IDropdownData<any> = {
     header: 'Formulario',
     button: {
       icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
     },
     rows: [
+      {
+        title: 'Ver Respuestas',
+        disabled: true,
+        fnc: (data: any) => {
+          if (data == null) return;
+          console.log(data);
+          // this.onUpdate.emit(data);
+        },
+        icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.6 8.5h8m-8 3.5H12m7.1-7H5c-.2 0-.5 0-.6.3-.2.1-.3.3-.3.6V15c0 .3 0 .5.3.6.1.2.4.3.6.3h4l3 4 3-4h4.1c.2 0 .5 0 .6-.3.2-.1.3-.3.3-.6V6c0-.3 0-.5-.3-.6a.9.9 0 0 0-.6-.3Z"/></svg>'
+      }
+    ]
+  };
+
+  public dropdownRowsActive: IDropdownData<any> = {
+    header: 'Formulario',
+    button: {
+      icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
+    },
+    rows: [
+      {
+        title: 'Rellenar Formulario',
+        icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.8a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 18.8V7.2A1.2 1.2 0 0 1 5.2 6h4.6m4.4-2H20v5.8m-7.9 2L20 4.2"/></svg>',
+        fnc: (data: any) => {
+          console.log(data);
+          this.routerService.navigateByUrl(`/active/${data.id}`);
+        }
+      },
       {
         title: 'Ver Respuestas',
         disabled: true,
