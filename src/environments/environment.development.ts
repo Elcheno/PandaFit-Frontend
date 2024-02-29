@@ -10,5 +10,13 @@ export const environment = {
     output: '/output',
     formulary: '/formulary',
     login: "login"
-  }
+  },
+  firebaseConfig: {
+    apiKey: "AIzaSyBm55E8-hm-5CNLN54kbAA1Nr9raqaOZaE",
+    authDomain: "pandafit-bda26.firebaseapp.com",
+    projectId: "pandafit-bda26",
+    storageBucket: "pandafit-bda26.appspot.com",
+    messagingSenderId: "91118632701",
+    appId: "1:91118632701:web:a78f9094302cf2236e4894"
+}
 };

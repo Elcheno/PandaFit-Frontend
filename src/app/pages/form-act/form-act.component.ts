@@ -101,4 +101,16 @@ export class FormActComponent implements OnInit {
     })
   }
 
+  public close(formAct: any): void {
+    const currentDate = new Date(); 
+    formAct.expirationDate = currentDate.toISOString();
+    
+    this.formActiveService.close(formAct).subscribe(() => {
+      this.toastService.showToast('Formulario cerrado', 'success');
+      this.data.content = this.data.content.filter((item) => item.id !== formAct.id);
+    });
+    
+  }
+  
+
 }

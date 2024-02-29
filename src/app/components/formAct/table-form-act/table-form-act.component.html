@@ -44,9 +44,22 @@
                               {{ item | stateFormAct }}
                           </th>
                           <td class="px-6 py-4 text-right flex justify-end">
-                              <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
-                                  [dropdownStyle]="'text-black-primary'"></app-dropdown>
-                          </td>
+                            @if ((item | stateFormAct) === 'Abierto') {
+                                <app-dropdown 
+                                    [rows]="dropdownRowsActive" 
+                                    [data]="item" 
+                                    [triggerStyle]="'text-gray-800'"
+                                    [dropdownStyle]="'text-black-primary'">
+                                </app-dropdown>  
+                            } @else {
+                                <app-dropdown 
+                                    [rows]="dropdownRowsInactive" 
+                                    [data]="item" 
+                                    [triggerStyle]="'text-gray-800'"
+                                    [dropdownStyle]="'text-black-primary'">
+                                </app-dropdown>  
+                            }
+                         </td>
                       </tr>
                   }
               </tbody>
