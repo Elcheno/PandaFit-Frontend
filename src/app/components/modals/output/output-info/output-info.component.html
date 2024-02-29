@@ -1,0 +1,102 @@
+<!-- Main modal -->
+<div class="relative bg-white rounded-lg shadow w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12 m-auto">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+            <h3 class="text-lg font-semibold text-black-primary">
+                Ver Resultado
+            </h3>
+            <button type="button" (click)="closeModal()"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                <svg class="w-6 h-6 text-black-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18 18 6m0 12L6 6" />
+                </svg>
+            </button>
+        </div>
+
+        <form [formGroup]="form" class="p-4 md:p-5">
+            <div class="grid gap-4 mb-4">
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+                    <input type="text" name="name" id="name" formControlName="name" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Nombre" >
+                </div>
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
+                    <textarea name="description" id="description" formControlName="description" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Descripción" rows="3" required></textarea>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Fórmula</label>
+                    <input type="text" name="formula" id="formula" [value]="getFormattedFormula()"
+                        matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Formula">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Unidad</label>
+                    <input type="text" name="unit" id="unit" formControlName="unit" matInput
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
+                        placeholder="Unidad" >
+                </div>
+
+                <div class="col-span-2">
+                    <buttonComp [text]="showUmbralList ? 'Ocultar umbrales' : 'Ver umbrales'" type="button" (click)="toggleUmbralList()" class="btn" [buttonStyle]="'ms-2'"></buttonComp>
+                </div>
+                <div class="col-span-2">
+                    <div *ngIf="showUmbralList">
+                        <div class="grid gap-2 grid-cols-subgrid max-h-96 overflow-y-scroll pr-1" formArrayName="umbralList">
+                            <div class="mb-5 col-start-1 col-end-5 flex mb-4">
+                                <ng-container *ngIf="umbralList.length > 0; else noUmbralsMessage">
+                                    <div class="mr-5">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900">Texto</label>
+                                        <ng-container *ngFor="let umbral of umbralList.controls; let i = index" [formGroupName]="i">
+                                            <input type="text" formControlName="text"
+                                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-4"
+                                                placeholder="Texto">
+                                        </ng-container>
+                                    </div>
+                                    <div class="mr-5">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900">Valor</label>
+                                        <ng-container *ngFor="let umbral of umbralList.controls; let i = index" [formGroupName]="i">
+                                            <input type="number" formControlName="value"
+                                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-4"
+                                                placeholder="Valor">
+                                        </ng-container>
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900">Tipo</label>
+                                        <ng-container *ngFor="let umbral of umbralList.controls; let i = index" [formGroupName]="i">
+                                            <select formControlName="type"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-4">
+                                                <option value="="> = </option>
+                                                <option value=">"> > </option>
+                                                <option value="<"> < </option>
+                                            </select>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <ng-template #noUmbralsMessage>
+                            <p>No hay ningún umbral añadido</p>
+                        </ng-template>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+            </div>
+        </form>
+    </div>
+</div>
