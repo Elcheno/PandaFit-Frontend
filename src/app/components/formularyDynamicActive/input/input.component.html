@@ -1,9 +1,0 @@
-<label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">{{ this.data.text }}</label>
-<input 
-  [type]="this.data.type"
-  id="inputField" 
-  class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
-  [placeholder]="this.data.unit ? this.data.text + ' en ' + this.data.unit : this.data.text"
-  [required]="this.data.required ? this.data.required : false" 
-  [value]="this.data.value ?? ''"
-/>

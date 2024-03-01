@@ -64,15 +64,34 @@
                 <div>
                   <ng-container [formGroupName]="index">
                     <label for="inputField" class="block mb-2 text-sm font-medium text-black-primary">{{answer.get('text')?.value}}</label>
-                    <input 
-                      [type]="answer.get('type')?.value"
-                      id="inputField_{{ index }}" 
-                      class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
-                      [placeholder]="answer.get('text')?.value ? answer.get('text')?.value + ' en ' + answer.get('unit')?.value : answer.get('text')?.value"
-                      required
-                      [step]="answer.get('decimal')?.value ? '0.01' : '1'"
-                      formControlName="value"
-                    />
+                    @if (answer.get('type')?.value === 'boolean') {
+                      <div class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg grid md:grid-cols-2 gap-2 md:gap-12 w-full p-1.5">
+                        <button
+                          type="button"
+                          class="flex gap-2 items-center bg-gray-100 p-2 rounded-lg justify-center transition-colors text-black-primary cursor-pointer" 
+                          [class]="answer.get('value')?.value === 'true' ? 'bg-green-light text-white cursor-auto' : 'bg-gray-200 hover:bg-gray-300'"
+                          (click)="answer.get('value')?.setValue('true')">
+                          <p class="block text-sm font-medium select-none">Si</p>
+                        </button>
+                        <button 
+                          type="button"
+                          class="flex gap-2 items-center bg-gray-100 p-2 rounded-lg justify-center transition-colors text-black-primary cursor-pointer" 
+                          [class]="answer.get('value')?.value === 'false' ? 'bg-green-light text-white cursor-auto' : 'bg-gray-200 hover:bg-gray-300'"
+                          (click)="answer.get('value')?.setValue('false')">
+                          <p class="block text-sm font-medium select-none">No</p>
+                        </button>
+                      </div>
+                    } @else {
+                      <input 
+                        [type]="answer.get('type')?.value"
+                        id="inputField_{{ index }}" 
+                        class="bg-gray-50 border border-gray-300 text-black-primary text-sm rounded-lg block w-full p-2.5" 
+                        [placeholder]="answer.get('text')?.value ? answer.get('text')?.value + ' en ' + answer.get('unit')?.value : answer.get('text')?.value"
+                        required
+                        [step]="answer.get('decimal')?.value ? '0.01' : '1'"
+                        formControlName="value"
+                      />
+                    }
                   </ng-container>
                 </div>
               }
