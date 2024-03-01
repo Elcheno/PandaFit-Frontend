@@ -25,7 +25,9 @@ export class SidebarComponent {
   constructor(@Inject(DOCUMENT) private document: Document) {
     this.logginStatus = false;
     effect(() => {
-      this.logginStatus = this.authService.sessionData() ? true : false;
+      // Descomentar y quitar el true. Esto es un Mock!!!
+      // this.logginStatus = this.authService.sessionData() ? true : false;
+      this.logginStatus = true;
     })
   }
 
