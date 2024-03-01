@@ -9,5 +9,13 @@ import { Component } from '@angular/core';
 })
 export class FormularyDynamicActiveSuccessComponent {
 
+  public load: boolean = false;
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.load = true;
+    }, 500);
+  }
+
 
 }

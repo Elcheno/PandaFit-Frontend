@@ -30,7 +30,8 @@ module.exports = {
       },
       animation: {
         opacityIn: 'opacityIn 0.2s ease-in-out',
-        "zoom-in": "zoom-in 0.05s ease-out"
+        "zoom-in": "zoom-in 0.05s ease-out",
+        "zoom-in-1": "zoom-in 0.1s ease-out"
       }
     }
   },
