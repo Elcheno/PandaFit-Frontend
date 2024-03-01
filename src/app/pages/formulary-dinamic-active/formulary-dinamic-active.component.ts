@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormActiveService } from '../../services/form/form-active.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
@@ -29,7 +29,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
   public inputList!: IInputData[];
   public form!: FormGroup;
 
-  public isLoad: boolean = false;
+  public state = signal<boolean>(false);
 
   public inputName: IInputField<any> = {
     type: 'text',
@@ -79,7 +79,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
           );
         });
 
-        this.isLoad = true;
+        this.state.set(true);
       });
     });
   }
@@ -110,7 +110,6 @@ export class FormularyDinamicActiveComponent implements OnInit {
       this.routerService.navigateByUrl('/active/success/' + res.id);
     });
 
-    // console.log(response);
   }
 
   public generateUuid (): string {
