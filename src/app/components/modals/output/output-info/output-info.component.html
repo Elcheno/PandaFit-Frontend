@@ -37,7 +37,7 @@
                     <input type="text" name="formula" id="formula" [value]="getFormattedFormula()"
                         matInput
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5"
-                        placeholder="Formula">
+                        placeholder="Formula" disabled>
                 </div>
 
                 <div class="col-span-2">
@@ -53,7 +53,7 @@
                 <div class="col-span-2">
                     <div *ngIf="showUmbralList">
                         <div class="grid gap-2 grid-cols-subgrid max-h-96 overflow-y-scroll pr-1" formArrayName="umbralList">
-                            <div class="mb-5 col-start-1 col-end-5 flex mb-4">
+                            <div class="col-start-1 col-end-5 flex mb-4">
                                 <ng-container *ngIf="umbralList.length > 0; else noUmbralsMessage">
                                     <div class="mr-5">
                                         <label class="block mb-2 text-sm font-medium text-gray-900">Texto</label>
