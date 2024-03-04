@@ -3,6 +3,7 @@ import { Component, Inject, ViewChild, effect, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToastService } from '../../services/modal/toast.service';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +17,7 @@ export class SidebarComponent {
   @ViewChild('overlay') overlay: any;
 
   private readonly authService = inject(AuthService);
+  // private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
 
   public logginStatus: boolean;
@@ -23,7 +25,9 @@ export class SidebarComponent {
   constructor(@Inject(DOCUMENT) private document: Document) {
     this.logginStatus = false;
     effect(() => {
-      this.logginStatus = this.authService.sessionData() ? true : false;
+      // Descomentar y quitar el true. Esto es un Mock!!!
+      // this.logginStatus = this.authService.sessionData() ? true : false;
+      this.logginStatus = true;
     })
   }
 
