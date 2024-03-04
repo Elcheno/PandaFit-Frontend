@@ -18,8 +18,6 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
-import { CreateInputModalComponent } from '../../components/modals/input/create-input-modal/create-input-modal.component';
-import { IPageable } from '../../model/interfaces/i-pageable';
 import { Router, RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
@@ -42,13 +40,14 @@ export class CreateFormComponent {
   outputService = inject(OutputService);
   formService = inject(FormService);
   inputService = inject(InputService);
+  chargingInputs = false;
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
-  public outputsRelated = signal<any>({state:false, value:[]});
+  public outputsRelated = signal<any>({state:true, value:[]});
   private readonly toastService = inject(ToastService);
 
-  totalInputs: number = 0; 
-  currentPage: number = 1; // Página actual de elementos cargados
+  totalInputsPages: number = 0; 
+  currentPage: number = 0; // Página actual de elementos cargados
   itemsPerPage: number = 10;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -58,13 +57,14 @@ export class CreateFormComponent {
       outputsSelected:new FormArray([]),
       description:['']
     })
-    this.loadMoreItems();
+    this.getInputs();
   }
 
   ngOnInit(): void {
-    this.inputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
-      this.inputsAvailable.push(...res.content);
-    });
+    // this.getInputs();
+    // this.inputService.getAll({ page: this.currentPage, size: this.itemsPerPage, sort: ['name'] }).subscribe((res) => {
+    //   this.inputsAvailable.push(...res.content);
+    // });
   }
 
   public search (value: string): void {
@@ -166,11 +166,17 @@ export class CreateFormComponent {
 
   private checkOutputsDisponibility(): void {
     this.outputsRelated.set({state:false, value:[]});
-    const inputsId = this.inputsSelected.map(item => item.id);
+    setTimeout(() => {
+      
+      const inputsId = this.inputsSelected.map(item => item.id);
+      
+      this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
+        this.outputsRelated.set({state:true, value:res});
+        console.log(res);
+        
+      });
+    }, 150)
     
-    this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
-      this.outputsRelated.set({state:true, value:res});
-    });
 
   }
 
@@ -183,33 +189,25 @@ export class CreateFormComponent {
     }
   }
 
-  loadMoreItems() {
-    // Simulación de carga de datos desde una fuente externa (por ejemplo, una API)
-    // Aquí deberías hacer una llamada HTTP para obtener más elementos
-    // Simulamos una carga de datos
-    // setTimeout(() => {
-      // Suponiendo que 'moreItems' es la lista de elementos obtenida de tu fuente de datos
-      console.log("Cargando más inputs");
-      
-      const moreItems = this.getMoreItems();
-      this.inputsAvailable = this.inputsAvailable.concat(moreItems);
-    // }, 500); // Retardo simulado para simular la carga de datos desde una fuente externa
+  getInputs() {
+    this.inputService.getAll({ page: this.currentPage, size: this.itemsPerPage, sort: ['name'] }).subscribe((res) => {
+      this.inputsAvailable.push(...res.content);
+      this.totalInputsPages = res.totalPages;
+      this.chargingInputs = false;
+    });
   }
 
-  getMoreItems(): any[] {
-    // Simulación de obtención de más elementos
-    // En una aplicación real, esto debería obtener los datos de tu fuente de datos (por ejemplo, una API)
-    const moreItems: any[] = [];
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    for (let i = startIndex; i < endIndex; i++) {
-      if (i < this.totalInputs) {
-        // Suponiendo que 'fetchData' es una función que obtiene datos de tu fuente de datos
-        // Debes modificar esto según tu lógica para obtener más elementos
-        moreItems.push({ id: i, name: 'Item ' + i });
-      }
-    }
+  loadMoreItems() {
+    this.nextPage();
+  }
+
+  public nextPage (): void { 
+    if ((this.currentPage + 1) == this.totalInputsPages) return;
+    
+    this.chargingInputs = true;
     this.currentPage++;
-    return moreItems;
+    setTimeout(() => {   
+      this.getInputs();
+    }, 500);
   }
 }
