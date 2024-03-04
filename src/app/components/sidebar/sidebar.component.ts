@@ -18,7 +18,6 @@ export class SidebarComponent {
   @ViewChild('overlay') overlay: any;
 
   private readonly authService = inject(AuthService);
-  // private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
 
   public logginStatus: boolean;
