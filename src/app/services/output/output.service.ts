@@ -48,7 +48,7 @@ export class OutputService {
     return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId (ids: string[]) {
+  getOutputsWithInputsId (ids: string[]): Promise<IOutputData[]> {
     let result:IOutputData[] = [];
     if(this.allOutputs.length == 0) {
       this.getAll(
@@ -68,8 +68,7 @@ export class OutputService {
       }
     })
     // console.log(this.allOutputs);
-    
-    return result;
+    return Promise.resolve(result);
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IOutputData>> {
