@@ -166,11 +166,11 @@ export class CreateFormComponent {
 
   private checkOutputsDisponibility(): void {
     this.outputsRelated.set({state:false, value:[]});
-    setTimeout(() => {
+    setTimeout(async () => {
       
       const inputsId = this.inputsSelected.map(item => item.id);
       
-      this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
+      await this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
         this.outputsRelated.set({state:true, value:res});
         console.log(res);
         

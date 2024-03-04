@@ -48,17 +48,14 @@ export class OutputService {
     return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId (ids: string[]): Promise<IOutputData[]> {
+  async getOutputsWithInputsId (ids: string[]): Promise<IOutputData[]> {
     let result:IOutputData[] = [];
     if(this.allOutputs.length == 0) {
-      this.getAll(
-        { page: 0, size: 1000, sort: ['name'] }
-      ).subscribe((res) => {
-        this.allOutputs = res.content;
-      })
+      this.allOutputs = (await lastValueFrom(this.getAll({ page: 0, size: 1000, sort: ['name'] }))).content;
     }
     this.allOutputs.forEach(output => {      
       if(output.inputsId && output.inputsId.length > 0) {
+        
         const filteredArray = ids.filter(value => output.inputsId?.includes(value));
         // console.log(filteredArray);
         
