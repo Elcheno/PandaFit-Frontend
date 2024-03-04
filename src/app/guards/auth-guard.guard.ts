@@ -3,6 +3,9 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { environment as env } from '../../environments/environment.development';
 
+/**
+ * Custom authentication guard function to protect routes.
+ */
 export const authGuard: CanActivateFn = (route, state) => {
   if(env.dev === true) return true;
 

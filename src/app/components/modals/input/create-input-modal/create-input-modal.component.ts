@@ -54,6 +54,9 @@ export class CreateInputModalComponent {
     })
   }
 
+  /**
+   * Submits the form data
+   */
   public submit (): void {
     if (!this.form.valid) return;
 
@@ -72,6 +75,9 @@ export class CreateInputModalComponent {
 
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

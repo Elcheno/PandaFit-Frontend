@@ -20,6 +20,9 @@ export class SidebarComponent {
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
 
+  /**
+   * Indicates the login status.
+   */
   public logginStatus: boolean;
 
   constructor(@Inject(DOCUMENT) private document: Document) {
@@ -31,6 +34,9 @@ export class SidebarComponent {
     })
   }
 
+  /**
+   * Toggles the sidebar visibility.
+   */
   public toggleSidebar(): void {
     this.sidebar.nativeElement.classList.toggle('transform-none');
     this.overlay.nativeElement.classList.toggle('hidden');
@@ -38,6 +44,9 @@ export class SidebarComponent {
     this.document.body.classList.toggle('overflow-hidden');
   }
 
+  /**
+   * Logs out the user.
+   */
   public logout(): void {
     this.authService.logOut()
       .then(() => this.toastService.showToast('Sesión cerrada correctamente', 'success'));

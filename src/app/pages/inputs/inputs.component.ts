@@ -12,6 +12,7 @@ import { ShowInputModalComponent } from '../../components/modals/input/show-inpu
 import { ToastService } from '../../services/modal/toast.service';
 import { ButtonComponent } from '../../components/button/button.component';
 
+/** Component for managing inputs */
 @Component({
   selector: 'app-inputs',
   standalone: true,
@@ -22,24 +23,39 @@ import { ButtonComponent } from '../../components/button/button.component';
 export class InputsComponent {
   @ViewChild(TableInputComponent) table!: TableInputComponent;
 
+  /** Instance of InputService for interacting with input data */
   private readonly inputService = inject(InputService);
+
+  /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
+
+  /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  /** Holds the data for inputs */
   public data!: IPageable<IInputData>;
 
+  /** Initializes the component */
   public async ngOnInit (): Promise<void> {
     this.inputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
       this.data = res;
     });
   }
 
+  /**
+   * Fetches all inputs based on the provided page information
+   * @param page The page object
+   */
   public async getAll (page: IPage): Promise<void> {
     this.inputService.getAll(page).subscribe((res) => {
       this.data = res;
     });
   }
 
+  /**
+   * Displays details of a specific input
+   * @param input The input data
+   */
   public async show(input: IInputData): Promise<void> {
     if (!input || !input.id) {
       console.error("El input no es válido.");
@@ -60,7 +76,10 @@ export class InputsComponent {
       console.error("Error al obtener los detalles del input:", error);
     }
   }
-
+  
+  /**
+   * Opens the modal for creating a new input
+   */
   public async create (): Promise<void> {
     (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((input: IInputData) => {
       if(!input) return;
@@ -73,6 +92,10 @@ export class InputsComponent {
     });
   }
 
+  /**
+   * Opens the modal for updating an existing input
+   * @param input The input data
+   */
   public async update(input: IInputData): Promise<void> {
     if (!input) {
       console.error("El input es inválido.");
@@ -89,7 +112,10 @@ export class InputsComponent {
     });
   }
  
-
+  /**
+   * Deletes an input
+   * @param input The input data
+   */
   public async delete (input: IInputData): Promise<void> {
     if(!input) return;
 
@@ -100,6 +126,10 @@ export class InputsComponent {
     })
   }
 
+  /**
+   * Performs search
+   * @param value The search value
+   */
   public search (value: string): void {
     console.log(value);
   }

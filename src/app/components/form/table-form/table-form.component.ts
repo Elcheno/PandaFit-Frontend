@@ -9,6 +9,9 @@ import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.comp
 import { PaginationComponent } from '../../pagination/pagination.component';
 import { Router } from '@angular/router';
 
+/**
+ * Component representing a table with form data and actions.
+ */
 @Component({
   selector: 'app-table-form',
   standalone: true,
@@ -66,6 +69,9 @@ export class TableFormComponent {
     ]
   };
 
+  /**
+   * Handles going to the next page.
+   */
   public handleNextPage(): void {
     const nextPage: IPage = {
       page: this.data.page + 1,
@@ -75,6 +81,9 @@ export class TableFormComponent {
     this.onChangePage.emit(nextPage);
   }
 
+  /**
+   * Handles going to the previous page.
+   */
   public handlePreviousPage(): void {
     const previousPage: IPage = {
       page: this.data.page - 1,
@@ -84,6 +93,9 @@ export class TableFormComponent {
     this.onChangePage.emit(previousPage);
   }
 
+  /**
+   * Toggles the table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

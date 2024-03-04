@@ -8,6 +8,9 @@ import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { PaginationComponent } from '../../pagination/pagination.component';
 
+/**
+ * Component for displaying outputs in a table format.
+ */
 @Component({
   selector: 'app-table-outputs',
   standalone: true,
@@ -18,15 +21,36 @@ import { PaginationComponent } from '../../pagination/pagination.component';
 export class TableOutputsComponent {
   @ViewChild('tableLoaderPage') public tableLoader!: any;
 
+  /**
+   * Input data containing pageable output data.
+   */
   @Input() public data!: IPageable<IOutputData>;
 
+  /**
+   * Event emitter for displaying output details.
+   */
   @Output() public onShow = new EventEmitter<IOutputData>();
+
+  /**
+   * Event emitter for updating output data.
+   */
   @Output() public onDelete = new EventEmitter<IOutputData>();
+
+  /**
+   * Event emitter for deleting output data.
+   */
   @Output() public onUpdate = new EventEmitter<IOutputData>(); 
+
+  /**
+   * Event emitter for changing page in pagination.
+   */
   @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
 
+  /**
+   * Dropdown data for output actions.
+   */
   public dropdownData: IDropdownData<IOutputData> = {
     header: 'Resultado',
     button: {
@@ -63,6 +87,9 @@ export class TableOutputsComponent {
     ]
   };
 
+  /**
+   * Handles next page navigation.
+   */
   public handleNextPage(): void {
     const nextPage: IPage = {
       page: this.data.page + 1,
@@ -72,6 +99,9 @@ export class TableOutputsComponent {
     this.onChangePage.emit(nextPage);
   }
 
+  /**
+   * Handles previous page navigation.
+   */
   public handlePreviousPage(): void {
     const previousPage: IPage = {
       page: this.data.page - 1,
@@ -81,6 +111,9 @@ export class TableOutputsComponent {
     this.onChangePage.emit(previousPage);
   }
 
+  /**
+   * Toggles table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

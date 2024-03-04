@@ -23,6 +23,9 @@ export class CreateInstitutionModalComponent {
     });
   }
 
+  /**
+   * Submits the form data
+   */
   public async submit (): Promise<void> {
     if (this.form.invalid) return;
     const newInstitution: IInstitution = {
@@ -31,6 +34,9 @@ export class CreateInstitutionModalComponent {
     this.dialogRef.close(newInstitution);
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

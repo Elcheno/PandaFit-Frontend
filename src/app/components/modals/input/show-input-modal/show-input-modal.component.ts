@@ -42,11 +42,19 @@ export class ShowInputModalComponent {
     this.form.disable();
   }
 
+  /**
+   * Gets the name of the input type
+   * @param type The input type
+   * @returns The name of the input type
+   */
   private getInputTypeName(type: number): string {
     const typeName = this.inputTypeNames[type];
     return type === IInputType.STRING ? "Texto" : type.toString();
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal(): void {
     this.dialogRef.close();
   }

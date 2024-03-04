@@ -44,6 +44,9 @@ export class FormActiveComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the modal to select a form
+   */
   public async handlerSelectForm (): Promise<void> {
     (await this.modalService.open(SelectFormComponent)).closed.subscribe((res: IFormData) => {
       if (!res) return;
@@ -52,6 +55,9 @@ export class FormActiveComponent implements OnInit {
     })
   }
 
+  /**
+   * Submits the form data
+   */
   public onSubmit (): void {
     if (!this.form.valid) return;
 
@@ -65,6 +71,9 @@ export class FormActiveComponent implements OnInit {
     this.dialogRef.close(formActive);
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

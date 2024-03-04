@@ -24,6 +24,9 @@ export class CreateSchoolYearModalComponent {
     });
   }
 
+  /**
+   * Method to handle form submission
+   */
   public submit (): void {
     if (!this.form.valid) return;
 
@@ -35,6 +38,9 @@ export class CreateSchoolYearModalComponent {
     this.dialogRef.close(newSchoolYear);
   }
 
+  /**
+   * Method to close the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

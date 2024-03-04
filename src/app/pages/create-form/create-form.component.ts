@@ -26,6 +26,7 @@ import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-s
 import { ToastService } from '../../services/modal/toast.service';
 
 
+/** Component for creating a new form */
 @Component({
   selector: 'app-create-form',
   standalone: true,
@@ -67,10 +68,18 @@ export class CreateFormComponent {
     });
   }
 
+  /**
+   * Performs search
+   * @param value The search value
+   */
   public search (value: string): void {
     console.log(value);
   }
 
+  /**
+   * Handles item drop event
+   * @param event The drop event
+   */
   drop(event: CdkDragDrop<IInputData[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -86,11 +95,19 @@ export class CreateFormComponent {
     }
   }
 
+  /**
+   * Changes the activation of checkbox
+   * @param item The checkbox item
+   */
   changeCheckBoxActivate(item:any){
     const checkbox = document.getElementById(item.id);
     checkbox?.click();
   }
 
+  /**
+   * Handles checkbox change event
+   * @param event The change event
+   */
   onCheckChange(event:any) {
     const formArray: FormArray = this.formGroup.get('outputsSelected') as FormArray;
   
@@ -115,6 +132,10 @@ export class CreateFormComponent {
       });
     }
   }
+
+  /**
+   * Submits the form data
+   */
   async onSubmit(){  
     const form:IFormData = {
       name:this.formGroup.get('name')?.value,
@@ -129,6 +150,10 @@ export class CreateFormComponent {
     await this.router.navigateByUrl('formulary/forms')
   }
 
+  /**
+   * Removes the selected input
+   * @param input The input to be removed
+   */
   removeInput(input: IInputData): void {
     const index = this.inputsSelected.indexOf(input);
     // if(this.inputsAvailable.length > 9){
@@ -146,6 +171,10 @@ export class CreateFormComponent {
     }
   }
 
+  /**
+   * Adds the selected input
+   * @param input The input to be added
+   */
   addInput(input: IInputData): void {
     const index = this.inputsAvailable.indexOf(input);
     if (index >= 0) {
@@ -160,10 +189,17 @@ export class CreateFormComponent {
     }
   }
 
+  /**
+   * Opens the info modal for the input
+   * @param input The input for which info modal is opened
+   */
   openInfoModal(input: IInputData): void {
     this.modalService.open(ShowInputModalComponent, input);
   }
 
+  /**
+   * Checks the availability of outputs based on selected inputs
+   */
   private checkOutputsDisponibility(): void {
     this.outputsRelated.set({state:false, value:[]});
     const inputsId = this.inputsSelected.map(item => item.id);
@@ -174,6 +210,10 @@ export class CreateFormComponent {
 
   }
 
+  /**
+   * Handles scroll event
+   * @param event The scroll event
+   */
   @HostListener('scroll', ['$event'])
   onScroll(event: any) {
     const scrollElement = this.scrollContainer.nativeElement;
@@ -183,6 +223,9 @@ export class CreateFormComponent {
     }
   }
 
+  /**
+   * Loads more items when user scrolls to the bottom
+   */
   loadMoreItems() {
     // Simulación de carga de datos desde una fuente externa (por ejemplo, una API)
     // Aquí deberías hacer una llamada HTTP para obtener más elementos
@@ -196,6 +239,10 @@ export class CreateFormComponent {
     // }, 500); // Retardo simulado para simular la carga de datos desde una fuente externa
   }
 
+  /**
+   * Simulates fetching more items
+   * @returns An array of more items
+   */
   getMoreItems(): any[] {
     // Simulación de obtención de más elementos
     // En una aplicación real, esto debería obtener los datos de tu fuente de datos (por ejemplo, una API)

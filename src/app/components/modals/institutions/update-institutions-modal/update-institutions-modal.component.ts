@@ -26,6 +26,9 @@ export class UpdateInstitutionsModalComponent {
     });
   }
 
+  /**
+   * Submits the form data after confirmation
+   */
   public async submit (): Promise<void> {
     if (this.form.invalid || !this.form.dirty) return;
     (await this.confirmService.open('¿Estas seguro de actualizar este instituto?')).closed.subscribe((res: boolean) => {
@@ -38,6 +41,9 @@ export class UpdateInstitutionsModalComponent {
     });
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }
