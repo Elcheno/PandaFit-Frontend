@@ -11,6 +11,9 @@
                             Rol
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Instituto
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             <span class="sr-only">Options</span>
                         </th>
                     </tr>
@@ -24,6 +27,9 @@
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ item.role | role }}
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ item.institutionName }}
                             </th>
                             <td class="px-6 py-4 text-right flex justify-end">
                                 <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"

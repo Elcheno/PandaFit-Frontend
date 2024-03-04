@@ -8,6 +8,9 @@
                             Nombre
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Descripción
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             <span class="sr-only">Borrar</span>
                         </th>
                     </tr>
@@ -18,6 +21,9 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ item.name }}
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ item.description }}
                             </th>
                             <td class="px-6 py-4 text-right flex justify-end">
                                 <app-dropdown
@@ -34,7 +40,7 @@
                 <thead class="text-xs text-white uppercase bg-black-primary">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Nombre
+                            Registros
                         </th>
                     </tr>
                 </thead>
@@ -51,7 +57,7 @@
             <thead class="text-xs text-white uppercase bg-black-primary">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Nombre
+                        Cargando
                     </th>
                 </tr>
             </thead>

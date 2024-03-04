@@ -4,6 +4,9 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IUmbral } from '../../../model/interfaces/i-output-data';
 
+/**
+ * Component for generating umbrals dynamically.
+ */
 @Component({
   selector: 'app-umbral-generator',
   standalone: true,
@@ -15,6 +18,9 @@ export class UmbralGeneratorComponent {
 
   private readonly fb = inject(FormBuilder);
 
+  /**
+   * Form group for umbrals.
+   */
   public form!: FormGroup;
 
   private umbralListResponse: IUmbral[] = [];
@@ -38,10 +44,19 @@ export class UmbralGeneratorComponent {
 
   }
 
+  /**
+   * Gets umbral list form array.
+   */
   get umbralList (): FormArray {
     return this.form.get('umbralList') as FormArray;
   }
 
+  /**
+   * Adds a new umbral to the form.
+   * @param text - Text of the umbral.
+   * @param value - Value of the umbral.
+   * @param type - Type of the umbral.
+   */
   public addUmbral (text='',value=0,type='='): void {
     this.umbralList.push(
       this.fb.group({
@@ -52,10 +67,18 @@ export class UmbralGeneratorComponent {
     );
   }
 
+  /**
+   * Deletes an umbral from the form.
+   * @param index - Index of the umbral to be deleted.
+   */
   public deleteUmbral (index: number): void {
     this.umbralList.removeAt(index);
   }
 
+  /**
+   * Checks umbrals for validity and sorts them.
+   * @returns True if umbrals are valid, otherwise false.
+   */
   public checkUmbrals (): boolean {
     if (this.umbralList.length === 0) return false;
     this.umbralListResponse = this.umbralList.value;
@@ -63,15 +86,27 @@ export class UmbralGeneratorComponent {
     return true;
   }
 
+  /**
+   * Closes the modal dialog.
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }
 
+  /**
+   * Submits the form data.
+   */
   public onSubmit (): void {
     if (this.form.invalid) return;
     if (this.checkUmbrals()) this.dialogRef.close(this.umbralListResponse);
   }
 
+  /**
+   * Sorts umbrals by type.
+   * @param a - First umbral.
+   * @param b - Second umbral.
+   * @returns Sorting order.
+   */
   private sortByType (a: IUmbral, b: IUmbral): number  {
     if (a.type === "=" && b.type !== "=") {
       return -1;

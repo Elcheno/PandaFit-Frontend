@@ -7,6 +7,9 @@ import { AuthService } from '../auth/auth.service';
 import { Observable, catchError, map, take } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 
+/**
+ * Service for handling school year data.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +17,10 @@ export class SchoolyearService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
+  /**
+   * Retrieves mock data for all school years.
+   * @returns A promise that resolves to an array of school years.
+   */
   public async getAllMock(): Promise<ISchoolYear[]> {
     return await new Promise((resolve, _reject) => {
       const data: ISchoolYear[] = [
@@ -32,6 +39,12 @@ export class SchoolyearService {
     });
   }
 
+  /**
+   * Retrieves all school years by institution.
+   * @param pageParams Page parameters for pagination.
+   * @param id The ID of the institution.
+   * @returns An observable of type `IPageable<ISchoolYear>` containing the paginated list of school years.
+   */
   public getAllByInstitution(pageParams: IPage, id: any): Observable<IPageable<ISchoolYear>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -48,6 +61,11 @@ export class SchoolyearService {
       );
   }
 
+  /**
+   * Retrieves a school year by ID.
+   * @param id The ID of the school year.
+   * @returns An observable of type `ISchoolYear` containing the retrieved school year.
+   */
   public getById(id: string): Observable<ISchoolYear> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -61,6 +79,12 @@ export class SchoolyearService {
       )
   }
 
+  /**
+   * Creates a new school year.
+   * @param schoolYear The school year data to be created.
+   * @param id The ID of the institution.
+   * @returns An observable of type `ISchoolYear` containing the created school year.
+   */
   public create(schoolYear: any, id: any): Observable<ISchoolYear> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -84,6 +108,11 @@ export class SchoolyearService {
       )
   }
 
+  /**
+   * Updates an existing school year.
+   * @param data The updated school year data.
+   * @returns An observable of type `ISchoolYear` containing the updated school year.
+   */
   public update(data: ISchoolYear): Observable<ISchoolYear> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -102,6 +131,11 @@ export class SchoolyearService {
       )
   }
 
+  /**
+   * Deletes a school year.
+   * @param data The school year data to be deleted.
+   * @returns An observable of type `boolean` indicating the success of the deletion operation.
+   */
   public delete(data: ISchoolYear): Observable<boolean> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;

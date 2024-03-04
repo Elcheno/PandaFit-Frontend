@@ -11,6 +11,7 @@ import { IPage } from '../../model/interfaces/i-page';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ToastService } from '../../services/modal/toast.service';
 
+/** Component for managing institutions */
 @Component({
   selector: 'app-institutions',
   standalone: true,
@@ -21,10 +22,16 @@ import { ToastService } from '../../services/modal/toast.service';
 export class InstitutionsComponent {
   @ViewChild(TableInstitutionComponent) table!: TableInstitutionComponent;
 
+  /** Instance of InstitutionService for interacting with institution data */
   private readonly institutionService = inject(InstitutionService);
+
+  /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
+
+  /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  /** Holds the data for institutions */
   public data!: IPageable<IInstitution>;
   searchTerm: string = '';
 
@@ -36,12 +43,19 @@ export class InstitutionsComponent {
       });
   }
 
+  /**
+   * Fetches all institutions based on the provided page information
+   * @param page The page object
+   */
   public async getAll (page: IPage): Promise<void> {
     this.institutionService.getAll(page).subscribe((res) => {
       this.data = res;
     });
   }
 
+  /**
+   * Opens the modal for creating a new institution
+   */
   public async create (): Promise<void> {
     (await this.modalService.open(CreateInstitutionModalComponent)).closed.subscribe((institution: IInstitution) => {
       if (!institution) return;
@@ -54,6 +68,10 @@ export class InstitutionsComponent {
     });
   }
 
+  /**
+   * Opens the modal for updating an existing institution
+   * @param institution The institution data
+   */
   public async update (institution: IInstitution): Promise<void> {
     if (!institution) return;
 
@@ -65,6 +83,10 @@ export class InstitutionsComponent {
     });
   }
 
+  /**
+   * Deletes an institution
+   * @param institution The institution data
+   */
   public async delete (institution: IInstitution): Promise<void> {
     if (!institution) return;
     

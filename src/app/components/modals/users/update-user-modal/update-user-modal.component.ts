@@ -30,6 +30,9 @@ export class UpdateUserComponent {
 
   ngOnInit (): void { }
 
+  /**
+   * Method to handle form submission
+   */
   public async submit (): Promise<void> {
     if (this.form.invalid) return;
     (await this.confirmService.open('¿Estas seguro de actualizar este usuario?')).closed.subscribe((res: boolean) => {
@@ -45,6 +48,9 @@ export class UpdateUserComponent {
     });
   }
 
+  /**
+   * Method to close the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

@@ -10,12 +10,19 @@ import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms
   styleUrl: './search-entity.component.scss'
 })
 export class SearchEntityComponent {
+
+  /**
+   * Event emitter for search action.
+   */
   @Output() public onSearch = new EventEmitter<string>();
 
   searchTerm: string = '';
 
   private readonly fb = inject(FormBuilder);
 
+  /**
+   * Form group for search input.
+   */
   public form!: FormGroup;
 
   constructor () {
@@ -24,6 +31,9 @@ export class SearchEntityComponent {
     });
   }
 
+  /**
+   * Submits the search query.
+   */
   public submit (): void {
     //if (this.form.invalid) return;
     this.onSearch.emit(this.form.value.search);

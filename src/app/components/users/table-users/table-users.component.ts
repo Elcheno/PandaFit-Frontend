@@ -19,14 +19,32 @@ import { RolePipe } from '../../../pipes/role.pipe';
 export class TableUsersComponent {
   @ViewChild('tableLoaderPage') public tableLoader!: any;
 
+  /**
+   * Input data containing pageable user information.
+   */
   @Input() public data!: IPageable<IUser>;
 
+
+  /**
+   * Event emitter for delete action.
+   */
   @Output() public onDelete = new EventEmitter<IUser>();
+
+  /**
+   * Event emitter for update action.
+   */
   @Output() public onUpdate = new EventEmitter<IUser>();
+
+  /**
+   * Event emitter for page change action.
+   */
   @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
 
+  /**
+   * Dropdown data for user actions.
+   */
   public dropdownRows: IDropdownData<IUser> = {
     header: 'Usuario',
     button: {
@@ -34,7 +52,7 @@ export class TableUsersComponent {
     },
     rows: [
       {
-        title: 'Update',
+        title: 'Editar',
         fnc: (data: any) => {
           if (data == null) return;
           console.log(data);
@@ -43,7 +61,7 @@ export class TableUsersComponent {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z" /></svg>'
       },
       {
-        title: 'Delete',
+        title: 'Eliminar',
         fnc: async (data: any) => {
           if (data == null) return;
           (await (this.confirmService.open('Estas seguro de eliminar este usuario'))).closed.subscribe((res: boolean) => {
@@ -56,6 +74,9 @@ export class TableUsersComponent {
     ]
   };
 
+  /**
+   * Navigates to the next page.
+   */
   public nextPage (): void { 
     if ((this.data.page + 1) > this.data.totalPages) return;
     this.toggleTableLoader();
@@ -68,6 +89,9 @@ export class TableUsersComponent {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Navigates to the previous page.
+   */
   public previousPage (): void {
     if (this.data.page === 0) return;
     this.toggleTableLoader();
@@ -80,6 +104,9 @@ export class TableUsersComponent {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Toggles table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

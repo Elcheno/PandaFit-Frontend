@@ -5,6 +5,9 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
 
+/**
+ * Custom HTTP interceptor function to handle HTTP errors and authentication.
+ */
 export const notResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
   const authService = inject(AuthService);

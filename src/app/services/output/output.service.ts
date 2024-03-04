@@ -48,7 +48,7 @@ export class OutputService {
     return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId (ids: string[]) {
+  getOutputsWithInputsId (ids: string[]): Promise<IOutputData[]> {
     let result:IOutputData[] = [];
     if(this.allOutputs.length == 0) {
       this.getAll(
@@ -68,8 +68,7 @@ export class OutputService {
       }
     })
     // console.log(this.allOutputs);
-    
-    return result;
+    return Promise.resolve(result);
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IOutputData>> {
@@ -112,7 +111,10 @@ export class OutputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    const userId: string = '3630fe4b-d2c5-4336-aae3-c9a2352c24bf';
+
+
+    const userId: string = sessionData.id;
+
     const newData = { ...data, userOwnerId: userId }
     // console.log(newData);
     return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData, { headers: { Authorization: token ?? "" } })

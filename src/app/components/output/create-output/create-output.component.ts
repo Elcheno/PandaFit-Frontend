@@ -8,6 +8,7 @@ import { UmbralGeneratorComponent } from '../../output/umbral-generator/umbral-g
 import { ModalService } from '../../../services/modal/modal.service';
 import { IInputData } from '../../../model/interfaces/i-input-data';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../services/modal/toast.service';
 
 @Component({
   selector: 'app-create-output',
@@ -21,6 +22,7 @@ export class CreateOutputComponent {
   private readonly fb = inject(FormBuilder);
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
 
   public form!: FormGroup;
 
@@ -43,6 +45,9 @@ export class CreateOutputComponent {
     });
   }
 
+  /**
+   * Method to handle form submission
+   */
   public onSubmit (): void {
     const output: IOutputData = {
       name: this.form.get('name')?.value,
@@ -56,13 +61,17 @@ export class CreateOutputComponent {
     this.createOutput(output);
   }
 
+  /**
+   * Method to set calculation based on data
+   * @param data 
+   */
   public setCalculation (data: any): void { 
     this.inputs = data.inputs;
     this.form.get('calculation')?.setValue(data.concatenatedFormula);
   }
 
   /**
-   * Lee el valor del textarea y valida si es una expresión matemática correcta con eval
+   * Method to validate calculation
    * @param event 
    */
   validCalculation (event: any) {
@@ -80,6 +89,10 @@ export class CreateOutputComponent {
     } 
   }
 
+  /**
+   * Method to get IDs from calculation
+   * @returns array of input IDs
+   */
   getIdsFromCalculation () {
     const inputsValues = [];
 
@@ -90,6 +103,9 @@ export class CreateOutputComponent {
     return inputsValues;
   }
 
+  /**
+   * Method to set threshold
+   */
   public async setThreshold (): Promise<void> {
     (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
       if (!umbralList) return;
@@ -97,10 +113,15 @@ export class CreateOutputComponent {
     });
   }
 
+  /**
+   * Method to create output
+   * @param output 
+   */
   private createOutput (output: IOutputData): void {
     this.outputService.create(output).subscribe(
       (res: IOutputData) => {
         this.form.reset();
+        this.toastService.showToast('Respuesta guardada', 'success');
         this.router.navigateByUrl('formulary/outputs');
       }
     );

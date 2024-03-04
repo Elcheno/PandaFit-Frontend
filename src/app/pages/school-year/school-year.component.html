@@ -18,10 +18,18 @@
         <div class="flex flex-col items-center pb-10">
             <h5 class="mb-1 text-4xl font-medium text-gray-900">{{item.name}}</h5>
             <div class="flex mt-4 md:mt-6">
-                <buttonComp [text]="'Gestión Respuestas'" (click)="create()" [buttonStyle]="'w-10/12 sm:w-11/12'"
-                    class="flex justify-center"></buttonComp>
-                <buttonComp [text]="'Formularios Abiertos'" (click)="handlerFormActive(item)" [buttonStyle]="'w-10/12 sm:w-11/12'"
-                    class="flex justify-center"></buttonComp>
+                <buttonComp 
+                    [text]="'Gestión Respuestas'" 
+                    [buttonStyle]="'w-10/12 sm:w-11/12'"
+                    [disabled]="true"
+                    class="flex justify-center">
+                </buttonComp>
+                <buttonComp 
+                    [text]="'Formularios Abiertos'" 
+                    (click)="handlerFormActive(item)" 
+                    [buttonStyle]="'w-10/12 sm:w-11/12'"
+                    class="flex justify-center">
+                </buttonComp>
             </div>
         </div>
     </div>

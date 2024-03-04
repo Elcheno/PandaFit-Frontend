@@ -5,6 +5,7 @@ import { ToastService } from '../modal/toast.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { AuthService } from '../auth/auth.service';
+import { environment as env } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class FormActiveService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.post<any>('http://localhost:8080/active', formActive, { headers: { Authorization: token ?? "" } })
+    return this.http.post<any>(`${env.api.url}${env.api.active}`, formActive, { headers: { Authorization: token ?? "" } })
       .pipe(
         catchError((error) => {
           if (!error) return error;
@@ -36,11 +37,25 @@ export class FormActiveService {
       );
   }
 
+  public getById (id: string): Observable<any> {
+    return this.http.get<any>(`${env.api.url}${env.api.active}` + id)
+      .pipe(
+        catchError((error) => {
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          throw error;
+        }),
+        map((res: any) => {
+          return res;
+        }),
+        take(1)
+      );
+  }
+
   public getAllBySchoolYear (id: any, pageParams?: IPage): Observable<IPageable<any>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
-    return this.http.get<any>(`http://localhost:8080/active/page/schoolyear/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    
+    return this.http.get<any>(`${env.api.url}${env.api.active}/page${env.api.schoolyear}/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         catchError((error) => {
           console.error(error);
@@ -59,14 +74,14 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
 
   public getAllBySchoolYearAfter (id: any, pageParams?: IPage): Observable<IPageable<any>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<any>(`http://localhost:8080/active/page/schoolyear/after/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<any>(`${env.api.url}${env.api.active}/page${env.api.schoolyear}/after/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         catchError((error) => {
           console.error(error);
@@ -85,14 +100,14 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
 
   public getAllBySchoolYearBefore (id: any, pageParams?: IPage): Observable<IPageable<any>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<any>(`http://localhost:8080/active/page/schoolyear/before/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<any>(`${env.api.url}${env.api.active}/page${env.api.schoolyear}/before/${id}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         catchError((error) => {
           console.error(error);
@@ -111,6 +126,43 @@ export class FormActiveService {
           return response;
         }),
         take(1)
-      )
+      );
   }
+
+  public getFormDetailById (id: string): Observable<any> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`${env.api.url}${env.api.active}/${id}/${env.api.form}`, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          return res;
+        }),
+        take(1)
+      );
+  }
+
+  public close(data: any): Observable<any> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+  
+    return this.http.put<any>(`${env.api.url}${env.api.active}/close`, data, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cerrar formulario', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          return res;
+        }),
+        take(1)
+      );
+  }
+  
 }

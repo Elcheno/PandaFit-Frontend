@@ -3,6 +3,9 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { type IDropdownButton, type IDropdownData, type IDropdownRow } from '../../model/interfaces/i-dropdown';
 import { DomSanitizer } from '@angular/platform-browser';
 
+/**
+ * Component representing a dropdown menu.
+ */
 @Component({
   selector: 'app-dropdown',
   standalone: true,
@@ -35,6 +38,9 @@ export class DropdownComponent implements OnInit, OnChanges {
     this.loadData();
   }
 
+  /**
+   * Loads data into the component.
+   */
   private loadData (): void {
     this.button = {
       ...this.dropdownData.button,
@@ -49,6 +55,10 @@ export class DropdownComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Handles click event on a dropdown row.
+   * @param fnc Optional function to be executed on click.
+   */
   public async onClickRow (fnc?: (data?: any) => void | Promise<void>): Promise<void> {
     if (fnc !== undefined) await fnc(this.data);
     this.onClick.emit();

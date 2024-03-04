@@ -16,10 +16,22 @@ module.exports = {
         opacityIn: {
           '0%': { opacity: 0 },
           '100%': { opacity: 1 }
+        },
+        "zoom-in": {
+          "0%": {
+            "opacity": "0",
+            "transform": "scale(.5)"
+          },
+          "100%": {
+            "opacity": "1",
+            "transform": "scale(1)"
+          }
         }
       },
       animation: {
-        opacityIn: 'opacityIn 0.2s ease-in-out'
+        opacityIn: 'opacityIn 0.2s ease-in-out',
+        "zoom-in": "zoom-in 0.05s ease-out",
+        "zoom-in-1": "zoom-in 0.1s ease-out"
       }
     }
   },
