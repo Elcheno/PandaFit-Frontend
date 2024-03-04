@@ -34,9 +34,9 @@ export class FormularyDinamicActiveComponent implements OnInit {
     this.inputList = [];
 
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      surname1: ['', [Validators.required, Validators.minLength(3)]],
-      surname2: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', [Validators.required]],
+      surname1: ['', [Validators.required]],
+      surname2: ['', [Validators.required]],
       birthdate: ['', [Validators.required]],
       answers: this.fb.array([])
     });
