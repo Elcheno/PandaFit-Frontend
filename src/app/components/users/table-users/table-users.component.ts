@@ -19,14 +19,32 @@ import { RolePipe } from '../../../pipes/role.pipe';
 export class TableUsersComponent {
   @ViewChild('tableLoaderPage') public tableLoader!: any;
 
+  /**
+   * Input data containing pageable user information.
+   */
   @Input() public data!: IPageable<IUser>;
 
+
+  /**
+   * Event emitter for delete action.
+   */
   @Output() public onDelete = new EventEmitter<IUser>();
+
+  /**
+   * Event emitter for update action.
+   */
   @Output() public onUpdate = new EventEmitter<IUser>();
+
+  /**
+   * Event emitter for page change action.
+   */
   @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
 
+  /**
+   * Dropdown data for user actions.
+   */
   public dropdownRows: IDropdownData<IUser> = {
     header: 'Usuario',
     button: {
@@ -56,6 +74,9 @@ export class TableUsersComponent {
     ]
   };
 
+  /**
+   * Navigates to the next page.
+   */
   public nextPage (): void { 
     if ((this.data.page + 1) > this.data.totalPages) return;
     this.toggleTableLoader();
@@ -68,6 +89,9 @@ export class TableUsersComponent {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Navigates to the previous page.
+   */
   public previousPage (): void {
     if (this.data.page === 0) return;
     this.toggleTableLoader();
@@ -80,6 +104,9 @@ export class TableUsersComponent {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Toggles table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

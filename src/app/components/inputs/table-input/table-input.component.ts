@@ -9,6 +9,9 @@ import { ModalConfirmService } from '../../../services/modal/modal-confirm.servi
 import { Router } from '@angular/router';
 import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 
+/**
+ * Component representing a table for input data.
+ */
 @Component({
   selector: 'app-table-input',
   standalone: true,
@@ -29,6 +32,9 @@ export class TableInputComponent {
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
 
+  /**
+   * Dropdown data for input rows.
+   */
   public dropdownData: IDropdownData<IInputData> = {
     header: 'Campo',
     button: {
@@ -64,6 +70,9 @@ export class TableInputComponent {
     ]
   };
 
+  /**
+   * Handles going to the next page.
+   */
   public handleNextPage(): void {
     const nextPage: IPage = {
       page: this.data.page + 1,
@@ -73,6 +82,9 @@ export class TableInputComponent {
     this.onChangePage.emit(nextPage);
   }
 
+  /**
+   * Handles going to the previous page.
+   */
   public handlePreviousPage(): void {
     const previousPage: IPage = {
       page: this.data.page - 1,
@@ -82,6 +94,9 @@ export class TableInputComponent {
     this.onChangePage.emit(previousPage);
   }
 
+  /**
+   * Toggles the table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

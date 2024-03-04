@@ -9,12 +9,17 @@ import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 
 
-
+/**
+ * Service for managing input data.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class InputService {
 
+  /**
+   * Example data for testing purposes.
+   */
   private _mockData: IInputData[] = [
     {
       id: '1',
@@ -55,9 +60,18 @@ export class InputService {
   ]
   constructor() { }
 
+  /**
+   * Getter for mock data.
+   * @returns The mock data array.
+   */
   get mockData(): IInputData[] {
     return this._mockData;
   }
+
+  /**
+   * Setter for mock data.
+   * @param value - The new value for mock data.
+   */
   set mockData(value: IInputData[]) {
     this._mockData = value;
   }
@@ -71,6 +85,12 @@ export class InputService {
   // removeInput(id:number){
   //   this._mockData=this._mockData.filter(input=>input.id!==id)
   // }
+
+  /**
+   * Searches for an input data by its ID.
+   * @param id - The ID of the input data to search for.
+   * @returns The found input data or undefined if not found.
+   */
   searchInput(id: number | undefined): IInputData | undefined {
     return this._mockData.find(input => input.id === id)
   }
@@ -80,6 +100,11 @@ export class InputService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
+  /**
+   * Retrieves all input data paginated.
+   * @param pageParams - Pagination parameters for the request.
+   * @returns Observable of paginated input data.
+   */
   public getAll(pageParams?: IPage): Observable<IPageable<IInputData>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -101,6 +126,11 @@ export class InputService {
       );
   }
 
+  /**
+   * Retrieves an input data by its ID.
+   * @param id - The ID of the input data to retrieve.
+   * @returns Observable of the retrieved input data.
+   */
   public getById (id: string): Observable<IInputData> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -115,6 +145,11 @@ export class InputService {
       );
   }
 
+  /**
+   * Creates a new input data.
+   * @param input - The new input data to create.
+   * @returns Observable of the created input data.
+   */
   public create(input: IInputData): Observable<IInputData> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -126,7 +161,7 @@ export class InputService {
       decimal: input.decimal,
       decimals: input.decimals,
       unit: input.unit,
-      userOwnerId: '3630fe4b-d2c5-4336-aae3-c9a2352c24bf'
+      userOwnerId: '08c6c3ab-583e-4ee2-98f8-fe2412dc84ce'
     };
 
     return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
@@ -139,6 +174,11 @@ export class InputService {
       );
   };
 
+  /**
+   * Deletes an input data.
+   * @param data - The data of the input data to delete.
+   * @returns Observable of the deleted input data.
+   */
   public delete (data: any): Observable < IInputData > {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -153,6 +193,11 @@ export class InputService {
       );
 }
 
+  /**
+   * Updates an input data.
+   * @param data - The data of the input data to update.
+   * @returns Observable of the updated input data.
+   */
   public update(data: any): Observable < IInputData > {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;

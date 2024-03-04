@@ -11,6 +11,9 @@ export interface IToast  {
   type: "success" | "error"
 }
 
+/**
+ * Service for managing toast messages.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -42,6 +45,11 @@ export class ToastService implements OnInit {
 
   ngOnInit(): void { }
 
+  /**
+   * Display a toast message.
+   * @param msg - The message content.
+   * @param type - The type of the toast message (default is 'success').
+   */
   public showToast(msg: string, type: string = 'success') {
 
     let id = Math.round((Math.random() * 9000) + 1000);

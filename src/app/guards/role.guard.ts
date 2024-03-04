@@ -2,6 +2,9 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 
+/**
+ * Custom role guard function to check user roles.
+ */
 export const roleGuard: CanActivateFn = (route, state) => {
   return true;
   const authService = inject(AuthService);

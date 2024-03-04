@@ -9,6 +9,9 @@ import { IPageable } from '../../../model/interfaces/i-pageable';
 import { IPage } from '../../../model/interfaces/i-page';
 import { PaginationComponent } from '../../pagination/pagination.component';
 
+/**
+ * Component representing a table for institutions.
+ */
 @Component({
   selector: 'app-table-institution',
   standalone: true,
@@ -28,6 +31,9 @@ export class TableInstitutionComponent {
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
 
+  /**
+   * Dropdown data for institution rows.
+   */
   public dropdownData: IDropdownData<IInstitution> = {
     header: 'Instituto',
     button: {
@@ -71,6 +77,9 @@ export class TableInstitutionComponent {
     ]
   };
 
+  /**
+   * Handles going to the next page.
+   */
   public handleNextPage(): void {
     const nextPage: IPage = {
       page: this.data.page + 1,
@@ -80,6 +89,9 @@ export class TableInstitutionComponent {
     this.onChangePage.emit(nextPage);
   }
 
+  /**
+   * Handles going to the previous page.
+   */
   public handlePreviousPage(): void {
     const previousPage: IPage = {
       page: this.data.page - 1,
@@ -89,11 +101,18 @@ export class TableInstitutionComponent {
     this.onChangePage.emit(previousPage);
   }
 
+  /**
+   * Toggles the table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');
   }
 
+  /**
+   * Handles viewing an institution.
+   * @param institution The institution to view.
+   */
   public handleViewInstitution (institution: IInstitution): void {
     this.router.navigate(['/institutions/schoolyear'], { queryParams: { id: institution.id } });
   }

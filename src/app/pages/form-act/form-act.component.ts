@@ -23,14 +23,28 @@ import { ToastService } from '../../services/modal/toast.service';
 export class FormActComponent implements OnInit {
   @ViewChild(TableFormActComponent) table!: TableFormActComponent;
 
+  /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
+
+    /** Instance of ActivatedRoute for accessing route parameters */
   private readonly routeActive = inject(ActivatedRoute);
+
+  /** Instance of SchoolyearService for fetching school year data */
   private readonly schoolYearService = inject(SchoolyearService);
+
+  /** Instance of FormActiveService for interacting with active form data */
   private readonly formActiveService = inject(FormActiveService);
+
+  /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  /** Holds the currently selected school year */
   public schoolyear!: ISchoolYear;
+
+  /** Holds the data for the active forms */
   public data!: IPageable<any>;
+
+  /** Represents the selected state (active, inactive, all) */
   public selectState: string = 'active';
 
   constructor() {}
@@ -50,6 +64,10 @@ export class FormActComponent implements OnInit {
     });
   }
 
+  /**
+   * Handles state or page change event
+   * @param page The page object
+   */
   public onChangeStateOrPage (page?: IPage): void {
     page ? null : this.table.toggleTableLoader(); 
     if (this.selectState === 'active') {
@@ -64,6 +82,10 @@ export class FormActComponent implements OnInit {
     }
   }
 
+  /**
+   * Fetches active forms after the specified page
+   * @param page The page object
+   */
   public getAllBySchoolYearAfter (page: IPage): void {
     this.formActiveService.getAllBySchoolYearAfter(this.schoolyear.id, page).subscribe((res) => {
       this.data = res;
@@ -71,6 +93,10 @@ export class FormActComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches inactive forms before the specified page
+   * @param page The page object
+   */
   public getAllBySchoolYearBefore (page: IPage): void {
     this.formActiveService.getAllBySchoolYearBefore(this.schoolyear.id, page).subscribe((res) => {
       this.data = res;
@@ -78,6 +104,10 @@ export class FormActComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches all forms for the specified school year
+   * @param page The page object
+   */
   public getAllBySchoolYear (page: IPage): void {
     this.formActiveService.getAllBySchoolYear(this.schoolyear.id, page).subscribe((res) => {
       this.data = res;
@@ -85,10 +115,17 @@ export class FormActComponent implements OnInit {
     });
   }
 
+  /**
+   * Performs search
+   * @param value The search value
+   */
   public search (value: string): void {
     console.log(value);
   }
 
+  /**
+   * Opens the form modal
+   */
   public async openForm (): Promise<void> {
     (await this.modalService.open(FormActiveComponent, this.schoolyear)).closed.subscribe((res: any) => {
       if (!res) return;
@@ -101,6 +138,10 @@ export class FormActComponent implements OnInit {
     })
   }
 
+  /**
+   * Closes the form
+   * @param formAct The form to be closed
+   */
   public close(formAct: any): void {
     const currentDate = new Date(); 
     formAct.expirationDate = currentDate.toISOString();

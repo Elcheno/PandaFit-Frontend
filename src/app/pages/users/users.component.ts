@@ -36,6 +36,9 @@ export class UsersComponent implements OnInit {
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
 
+  /**
+   * Initializes the component.
+   */
   public async ngOnInit (): Promise<void> {
     this.router.queryParams.subscribe((param) => {
       this.institutionId = param['id'] ?? '';
@@ -64,6 +67,11 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  /**
+   * Retrieves all users.
+   * 
+   * @param page The page configuration.
+   */
   public async getAll (page: IPage): Promise<void> {
     this.userService.getAll(page).subscribe((res) => {
       this.data = res;
@@ -71,6 +79,9 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  /**
+   * Creates a new user.
+   */
   public async create (): Promise<void> {
     (await this.modalService.open(CreateUsersModalComponent, this.institutionList.content)).closed.subscribe((user: IUser) => {
       if (!user) return;
@@ -83,6 +94,11 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  /**
+   * Deletes a user.
+   * 
+   * @param user The user to delete.
+   */
   public async delete (user: IUser): Promise<void> {
     if (!user) return;
 
@@ -94,6 +110,11 @@ export class UsersComponent implements OnInit {
     })
   }
 
+  /**
+   * Updates a user.
+   * 
+   * @param user The user to update.
+   */
   public async update (user: IUser): Promise<void> {
     (await this.modalService.open(UpdateUserComponent, user)).closed.subscribe(async (res: IUser) => {
       if (!res) return;
@@ -105,6 +126,11 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  /**
+   * Searches for a value.
+   * 
+   * @param searchValue The value to search for.
+   */
   public search (searchValue: string): void {
     console.log(searchValue);
   }

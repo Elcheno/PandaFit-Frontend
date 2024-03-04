@@ -9,6 +9,9 @@ import { environment } from '../../../environments/environment.development';
 import { Observable, map, take } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
+/**
+ * Service for managing user-related operations.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +19,11 @@ export class UserService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
+  /**
+   * Fetches mock user data.
+   * @param page - Page number.
+   * @returns Promise resolving with mock user data.
+   */
   public async getAllMock (page: number): Promise<any> {
     return await new Promise((resolve, _reject) => {
       setTimeout(() => {
@@ -126,6 +134,11 @@ export class UserService {
     });
   }
 
+  /**
+   * Fetches all users.
+   * @param pageParams - Page parameters.
+   * @returns Observable emitting pageable user data.
+   */
   public getAll (pageParams?: IPage): Observable<IPageable<IUser>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -147,6 +160,12 @@ export class UserService {
       );
   }
 
+  /**
+   * Fetches all users belonging to a specific institution.
+   * @param institutionId - ID of the institution.
+   * @param pageParams - Page parameters.
+   * @returns Observable emitting pageable user data.
+   */
   public getAllByInstitution (institutionId: string, pageParams?: IPage, ): Observable<IPageable<IUser>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -168,6 +187,11 @@ export class UserService {
       );
   }
 
+  /**
+   * Fetches a user by ID.
+   * @param id - User ID.
+   * @returns Observable emitting user data.
+   */
   public getById (id: string): Observable<IUser> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -187,6 +211,11 @@ export class UserService {
       );
   }
 
+  /**
+   * Creates a new user.
+   * @param user - User data to create.
+   * @returns Observable emitting created user data.
+   */
   public create (user: IUser): Observable<IUser> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -208,6 +237,11 @@ export class UserService {
       );
   }
 
+  /**
+   * Deletes a user.
+   * @param data - User data to delete.
+   * @returns Observable emitting a boolean indicating success or failure.
+   */
   public delete (data: IUser): Observable<boolean> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -221,6 +255,11 @@ export class UserService {
       );
   }
 
+  /**
+   * Updates a user.
+   * @param data - User data to update.
+   * @returns Observable emitting updated user data.
+   */
   public update (data: IUser): Observable<IUser> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;

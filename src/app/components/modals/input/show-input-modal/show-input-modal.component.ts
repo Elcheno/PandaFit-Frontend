@@ -43,6 +43,11 @@ export class ShowInputModalComponent {
     this.form.disable();
   }
 
+  /**
+   * Gets the name of the input type
+   * @param type The input type
+   * @returns The name of the input type
+   */
   private getInputTypeName(type: number): string {
     // Obtiene el nombre del tipo del objeto inputTypeNames
     const typeName = this.inputTypeNames[type];
@@ -51,6 +56,9 @@ export class ShowInputModalComponent {
     return type === IInputType.STRING ? "Text" : type.toString();
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal(): void {
     this.dialogRef.close();
   }

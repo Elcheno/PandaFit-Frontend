@@ -12,6 +12,9 @@ import { ISchoolYear } from '../../../model/interfaces/i-school-year';
 import { SchoolyearService } from '../../../services/schoolyear/schoolyear.service';
 import { StateFormActPipe } from '../../../pipes/state-form-act.pipe';
 
+/**
+ * Component representing a table for form activities.
+ */
 @Component({
   selector: 'app-table-form-act',
   standalone: true,
@@ -45,6 +48,9 @@ export class TableFormActComponent implements OnInit {
     })
   }
 
+  /**
+   * Dropdown data for inactive form rows.
+   */
   public dropdownRowsInactive: IDropdownData<any> = {
     header: 'Formulario',
     button: {
@@ -64,6 +70,9 @@ export class TableFormActComponent implements OnInit {
     ]
   };
 
+  /**
+   * Dropdown data for active form rows.
+   */
   public dropdownRowsActive: IDropdownData<any> = {
     header: 'Formulario',
     button: {
@@ -102,6 +111,9 @@ export class TableFormActComponent implements OnInit {
     ]
   };
 
+  /**
+   * Handles going to the next page.
+   */
   public nextPage (): void { 
     if ((this.data.page + 1) > this.data.totalPages) return;
     this.toggleTableLoader();
@@ -114,6 +126,9 @@ export class TableFormActComponent implements OnInit {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Handles going to the previous page.
+   */
   public previousPage (): void {
     if (this.data.page === 0) return;
     this.toggleTableLoader();
@@ -126,6 +141,9 @@ export class TableFormActComponent implements OnInit {
     this.onChangePage.emit(page);
   }
 
+  /**
+   * Toggles the table loader visibility.
+   */
   public toggleTableLoader (): void {
     this.tableLoader.nativeElement.classList.toggle('flex');
     this.tableLoader.nativeElement.classList.toggle('hidden');

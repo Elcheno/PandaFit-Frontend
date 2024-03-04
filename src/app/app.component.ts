@@ -6,6 +6,9 @@ import { AuthService } from './services/auth/auth.service';
 import { ToastService } from './services/modal/toast.service';
 import { LoginService } from './services/login/login.service';
 
+/**
+ * Root component of the application.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -18,6 +21,9 @@ export class AppComponent implements OnInit {
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
+  /**
+   * Logs out the user.
+   */
   logout() {
     this.loginS.loggedIn = false;
     sessionStorage.removeItem('user');
@@ -27,6 +33,10 @@ export class AppComponent implements OnInit {
 
   constructor(private loginS: LoginService) { }
 
+  /**
+   * Lifecycle hook called after component initialization.
+   * Loads session data on initialization.
+   */
   ngOnInit (): void {
     this.authService.loadSessionData();
     // this.toastService.showToast('Esto es un toast', 'success');
