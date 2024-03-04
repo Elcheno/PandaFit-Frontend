@@ -26,9 +26,12 @@ export class InstitutionsComponent {
   private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IInstitution>;
+  searchTerm: string = '';
 
-  public async ngOnInit (): Promise<void> {
-      this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
+  public async ngOnInit(): Promise<void> {
+    // Fetch initial data without any search term
+    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
+      .subscribe((res) => {
         this.data = res;
       });
   }
@@ -72,7 +75,19 @@ export class InstitutionsComponent {
     })
   }
 
-  public search (value: string): void {
-    console.log(value);
+  public search (term: string): void {
+      if (term) {
+        // Use FilterByName with the search term
+        this.institutionService.FilterByName(term, { page: 0, size: 10, sort: ['name'] })
+          .subscribe((res) => {
+            this.data = res;
+          });
+      } else {
+        // Use getAll when the search term is empty
+        this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
+          .subscribe((res) => {
+            this.data = res;
+          });
+      }
   }
 }

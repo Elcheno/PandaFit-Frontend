@@ -12,6 +12,8 @@ import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms
 export class SearchEntityComponent {
   @Output() public onSearch = new EventEmitter<string>();
 
+  searchTerm: string = '';
+
   private readonly fb = inject(FormBuilder);
 
   public form!: FormGroup;
@@ -23,7 +25,7 @@ export class SearchEntityComponent {
   }
 
   public submit (): void {
-    if (this.form.invalid) return;
+    //if (this.form.invalid) return;
     this.onSearch.emit(this.form.value.search);
   }
 }
