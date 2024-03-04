@@ -172,8 +172,6 @@ export class CreateFormComponent {
       
       await this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
         this.outputsRelated.set({state:true, value:res});
-        console.log(res);
-        
       });
     }, 150)
     
