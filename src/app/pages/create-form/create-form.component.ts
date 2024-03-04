@@ -208,8 +208,6 @@ export class CreateFormComponent {
       
       await this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
         this.outputsRelated.set({state:true, value:res});
-        console.log(res);
-        
       });
     }, 150)
     
@@ -250,24 +248,6 @@ export class CreateFormComponent {
     if ((this.currentPage + 1) == this.totalInputsPages) return;
     
     this.chargingInputs = true;
-
-  /**
-   * Simulates fetching more items
-   * @returns An array of more items
-   */
-  getMoreItems(): any[] {
-    // Simulación de obtención de más elementos
-    // En una aplicación real, esto debería obtener los datos de tu fuente de datos (por ejemplo, una API)
-    const moreItems: any[] = [];
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    for (let i = startIndex; i < endIndex; i++) {
-      if (i < this.totalInputs) {
-        // Suponiendo que 'fetchData' es una función que obtiene datos de tu fuente de datos
-        // Debes modificar esto según tu lógica para obtener más elementos
-        moreItems.push({ id: i, name: 'Item ' + i });
-      }
-    }
 
     this.currentPage++;
     setTimeout(() => {   
