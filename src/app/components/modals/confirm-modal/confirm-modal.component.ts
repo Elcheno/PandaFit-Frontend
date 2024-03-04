@@ -15,10 +15,16 @@ export class ConfirmModalComponent {
     @Inject(DIALOG_DATA) public msg?: string
   ) { }
 
+  /**
+   * Confirms the action and closes the dialog.
+   */
   public confirm (): void {
     this.dialogRef.close(true);
   }
 
+  /**
+   * Cancels the action and closes the dialog.
+   */
   public cancel (): void {
     this.dialogRef.close(false);
   }

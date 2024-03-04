@@ -9,8 +9,14 @@ import { DATA_TOAST, ToastService } from '../../services/modal/toast.service';
   styleUrl: './toast.component.scss'
 })
 export class ToastComponent implements OnInit {
+  /**
+   * List of toast messages.
+   */
   public toastList!: any[];
 
+  /**
+   * Height of the toast component.
+   */
   public height = `0px`
 
   constructor(

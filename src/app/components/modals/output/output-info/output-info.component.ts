@@ -49,7 +49,10 @@ export class OutputInfoComponent {
     this.form.disable();
   }
 
-  // Método para reemplazar los IDs por nombres en la fórmula
+  /**
+   * Method to replace IDs with names in the formula
+   * @returns Formatted formula string
+   */  
   getFormattedFormula(): string {
     let formula: string | null = this.form?.get('formula')?.value ?? '';
     if (formula !== null) {
@@ -65,16 +68,25 @@ export class OutputInfoComponent {
 }
 
 
-
+  /**
+   * Toggle umbral list visibility
+   */
   toggleUmbralList() {
     this.showUmbralList = !this.showUmbralList;
   }
 
+  /**
+   * Getter for umbralList FormArray
+   * @returns UmbralList FormArray
+   */
   get umbralList(): FormArray {
     return this.form.get('umbralList') as FormArray;
   }
 
-  // Method to add a new umbral to the FormArray
+  /**
+   * Method to add a new umbral to the FormArray
+   * @param umbral Umbral to be added
+   */  
   addUmbral(umbral: IUmbral): void {
     this.umbralList.push(this.formBuilder.group({
       value: [umbral.value],
@@ -83,6 +95,9 @@ export class OutputInfoComponent {
     }));
   }
 
+  /**
+   * Close the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

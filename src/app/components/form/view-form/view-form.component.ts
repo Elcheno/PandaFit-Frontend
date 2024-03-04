@@ -11,6 +11,9 @@ import { ShowInputModalComponent } from '../../modals/input/show-input-modal/sho
 import { ModalService } from '../../../services/modal/modal.service';
 import { FormService } from '../../../services/form/form.service';
 
+/**
+ * Component representing the view form page.
+ */
 @Component({
   selector: 'app-view-form',
   standalone: true,
@@ -59,6 +62,10 @@ export class ViewFormComponent {
     });
   }
 
+  /**
+   * Opens the information modal for the given input.
+   * @param input The input data to display in the modal.
+   */
   openInfoModal(input: IInputData): void {
     this.modalService.open(ShowInputModalComponent, input);
   }

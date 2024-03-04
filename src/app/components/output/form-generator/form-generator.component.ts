@@ -17,6 +17,9 @@ interface Item {
   value?: string
 }
 
+/**
+ * Component for generating a form dynamically.
+ */
 @Component({
   selector: 'app-form-generator',
   standalone: true,
@@ -25,12 +28,18 @@ interface Item {
   styleUrl: './form-generator.component.scss'
 })
 export class FormGeneratorComponent {
+  /**
+   * Event emitter for notifying changes in the form.
+   */
   @Output() changed = new EventEmitter<any>();
 
   private inputService = inject(InputService);
 
   private inputBufferSubject = new Subject<string>();
 
+  /**
+   * Status signal indicating error and input status.
+   */
   public status: WritableSignal<any> = signal({
     error: false,
     inputs: []
@@ -44,6 +53,9 @@ export class FormGeneratorComponent {
 
   private dropdownRows!: IDropdownRow<any>[];
   
+  /**
+   * Dropdown data for input selection.
+   */
   public dropdownData: IDropdownData<any> = {
     button: {
       title: 'Inputs',
@@ -69,6 +81,9 @@ export class FormGeneratorComponent {
 
   }
 
+  /**
+   * Generates dropdown options based on input data.
+   */
   private generateDropdown (): void {
     this.dropdownRows = this.inputData.map((input: IInputData) => {
       return {
@@ -79,12 +94,15 @@ export class FormGeneratorComponent {
 
     this.dropdownData = {
       button: {
-        title: 'Inputs',
+        title: 'Campos',
       },
       rows: this.dropdownRows
     };
   }
 
+  /**
+   * Handles the input buffer to insert elements.
+   */
   handleInputBuffer () {
     if (this.inputBuffer) {
       this.insertElement(this.inputBuffer);
@@ -92,22 +110,39 @@ export class FormGeneratorComponent {
     }
   }
 
+  /**
+   * Handles drop event for reordering items.
+   * @param event - Drag drop event.
+   */
   onDrop (event: any) {
     moveItemInArray(this.items, event.previousIndex, event.currentIndex);
     this.evaluateFormulas();
   }
 
+  /**
+   * Inserts input element into the form.
+   * @param input - Input data to be inserted.
+   */
   insertInput (input: IInputData) {
     if(input && input.name)
       this.insertElement(`#{${input?.name}}`, input);
   }
 
+  /**
+   * Inserts a new element into the form.
+   * @param newText - Text to be inserted.
+   * @param input - Input data associated with the element.
+   */
   insertElement(newText: string, input?: IInputData) {
     const newItem: Item = { id: Math.round((Math.random() * 9000) + 1000), text: newText, selected: false, input: input, value:`#{${input?.id}}` };
     this.items.push(newItem);
     this.evaluateFormulas();
   }
 
+  /**
+   * Selects an item in the form.
+   * @param item - Item to be selected.
+   */
   selectItem (item: Item) {
     if (!item.selected) {
       this.items = this.items.map(i => { return { ...i, selected : false } });
@@ -117,22 +152,37 @@ export class FormGeneratorComponent {
     }
   }
 
+  /**
+   * Deletes an item from the form.
+   * @param data - Item data to be deleted.
+   */
   deleteItem (data: Item) {
     this.items = this.items.filter(item => item.id !== data.id);
     this.evaluateFormulas();
   }
 
+  /**
+   * Handles number key input.
+   * @param key - Key pressed.
+   */
   handleKeyNumber (key: string) {
     this.inputBuffer += key;
     this.inputBufferSubject.next('');
   }
 
+  /**
+   * Handles key input.
+   * @param key - Keys pressed.
+   */
   handleKey (...key: string[]) { 
     for(const k of key){
       this.insertElement(k)
     }  
   }
 
+  /**
+   * Evaluates formulas in the form.
+   */
   evaluateFormulas () {
     const concatenatedFormula = this.items.map(item => item.input ? item.value : item.text).join('');
 
@@ -173,10 +223,17 @@ export class FormGeneratorComponent {
     }
   }
 
+  /**
+   * Emulates input values for formula validation.
+   * @param concatenatedFormula - Formula to be validated.
+   */
   private emulateInputsToValidate(concatenatedFormula: string): string {
     return concatenatedFormula.replaceAll(this.patronRegex, "1");
   }
 
+  /**
+   * Checks syntax and evaluates the formula.
+   */
   public async checkSintaxis() {
     const concatenatedFormula = this.items.map(item => item.input ? item.value : item.text).join('');
     let newconcatenatedFormula = concatenatedFormula;

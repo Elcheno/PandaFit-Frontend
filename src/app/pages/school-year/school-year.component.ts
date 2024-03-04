@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
 import { FormActiveComponent } from '../../components/modals/form-active/form-active.component';
 
+/** Component for managing school years */
 @Component({
   selector: 'app-school-year',
   standalone: true,
@@ -26,18 +27,37 @@ import { FormActiveComponent } from '../../components/modals/form-active/form-ac
   styleUrl: './school-year.component.scss'
 })
 export class SchoolYearComponent {
+
+  /** Form group for school year */
   public form!: FormGroup;
+
+  /** Instance of SchoolyearService for interacting with school year data */
   private readonly schoolYearService = inject(SchoolyearService);
+
+  /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
+
+  /** Instance of ModalConfirmService for confirmation modals */
   private readonly confirmService = inject(ModalConfirmService);
+
+  /** Instance of ActivatedRoute for getting route parameters */
   private readonly router = inject(ActivatedRoute);
+
+  /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
+
+  /** Instance of Router for navigation */
   private readonly routerService = inject(Router);
 
   // public data: ISchoolYear[] = [];
+
+  /** Holds the data for school years */
   public data!: IPageable<ISchoolYear>;
+
+  /** Holds the institution ID */
   private institutionId!: string;
 
+  /** Initializes the component and form */
   constructor(private readonly fb: FormBuilder) {
     this.router.queryParams.subscribe((params) => {
       this.institutionId = params['id'] ?? '';
@@ -50,6 +70,9 @@ export class SchoolYearComponent {
     });
   }
 
+  /** 
+   * Pageable object for pagination 
+   */
   public pageable: IPageable<ISchoolYear> = {
     page: 0,
     size: 10,
@@ -59,10 +82,16 @@ export class SchoolYearComponent {
     content: []
   };
 
+  /** 
+   * Initializes the component 
+   */
   public ngOnInit(): void {
     this.loadTable();
   }
 
+  /** 
+   * Loads the table data 
+   */
   public loadTable(): void {
     this.schoolYearService.getAllByInstitution(
       { 
@@ -75,6 +104,10 @@ export class SchoolYearComponent {
       this.data = res;
     });
   }
+
+  /** 
+   * Opens the modal to create a new school year 
+   */
   public async create(): Promise<void> {
     (await this.modalService.open(CreateSchoolYearModalComponent)).closed.subscribe((schoolYear: ISchoolYear) => {
         if (!schoolYear) return;
@@ -87,6 +120,12 @@ export class SchoolYearComponent {
     });
   }
 
+  /**
+   * Deletes a school year.
+   * 
+   * @param schoolYear The school year to be deleted.
+   * @returns A promise that resolves when the deletion is successful.
+   */
   public async delete(schoolYear: ISchoolYear): Promise<void> {
       if (!schoolYear) return;
 
@@ -98,6 +137,12 @@ export class SchoolYearComponent {
     })
   }
 
+  /**
+   * Updates a school year.
+   * 
+   * @param schoolYear The school year to be updated.
+   * @returns A promise that resolves when the update is successful.
+   */
   public async update(schoolYear: ISchoolYear): Promise<void> {
     (await this.modalService.open(UpdateSchoolYearModalComponent, schoolYear)).closed.subscribe(async (res: ISchoolYear) => {
       if (!res) return;
@@ -109,6 +154,12 @@ export class SchoolYearComponent {
     });
   }
 
+  /**
+   * Searches for a value.
+   * 
+   * @param searchValue The value to search for.
+   * @returns A promise that resolves when the search is completed.
+   */
   public async search (searchValue: string): Promise <void> {
     return await new Promise((resolve, _reject) => {
       console.log(searchValue);
@@ -116,6 +167,12 @@ export class SchoolYearComponent {
     });
   }
 
+  /**
+   * Handles the activation of a form for a school year.
+   * 
+   * @param data The school year data.
+   * @returns A promise that resolves when the activation is completed.
+   */
   public async handlerFormActive (data: ISchoolYear): Promise<void> {
     this.routerService.navigate(['/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
   }
@@ -126,15 +183,6 @@ export class SchoolYearComponent {
       icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
     },
     rows: [
-      {
-        title: 'Ver',
-        disabled: false,
-        fnc: (data: any) => {
-          if (data == null) return;
-          this.handlerFormActive(data);
-        },
-        icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"/><path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>',
-      },
       {
         title: 'Editar',
         disabled: false,

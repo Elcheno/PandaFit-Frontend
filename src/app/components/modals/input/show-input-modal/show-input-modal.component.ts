@@ -15,15 +15,15 @@ import { CommonModule } from '@angular/common';
 export class ShowInputModalComponent {
   form: FormGroup;
   inputType = [
-    { name: 'Number', value: IInputType.NUMBER },
-    { name: 'Boolean', value: IInputType.BOOLEAN },
-    { name: 'Text', value: '2' }
+    { name: 'Numero', value: IInputType.NUMBER },
+    { name: 'Verdadero o Falso', value: IInputType.BOOLEAN },
+    { name: 'Texto', value: '2' }
   ];
 
   private inputTypeNames: { [key: number]: string } = {
-    [IInputType.NUMBER]: 'NUMBER',
-    [IInputType.BOOLEAN]: 'BOOLEAN',
-    [IInputType.STRING]: 'STRING'
+    [IInputType.NUMBER]: 'Number',
+    [IInputType.BOOLEAN]: 'Boolean',
+    [IInputType.STRING]: 'Text'
   };
 
   constructor (
@@ -34,8 +34,7 @@ export class ShowInputModalComponent {
     this.form = this.formBuilder.group({
       name: input.name,
       description: input.description,
-      /*selectType: (this.input.type === 2) ? 'Text' : this.input.type.toString(),*/ // Modificado
-      selectType: [this.getInputTypeName(this.input.type), Validators.required],
+      selectType: [this.input.type, Validators.required],
       decimal: input.decimal,
       decimals: input.decimals,
       unit: input.unit
@@ -43,14 +42,19 @@ export class ShowInputModalComponent {
     this.form.disable();
   }
 
+  /**
+   * Gets the name of the input type
+   * @param type The input type
+   * @returns The name of the input type
+   */
   private getInputTypeName(type: number): string {
-    // Obtiene el nombre del tipo del objeto inputTypeNames
     const typeName = this.inputTypeNames[type];
-  
-    // Retorna el nombre del tipo si es STRING, de lo contrario, devuelve el valor numérico como string
-    return type === IInputType.STRING ? "Text" : type.toString();
+    return type === IInputType.STRING ? "Texto" : type.toString();
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal(): void {
     this.dialogRef.close();
   }

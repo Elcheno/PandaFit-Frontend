@@ -8,6 +8,9 @@ import { environment as env } from '../../../environments/environment.developmen
 import { AuthService } from '../auth/auth.service';
 import { ToastService } from '../modal/toast.service';
 
+/**
+ * Service for managing institutions.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +19,11 @@ export class InstitutionService {
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
 
+  /**
+   * Retrieves mock institutions for testing.
+   * @param page - The page number for pagination.
+   * @returns Promise resolving with paginated institution data.
+   */
   public async getAllMock (page?: number): Promise<IPageable<IInstitution>> {
     return await new Promise((resolve, _reject) => {
       if (page !== undefined) {
@@ -123,6 +131,11 @@ export class InstitutionService {
     });
   }
 
+  /**
+   * Retrieves all institutions from the server.
+   * @param pageParams - Pagination parameters for the request.
+   * @returns Observable of paginated institution data.
+   */
   public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -149,6 +162,11 @@ export class InstitutionService {
       );
   }
 
+  /**
+   * Retrieves a single institution by its ID.
+   * @param id - The ID of the institution to retrieve.
+   * @returns Observable of the retrieved institution.
+   */
   public getById (id: string): Observable<IInstitution> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -163,6 +181,11 @@ export class InstitutionService {
       );
   }
 
+  /**
+   * Creates a new institution.
+   * @param data - Data for the new institution.
+   * @returns Observable of the created institution.
+   */
   public create (data: any): Observable<IInstitution> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -177,6 +200,11 @@ export class InstitutionService {
       );
   }
 
+  /**
+   * Deletes an institution.
+   * @param data - Data of the institution to delete.
+   * @returns Observable of the deleted institution.
+   */
   public delete (data: any): Observable<IInstitution> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -191,6 +219,11 @@ export class InstitutionService {
     );
   }
 
+  /**
+   * Updates an institution.
+   * @param data - Data of the institution to update.
+   * @returns Observable of the updated institution.
+   */
   public update (data: any): Observable<IInstitution> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;

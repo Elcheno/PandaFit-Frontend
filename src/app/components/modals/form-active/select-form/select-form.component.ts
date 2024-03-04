@@ -21,22 +21,35 @@ export class SelectFormComponent implements OnInit {
     public dialogRef: DialogRef<any>
   ) { }
 
+  /**
+   * Fetches all forms on initialization
+   */
   ngOnInit(): void {
     this.formService.getAll({page: 0, size: 100, sort: ['name']}).subscribe((data: any) => {
       this.formList = data.content;
     });
   }
 
+  /**
+   * Handles the selection of a form
+   * @param item The selected form item
+   */
   public handlerSelectForm (item: any): void {
     const input = document.getElementById(item.id) as HTMLInputElement;
     if (input) input.checked = true;
     this.formulario = item;
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }
 
+  /**
+   * Handles form submission
+   */
   public onSubmit (): void {
     if (!this.formulario) return;
     this.dialogRef.close(this.formulario);
