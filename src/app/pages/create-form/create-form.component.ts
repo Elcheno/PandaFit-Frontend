@@ -201,6 +201,9 @@ export class CreateFormComponent {
    * Checks the availability of outputs based on selected inputs
    */
   private checkOutputsDisponibility(): void {
+    if(this.inputsAvailable.length === 7){
+      this.loadMoreItems();
+    }
     this.outputsRelated.set({state:false, value:[]});
     setTimeout(async () => {
       
