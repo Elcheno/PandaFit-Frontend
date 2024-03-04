@@ -18,6 +18,7 @@
                 <span class="self-center text-3xl font-semibold whitespace-nowrap text-black-primary familia">PandaFit</span>
             </a>
             <ul class="space-y-2 font-medium">
+                @if (logginStatus) {
                 <li>
                     <a routerLink="/institutions" routerLinkActive="active-link"
                         class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 hover:text-green-dark group">
@@ -54,6 +55,8 @@
                         <span class="ms-3">Formularios</span>
                     </a>
                 </li>
+                    }
+                @if (!logginStatus) {
                 <li>
                     <a routerLink="/login" routerLinkActive="active-link"
                         class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 hover:text-green-dark group">
@@ -63,6 +66,7 @@
                         <span class="ms-3">Iniciar Sesión</span>
                     </a>
                 </li>
+                }
             </ul>
         </div>
         @if (logginStatus) {

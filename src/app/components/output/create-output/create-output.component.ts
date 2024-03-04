@@ -8,6 +8,7 @@ import { UmbralGeneratorComponent } from '../../output/umbral-generator/umbral-g
 import { ModalService } from '../../../services/modal/modal.service';
 import { IInputData } from '../../../model/interfaces/i-input-data';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../services/modal/toast.service';
 
 @Component({
   selector: 'app-create-output',
@@ -21,6 +22,7 @@ export class CreateOutputComponent {
   private readonly fb = inject(FormBuilder);
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
 
   public form!: FormGroup;
 
@@ -119,6 +121,7 @@ export class CreateOutputComponent {
     this.outputService.create(output).subscribe(
       (res: IOutputData) => {
         this.form.reset();
+        this.toastService.showToast('Respuesta guardada', 'success');
         this.router.navigateByUrl('formulary/outputs');
       }
     );

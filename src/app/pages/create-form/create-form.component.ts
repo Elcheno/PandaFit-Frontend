@@ -6,7 +6,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostListener, Output, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Output, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
@@ -22,12 +22,15 @@ import { CreateInputModalComponent } from '../../components/modals/input/create-
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { Router, RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
+import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
+import { ToastService } from '../../services/modal/toast.service';
+
 
 /** Component for creating a new form */
 @Component({
   selector: 'app-create-form',
   standalone: true,
-  imports: [CdkDrag,CdkDropList,CdkDropListGroup,ReactiveFormsModule, ButtonComponent, SearchEntityComponent],
+  imports: [CdkDrag,CdkDropList,CdkDropListGroup,ReactiveFormsModule, ButtonComponent, SearchEntityComponent, LoaderSpinnerComponent],
   templateUrl: './create-form.component.html',
   styleUrl: './create-form.component.scss'
 })
@@ -36,12 +39,14 @@ export class CreateFormComponent {
   formGroup!:FormGroup;
   inputsAvailable:IInputData[]=[];
   inputsSelected:IInputData[]=[];
-  outputsRelated:IOutputData[]=[];
+  // outputsRelated:IOutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
   inputService = inject(InputService);
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
+  public outputsRelated = signal<any>({state:false, value:[]});
+  private readonly toastService = inject(ToastService);
 
   totalInputs: number = 0; 
   currentPage: number = 1; // Página actual de elementos cargados
@@ -141,6 +146,7 @@ export class CreateFormComponent {
     // console.log(form)
     await lastValueFrom(this.formService.create(form))
     this.formGroup.reset();
+    this.toastService.showToast('Formulario creado', 'success');
     await this.router.navigateByUrl('formulary/forms')
   }
 
@@ -195,8 +201,13 @@ export class CreateFormComponent {
    * Checks the availability of outputs based on selected inputs
    */
   private checkOutputsDisponibility(): void {
+    this.outputsRelated.set({state:false, value:[]});
     const inputsId = this.inputsSelected.map(item => item.id);
-    this.outputsRelated=this.outputService.getOutputsWithInputsId(inputsId as any) as any;
+    
+    this.outputService.getOutputsWithInputsId(inputsId as any).then(res => {
+      this.outputsRelated.set({state:true, value:res});
+    });
+
   }
 
   /**

@@ -7,5 +7,5 @@ export interface IInputData {
     decimal:boolean;
     decimals?:number;
     unit?:string,
-    userOwnerId?:string
+    userOwnerId?:string,
 }

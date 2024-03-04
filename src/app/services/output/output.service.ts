@@ -48,7 +48,7 @@ export class OutputService {
     return this._mockData.find(input=>input.id === id)
   }
 
-  getOutputsWithInputsId (ids: string[]) {
+  getOutputsWithInputsId (ids: string[]): Promise<IOutputData[]> {
     let result:IOutputData[] = [];
     if(this.allOutputs.length == 0) {
       this.getAll(
@@ -68,8 +68,7 @@ export class OutputService {
       }
     })
     // console.log(this.allOutputs);
-    
-    return result;
+    return Promise.resolve(result);
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IOutputData>> {
@@ -113,7 +112,8 @@ export class OutputService {
     const token = sessionData?.token;
 
 
-    const userId: string = '08c6c3ab-583e-4ee2-98f8-fe2412dc84ce';
+
+    const userId: string = sessionData.id;
 
     const newData = { ...data, userOwnerId: userId }
     // console.log(newData);
