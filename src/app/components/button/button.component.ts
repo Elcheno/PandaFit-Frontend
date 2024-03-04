@@ -11,4 +11,5 @@ export class ButtonComponent {
   @Input() public text!: string;
   @Input() public buttonStyle!: string;
   @Input() public buttonType!: string;
+  @Input() public disabled: boolean = false;
 }

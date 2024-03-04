@@ -1,5 +1,10 @@
 .nav-button:active {
     background-color: #bebdbd; 
     transform: translateY(1px); 
-  }
+}
+
+.nav-button:disabled:active {
+  background-color: white; 
+  transform: none; 
+}
   

@@ -37,18 +37,18 @@
                     </label>
                     <select id="selectType" formControlName="selectType"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block w-full p-2.5 cursor-pointer">
-                        @for(option of inputType;track option.name; let i=$index){
-                        <option [selected]="i==0" value="{{option.value}}">{{option.name}}</option>
+                        @for (option of inputType; track option.name; let i = $index) {
+                            <option [selected]="i==0" value="{{option.value}}">{{option.name}}</option>
                         }
                     </select>
                 </div>
-                @if(form.value.selectType == 0){
+                @if (form.value.selectType == 0) {
                 <div class="flex items-center mb-4 col-span-2">
                     <input formControlName="decimal" type="checkbox" value=""
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <label for="decimal" class="ms-2 text-sm font-medium text-gray-900">Decimal</label>
                 </div>
-                @if(form.value.decimal){
+                @if (form.value.decimal) {
                 <div class="relative mb-6 col-span-2">
                     <label for="decimals" class="sr-only">Número de decimales</label>
                     <input formControlName="decimals" type="range" step="1" value="1" min="1" max="4"

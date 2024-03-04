@@ -27,15 +27,15 @@ export class CreateInputModalComponent {
   form!:FormGroup;
   inputType:any[]=[
     {
-      name:'Number',
+      name:'Numero',
       value:IInputType.NUMBER
     },
     {
-      name:'Boolean',
+      name:'Verdadero o Falso',
       value:IInputType.BOOLEAN
     },
     {
-      name:'Text',
+      name:'Texto',
       value:IInputType.STRING
     }
   ];
@@ -54,6 +54,9 @@ export class CreateInputModalComponent {
     })
   }
 
+  /**
+   * Submits the form data
+   */
   public submit (): void {
     if (!this.form.valid) return;
 
@@ -72,6 +75,9 @@ export class CreateInputModalComponent {
 
   }
 
+  /**
+   * Closes the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }

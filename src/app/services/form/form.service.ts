@@ -68,6 +68,7 @@ export class FormService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+
     const userId: string = sessionData.id;
     const newData: any = { ...data, userId: userId }
     return this.http.post<IFormData>(`${env.api.url}${env.api.form}${env.api.formulary}`, newData, { headers: { Authorization: token ?? "" } })

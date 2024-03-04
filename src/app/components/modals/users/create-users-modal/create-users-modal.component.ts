@@ -32,6 +32,9 @@ export class CreateUsersModalComponent {
     });
   }
 
+  /**
+   * Method to handle form submission
+   */
   public submit (): void {
     if (!this.form.valid) return;
 
@@ -45,6 +48,9 @@ export class CreateUsersModalComponent {
     this.dialogRef.close(newUser);
   }
 
+  /**
+   * Method to close the dialog
+   */
   public closeModal (): void {
     this.dialogRef.close();
   }
