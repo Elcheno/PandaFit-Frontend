@@ -126,7 +126,7 @@ export class InputService {
       decimal: input.decimal,
       decimals: input.decimals,
       unit: input.unit,
-      userOwnerId: '3630fe4b-d2c5-4336-aae3-c9a2352c24bf'
+      userOwnerId: sessionData.id
     };
 
     return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, OnChanges, signal } from '@angular/core';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ModalService } from '../../services/modal/modal.service';
@@ -45,6 +45,7 @@ export class FormActComponent implements OnInit {
       });
       
       this.formActiveService.getAllBySchoolYearAfter(id, { page: 0, size: 10, sort: [''] }).subscribe((res) => {
+        console.log(res);
         this.data = res;
       });
     });
@@ -100,5 +101,17 @@ export class FormActComponent implements OnInit {
       });
     })
   }
+
+  public close(formAct: any): void {
+    const currentDate = new Date(); 
+    formAct.expirationDate = currentDate.toISOString();
+    
+    this.formActiveService.close(formAct).subscribe(() => {
+      this.toastService.showToast('Formulario cerrado', 'success');
+      this.data.content = this.data.content.filter((item) => item.id !== formAct.id);
+    });
+    
+  }
+  
 
 }

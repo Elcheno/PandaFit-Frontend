@@ -23,6 +23,8 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 import { Router, RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
+import { ToastService } from '../../services/modal/toast.service';
+
 
 @Component({
   selector: 'app-create-form',
@@ -43,6 +45,7 @@ export class CreateFormComponent {
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
   public outputsRelated = signal<any>({state:false, value:[]});
+  private readonly toastService = inject(ToastService);
 
   totalInputs: number = 0; 
   currentPage: number = 1; // Página actual de elementos cargados
@@ -122,6 +125,7 @@ export class CreateFormComponent {
     // console.log(form)
     await lastValueFrom(this.formService.create(form))
     this.formGroup.reset();
+    this.toastService.showToast('Formulario creado', 'success');
     await this.router.navigateByUrl('formulary/forms')
   }
 

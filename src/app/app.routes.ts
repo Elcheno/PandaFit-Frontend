@@ -33,11 +33,6 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
         canActivate: [authGuard, roleGuard]
-      },
-      {
-        path: 'formactive',
-        loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
-        canActivate: [authGuard, roleGuard],
       }
     ]
   },
@@ -92,8 +87,21 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'formactive',
+    loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
+    canActivate: [authGuard, roleGuard],
+  },
+  {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'active/:id',
+    loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dinamic-active.component').then(m => m.FormularyDinamicActiveComponent)
+  },
+  {
+    path: 'active/success/:id',
+    loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dynamic-active-success/formulary-dynamic-active-success.component').then(m => m.FormularyDynamicActiveSuccessComponent)
   },
   {
     path: '',

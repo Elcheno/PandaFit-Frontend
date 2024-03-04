@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { ToastService } from '../../services/modal/toast.service';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import {  GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import {  GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly loginService = inject(LoginService);
 
   public logginStatus: boolean;
 

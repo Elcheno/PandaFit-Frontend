@@ -4,7 +4,6 @@ import { Router, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthService } from './services/auth/auth.service';
 import { ToastService } from './services/modal/toast.service';
-import { LoginService } from './services/login/login.service';
 
 @Component({
   selector: 'app-root',
@@ -18,14 +17,14 @@ export class AppComponent implements OnInit {
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
-  logout() {
-    this.loginS.loggedIn = false;
-    sessionStorage.removeItem('user');
-    this.loginS.singOut;
-    this.router.navigateByUrl('/RefrshComponent', { skipLocationChange: true }).then(() => this.router.navigate(["/"]));
-  }
+  // logout() {
+  //   this.loginS.loggedIn = false;
+  //   sessionStorage.removeItem('user');
+  //   this.loginS.logOut().then(() => this.toastService.showToast('Sesión cerrada correctamente', 'success'));
+  //   this.router.navigateByUrl('/RefrshComponent', { skipLocationChange: true }).then(() => this.router.navigate(["/"]));
+  // }
 
-  constructor(private loginS: LoginService) { }
+  constructor() { }
 
   ngOnInit (): void {
     this.authService.loadSessionData();
