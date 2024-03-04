@@ -27,15 +27,15 @@ export class CreateInputModalComponent {
   form!:FormGroup;
   inputType:any[]=[
     {
-      name:'Number',
+      name:'Numero',
       value:IInputType.NUMBER
     },
     {
-      name:'Boolean',
+      name:'Verdadero o Falso',
       value:IInputType.BOOLEAN
     },
     {
-      name:'Text',
+      name:'Texto',
       value:IInputType.STRING
     }
   ];

@@ -47,7 +47,6 @@ export class InputsComponent {
     }
   
     try {
-      // Obtener los detalles del input usando su ID
       const inputDetails: IInputData | undefined = await this.inputService.getById(input.id).toPromise();
       
       if (!inputDetails) {
@@ -55,31 +54,17 @@ export class InputsComponent {
         return;
       }
       
-      // Abrir el modal para mostrar los detalles del input
-      const modalRef = await this.modalService.open(ShowInputModalComponent, inputDetails);
-      // Escuchar cualquier evento de cierre del modal si es necesario
-      modalRef.closed.subscribe((result: any) => {
-        console.log("Modal cerrado con resultado:", result);
-      });
+      await this.modalService.open(ShowInputModalComponent, inputDetails);
+
     } catch (error) {
       console.error("Error al obtener los detalles del input:", error);
     }
   }
-  
-  
-
-
 
   public async create (): Promise<void> {
     (await this.modalService.open(CreateInputModalComponent)).closed.subscribe((input: IInputData) => {
       if(!input) return;
 
-      /*this.inputService.create(input).subscribe((res: IInputData) => {
-        this.data.content.splice(0,0, res);
-        this.data.totalElements += 1;
-      });*/
-
-      input.userOwnerId = 'f92e0e1c-17d0-4396-a012-26826952a441';    
       this.inputService.create(input).subscribe((res: IInputData) => { 
         this.data.content.unshift(res); 
         this.data.totalElements++
@@ -87,16 +72,6 @@ export class InputsComponent {
       });
     });
   }
-
-  
-
-  /*public async update (input: IInputData): Promise<void> {
-    (await this.modalService.open(UpdateInputModalComponent, input)).closed.subscribe((res: IInputData) => {
-      this.inputService.update(res).subscribe((response: IInputData) => {
-        this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
-      });
-    });
-  }*/
 
   public async update(input: IInputData): Promise<void> {
     if (!input) {
