@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  dev: true,
   api: {
     url: 'http://localhost:8080/',
     institution: 'institution',
