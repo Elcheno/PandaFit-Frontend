@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-search-entity',
@@ -16,6 +16,8 @@ export class SearchEntityComponent {
    */
   @Output() public onSearch = new EventEmitter<string>();
 
+  private inputBufferSubject = new Subject<string>();
+
   private readonly fb = inject(FormBuilder);
 
   /**
@@ -27,13 +29,24 @@ export class SearchEntityComponent {
     this.form = this.fb.group({
       search: ['']
     });
+
+    this.inputBufferSubject
+    .pipe(debounceTime(500))
+    .subscribe(() => {
+      this.emit();
+    });
   }
 
   /**
    * Submits the search query.
    */
   public submit (): void {
-    if (this.form.invalid) return;
+    //if (this.form.invalid) return;
+    // this.onSearch.emit(this.form.value.search);
+    this.inputBufferSubject.next('');
+  }
+
+  public emit (): void {
     this.onSearch.emit(this.form.value.search);
   }
 }

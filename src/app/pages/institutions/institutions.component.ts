@@ -33,20 +33,33 @@ export class InstitutionsComponent {
 
   /** Holds the data for institutions */
   public data!: IPageable<IInstitution>;
+  
+  public filteringString: string = '';
 
-  /** Initializes the component */
-  public async ngOnInit (): Promise<void> {
-      this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
-        this.data = res;
-      });
+  public async ngOnInit(): Promise<void> {
+    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
+    .subscribe((res) => {
+      this.data = res;
+    }); 
   }
 
   /**
    * Fetches all institutions based on the provided page information
    * @param page The page object
    */
-  public async getAll (page: IPage): Promise<void> {
-    this.institutionService.getAll(page).subscribe((res) => {
+  public getAll (page: IPage): void {
+    if (!this.filteringString) {
+      this.institutionService.getAll(page).subscribe((res) => {
+        this.data = res;
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.institutionService.filterByName(term, page).subscribe((res) => {
+      if (!res) return;
       this.data = res;
     });
   }
@@ -92,14 +105,18 @@ export class InstitutionsComponent {
       this.data.content = this.data.content.filter((item) => item.id !== institution.id);
       this.data.totalElements -= 1;
       this.toastService.showToast('Instituto eliminado', 'success');
-    })
+    });
   }
 
-  /**
-   * Performs search
-   * @param value The search value
-   */
-  public search (value: string): void {
-    console.log(value);
+  public search (term: string, page?: number): void {
+      if (term) {
+        this.filteringString = term;
+        this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+
+      } else {
+        this.filteringString = '';
+        this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+        
+      }
   }
 }

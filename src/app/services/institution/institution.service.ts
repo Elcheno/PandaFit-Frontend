@@ -162,6 +162,43 @@ export class InstitutionService {
       );
   }
 
+  public filterByName(name: string, pageParams?: IPage): Observable<IPageable<IInstitution>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+  
+    const queryParams = {
+      ...pageParams,
+      name, // Add the name parameter for filtering
+    };
+
+    return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page/name`, {
+      params: queryParams as any,
+      headers: { Authorization: token ?? "" },
+    })
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Handle errors gracefully
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {
+        // Map the response to your IPageable interface
+        const response: IPageable<IInstitution> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? ['name'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1) // Ensure only one emission
+    );
+  }
+  
+
   /**
    * Retrieves a single institution by its ID.
    * @param id - The ID of the institution to retrieve.
