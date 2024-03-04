@@ -162,7 +162,7 @@ export class InstitutionService {
       );
   }
 
-  public FilterByName(name: string, pageParams?: IPage): Observable<IPageable<IInstitution>> {
+  public filterByName(name: string, pageParams?: IPage): Observable<IPageable<IInstitution>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
   

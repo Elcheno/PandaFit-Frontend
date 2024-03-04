@@ -33,22 +33,33 @@ export class InstitutionsComponent {
 
   /** Holds the data for institutions */
   public data!: IPageable<IInstitution>;
-  searchTerm: string = '';
+  
+  public filteringString: string = '';
 
   public async ngOnInit(): Promise<void> {
-    // Fetch initial data without any search term
     this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
-      .subscribe((res) => {
-        this.data = res;
-      });
+    .subscribe((res) => {
+      this.data = res;
+    }); 
   }
 
   /**
    * Fetches all institutions based on the provided page information
    * @param page The page object
    */
-  public async getAll (page: IPage): Promise<void> {
-    this.institutionService.getAll(page).subscribe((res) => {
+  public getAll (page: IPage): void {
+    if (!this.filteringString) {
+      this.institutionService.getAll(page).subscribe((res) => {
+        this.data = res;
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.institutionService.filterByName(term, page).subscribe((res) => {
+      if (!res) return;
       this.data = res;
     });
   }
@@ -94,22 +105,18 @@ export class InstitutionsComponent {
       this.data.content = this.data.content.filter((item) => item.id !== institution.id);
       this.data.totalElements -= 1;
       this.toastService.showToast('Instituto eliminado', 'success');
-    })
+    });
   }
 
-  public search (term: string): void {
+  public search (term: string, page?: number): void {
       if (term) {
-        // Use FilterByName with the search term
-        this.institutionService.FilterByName(term, { page: 0, size: 10, sort: ['name'] })
-          .subscribe((res) => {
-            this.data = res;
-          });
+        this.filteringString = term;
+        this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+
       } else {
-        // Use getAll when the search term is empty
-        this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
-          .subscribe((res) => {
-            this.data = res;
-          });
+        this.filteringString = '';
+        this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+        
       }
   }
 }

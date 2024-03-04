@@ -1,8 +1,8 @@
 <main>
-  <div class="mb-[2em] mt-[-1em] mx-[-1em]">
-      <ul class="flex flex-row flex-nowrap gap-12 xl:gap-24 lg:gap-18 justify-center  py-4 w-3/3 m-auto">
-          <li class="cursor-pointer"><a routerLink="schoolyear" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-lg hover:text-green-dark px-4 py-2 transition-colors" routerLinkActive="active">Cursos</a></li>
-          <li class="cursor-pointer"><a routerLink="users" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-lg hover:text-green-dark px-4 py-2 transition-colors" routerLinkActive="active">Usuarios</a></li>
+  <div class="bg-gray-50 mx-auto mb-6 rounded-lg w-full lg:w-2/3 border border-gray-300">
+      <ul class="flex flex-row flex-wrap md:flex-nowrap gap-4 xl:gap-24 lg:gap-18 justify-around p-1.5 w-3/3 m-auto">
+          <li class="cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="schoolyear" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Cursos</a></li>
+          <li class="cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="users" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Usuarios</a></li>
       </ul>
   </div>
 
