@@ -113,7 +113,7 @@ export class OutputService {
     const token = sessionData?.token;
 
 
-    const userId: string = '3630fe4b-d2c5-4336-aae3-c9a2352c24bf';
+    const userId: string = sessionData.id;
 
     const newData = { ...data, userOwnerId: userId }
     // console.log(newData);
