@@ -1,4 +1,3 @@
-import { IInputField } from "../../components/formularyDynamicActive/input/input.component";
 import { IInputType } from "./i-input-type";
 export interface IInputData {
     id?:string;
@@ -9,5 +8,4 @@ export interface IInputData {
     decimals?:number;
     unit?:string,
     userOwnerId?:string,
-    inputField?: IInputField<any>
 }
