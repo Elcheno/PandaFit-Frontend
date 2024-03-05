@@ -31,7 +31,7 @@ export class AuthService {
       email: data.email,
       uuid: data.uuid
     }
-    return this.http.post<any>('http://localhost:8080/login', body)
+    return this.http.post<any>(`${env.api.url}${env.api.login}`, body)
       .pipe(
         catchError((error) => {
           return error;
