@@ -62,11 +62,6 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard]
       },
       {
-        path: 'outputs/create',
-        component: CreateOutputComponent,
-        canActivate: [authGuard, roleGuard]
-      },
-      {
         path: 'forms',
         component: FormComponent,
         canActivate: [authGuard, roleGuard]
@@ -85,6 +80,11 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: 'formulary/outputs/create',
+    component: CreateOutputComponent,
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'formactive',

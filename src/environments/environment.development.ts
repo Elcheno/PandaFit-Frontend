@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  dev: true,
+  dev: false,
   api: {
-    url: 'http://localhost:8080/',
+    url: 'https://pandafit.us-east-1.elasticbeanstalk.com/',
     institution: 'institution',
     users: '/users',
     schoolyear: '/schoolYear',
