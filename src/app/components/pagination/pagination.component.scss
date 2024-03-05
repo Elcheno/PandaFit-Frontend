@@ -1,10 +1,19 @@
 .nav-button:active {
-    background-color: #bebdbd; 
     transform: translateY(1px); 
+}
+
+.nav-button:hover {
+  background-color: rgb(243 244 246);
+  color: rgb(55 65 81);
 }
 
 .nav-button:disabled:active {
   background-color: white; 
   transform: none; 
+}
+
+.nav-button:disabled:hover {
+  background-color: white;
+  color: rgb(107 114 128);
 }
   
