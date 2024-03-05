@@ -49,6 +49,10 @@ export class CreateOutputComponent {
    * Method to handle form submission
    */
   public onSubmit (): void {
+    if (this.form.invalid) {
+      this.toastService.showToast('Todos los campos son obligatorios', 'error');
+      return;
+    }
     const output: IOutputData = {
       name: this.form.get('name')?.value,
       description: this.form.get('description')?.value,
@@ -110,6 +114,7 @@ export class CreateOutputComponent {
     (await this.modalService.open(UmbralGeneratorComponent, this.umbralList)).closed.subscribe((umbralList: IUmbral[]) => {
       if (!umbralList) return;
       this.umbralList = umbralList;
+      this.toastService.showToast('Umbrales guardados', 'success');
     });
   }
 

@@ -1,9 +1,19 @@
 <main>
   <div class="bg-gray-50 mx-auto mb-6 rounded-lg w-full lg:w-2/3 border border-gray-300">
-      <ul class="flex flex-row flex-wrap md:flex-nowrap gap-4 xl:gap-24 lg:gap-18 justify-around p-1.5 w-3/3 m-auto">
-          <li class="cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="schoolyear" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Cursos</a></li>
-          <li class="cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="users" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Usuarios</a></li>
+      <ul id="menu" class="flex flex-row flex-wrap md:flex-nowrap gap-4 xl:gap-24 lg:gap-18 justify-around p-1.5 w-3/3 m-auto">
+          <li id="schoolyear" class="z-[3] cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="schoolyear" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Cursos</a></li>
+          <li id="users" class="z-[3] cursor-pointer flex justify-center items-center w-full lg:w-52"><a routerLink="users" [queryParams]="{ id: this.institution ? this.institution.id : '' }" class="text-center text-lg hover:text-green-dark px-4 py-3.5 transition-colors rounded-lg w-full" routerLinkActive="active">Usuarios</a></li>
       </ul>
+      <div 
+        id="menu-backdrop"
+        [class]="'
+            absolute bg-green-primary rounded-lg 
+            left-[var(--left)] top-[var(--top)] 
+            w-[var(--width)] h-[var(--height)]
+            transition-all duration-300 ease-in-out
+            z-[2]     
+        '"
+      ></div>
   </div>
 
   <div class="h-[10vh] lg:w-2/3 m-auto flex flex-row justify-between gap-4 xs:mb-5">
