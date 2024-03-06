@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  dev: false,
+  dev: true,
   api: {
     url: 'https://pandafit.us-east-1.elasticbeanstalk.com/',
     institution: 'institution',
