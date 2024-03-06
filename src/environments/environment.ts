@@ -1,7 +1,7 @@
 export const environment = {
   dev: false,
   api: {
-    url: 'http://pandafit.us-east-1.elasticbeanstalk.com/',
+    url: 'https://pandafit.us-east-1.elasticbeanstalk.com/',
     institution: 'institution',
     users: '/users',
     schoolyear: '/schoolYear',
