@@ -132,6 +132,6 @@ export class UsersComponent implements OnInit {
    * @param searchValue The value to search for.
    */
   public search (searchValue: string): void {
-    console.log(searchValue);
+    
   }
 }

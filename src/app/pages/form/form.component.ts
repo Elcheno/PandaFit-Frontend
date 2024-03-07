@@ -55,7 +55,7 @@ export class FormComponent {
   }
 
   public search (value: string): void {
-    console.log(value);
+    
   }
 }
 

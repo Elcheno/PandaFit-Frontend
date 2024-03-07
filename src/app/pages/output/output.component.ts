@@ -73,7 +73,7 @@ export class OutputComponent implements OnInit {
       const modalRef = await this.modalService.open(OutputInfoComponent, outputDetails);
       // Escuchar cualquier evento de cierre del modal si es necesario
       modalRef.closed.subscribe((result: any) => {
-        console.log("Modal cerrado con resultado:", result);
+        
       });
     } catch (error) {
       console.error("Error al obtener los detalles del output:", error);
@@ -113,7 +113,7 @@ export class OutputComponent implements OnInit {
    * @param value The search value
    */
   public search (value: string): void {
-    console.log(value);
+    
   }
 
 }

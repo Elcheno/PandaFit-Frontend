@@ -48,7 +48,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
       if (!id) return;
 
       this.formActiveService.getFormDetailById(id).subscribe((res) => {
-        console.log(res);
+        
         if (!res) return;
         
         this.formulary = res.formDetails;
@@ -78,7 +78,7 @@ export class FormularyDinamicActiveComponent implements OnInit {
   }
 
   public onSubmit (): void {
-    // console.log(this.form);
+    // 
     if (this.form.invalid) {
       this.toastService.showToast('Todos los campos son obligatorios', 'error');
       return;
@@ -96,9 +96,9 @@ export class FormularyDinamicActiveComponent implements OnInit {
       })
     };
 
-// console.log(response);
+// 
     this.answerService.post(response).subscribe((res) => {
-      console.log(res);
+      
       if (!res) return;
       this.toastService.showToast('Respuesta enviada', 'success');
       this.routerService.navigateByUrl('/active/success/' + res.id);

@@ -59,7 +59,7 @@ export class FormActComponent implements OnInit {
       });
       
       this.formActiveService.getAllBySchoolYearAfter(id, { page: 0, size: 10, sort: [''] }).subscribe((res) => {
-        console.log(res);
+        
         this.data = res;
       });
     });
@@ -121,7 +121,7 @@ export class FormActComponent implements OnInit {
    * @param value The search value
    */
   public search (value: string): void {
-    console.log(value);
+    
   }
 
   /**

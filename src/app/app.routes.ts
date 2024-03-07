@@ -67,19 +67,21 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard]
       },
       {
-        path: 'forms/create',
-        loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent)
-      },
-      {
-        path: 'forms/view/:formId',
-        loadComponent: () => import('./components/form/view-form/view-form.component').then(m => m.ViewFormComponent)
-      },
-      {
         path: '',
         redirectTo: 'inputs',
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: 'formulary/forms/create',
+    loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent),
+    canActivate: [authGuard, roleGuard]
+  },
+  {
+    path: 'formulary/forms/view/:formId',
+    loadComponent: () => import('./components/form/view-form/view-form.component').then(m => m.ViewFormComponent),
+    canActivate: [authGuard, roleGuard]
   },
   {
     path: 'formulary/outputs/create',
@@ -93,7 +95,8 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'active/:id',

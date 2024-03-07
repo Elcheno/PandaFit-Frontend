@@ -20,6 +20,6 @@ export const roleGuard: CanActivateFn = (route, state) => {
       if (role['authority'] === 'ROLE_ADMIN') response = true;
     });
   }
-  console.log(response);
+  
   return response;
 };
