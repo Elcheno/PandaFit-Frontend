@@ -41,7 +41,7 @@ export class ViewFormComponent {
       description: [''],
     })
     this.formService.getById(this.formId!).subscribe((res) => {
-      console.log(res.inputIdList);
+      
       
       this.form = res
       this.formGroup = this.formBuilder.group({

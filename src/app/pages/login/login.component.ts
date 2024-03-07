@@ -29,7 +29,7 @@ export class LoginComponent {
   public login (): void {
     this.authService.login({ email: 'admin@example.com', uuid: 'admin' }).subscribe(
       (res: any) => {
-        console.log(res);
+        
         this.toastService.showToast('Sesión iniciada correctamente', 'success');
       }
     );

@@ -57,14 +57,14 @@ export class OutputService {
       if(output.inputsId && output.inputsId.length > 0) {
         
         const filteredArray = ids.filter(value => output.inputsId?.includes(value));
-        // console.log(filteredArray);
+        // 
         
         if(filteredArray && filteredArray.length==output.inputsId.length) {
           result.push(output)
         }
       }
     })
-    // console.log(this.allOutputs);
+    // 
     return Promise.resolve(result);
   }
 
@@ -113,7 +113,7 @@ export class OutputService {
     const userId: string = sessionData.id;
 
     const newData = { ...data, userOwnerId: userId }
-    // console.log(newData);
+    // 
     return this.http.post<IOutputData>(`${env.api.url}${env.api.form}${env.api.output}`, newData, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {

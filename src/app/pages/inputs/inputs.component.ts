@@ -131,6 +131,6 @@ export class InputsComponent {
    * @param value The search value
    */
   public search (value: string): void {
-    console.log(value);
+    
   }
 }

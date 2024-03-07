@@ -65,8 +65,8 @@ export class UpdateInputModalComponent {
         unit: [this.input.unit]
       });
 
-      console.log("Valor de this.input.type:", this.input.type);
-      console.log("Nombre del tipo obtenido:", this.getInputTypeName(this.input.type));
+      
+      
     } else {
       this.form = this.formBuilder.group({
         name: ['', Validators.required],

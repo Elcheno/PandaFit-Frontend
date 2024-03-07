@@ -33,10 +33,10 @@ export class InfoInstitutionComponent implements OnInit, AfterViewInit {
       }
     });
 
-    console.log(this.routerService.url);
+    
 
     const route = this.routerService.url.split('/')[2].split('?')[0];
-    console.log(route);
+    
 
     const item = document.getElementById(route);
     const menuBackdrop = document.querySelector('#menu-backdrop') as HTMLDivElement;

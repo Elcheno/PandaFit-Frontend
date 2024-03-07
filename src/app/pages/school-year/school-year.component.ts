@@ -162,7 +162,7 @@ export class SchoolYearComponent {
    */
   public async search (searchValue: string): Promise <void> {
     return await new Promise((resolve, _reject) => {
-      console.log(searchValue);
+      
       resolve();
     });
   }
