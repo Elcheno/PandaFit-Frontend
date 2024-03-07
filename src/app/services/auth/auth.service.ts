@@ -37,6 +37,9 @@ export class AuthService {
           return error;
         }),
         map((res: any) => {
+          if (!res?.token) {
+            return null;
+          }
           this.setSession(res);
           return res;
         }),

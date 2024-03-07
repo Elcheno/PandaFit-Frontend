@@ -23,17 +23,6 @@ export class LoginService {
       if (!this.authS.sessionData() || this.authS.sessionData() === null) {
         this.authService.authState.subscribe((user) => {
           this.user = user;
-          // this.loggedIn = (user != null);
-          // if (this.loggedIn) {
-          //   if (this.originalPath) {
-          //     this.router.navigate([this.originalPath]);
-          //     this.originalPath = '';
-          //   } else
-          //     this.router.navigate(['']);
-          // } else {
-          //   this.router.navigate(['/']);
-          // }
-          // console.log(user);
           this.login();
         });
       }
