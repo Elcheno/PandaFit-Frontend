@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  dev: true,
+  dev: false,
   api: {
     url: 'https://pandafit-backend-0-1.onrender.com/',
     institution: 'institution',
