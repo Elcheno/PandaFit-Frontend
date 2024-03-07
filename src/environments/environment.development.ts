@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   dev: false,
   api: {
-    url: 'http://pandafit.us-east-1.elasticbeanstalk.com/',
+    url: 'https://pandafit-backend-0-1.onrender.com/',
     institution: 'institution',
     users: '/users',
     schoolyear: '/schoolYear',
