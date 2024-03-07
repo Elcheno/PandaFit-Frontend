@@ -12,12 +12,11 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const routeService = inject(Router);
 
-  const isLoggger = authService.sessionData() ? true : false;
+  const sessionData = authService.sessionData();
 
-  if (isLoggger && route.routeConfig?.path === 'login') {
-    routeService.navigateByUrl('/institutions');
-    return false;
-  } else if (isLoggger) {
+  const isLoggger = sessionData?.token ? true : false;
+
+ if (isLoggger) {
     return true;
 
   } else {

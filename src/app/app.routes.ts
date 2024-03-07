@@ -10,6 +10,7 @@ import { CreateOutputComponent } from './components/output/create-output/create-
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guards/auth-guard.guard';
 import { roleGuard } from './guards/role.guard';
+import { loginGuard } from './guards/login.guard';
 
 
 
@@ -96,7 +97,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [loginGuard]
   },
   {
     path: 'active/:id',
