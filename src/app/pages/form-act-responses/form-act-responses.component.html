@@ -1,0 +1,16 @@
+<div class="w-full mx-auto lg:w-2/3">
+
+  <h1 class="text-3xl font-bold mb-7 text-black-primary">Respuestas de {{ formularyActive?.formName }}</h1>
+
+  <div class="flex items-center my-5">
+    <!-- Search component -->
+    <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
+  </div>
+
+  <app-table-responses
+    [data]="data"
+  >
+  </app-table-responses>
+
+</div>
+
