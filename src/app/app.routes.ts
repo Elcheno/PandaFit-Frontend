@@ -95,6 +95,11 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
   },
   {
+    path: 'formactive/:id/responses',
+    loadComponent: () => import('./pages/form-act-responses/form-act-responses.component').then(m => m.FormActResponsesComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'login',
     component: LoginComponent,
     canActivate: [loginGuard]
