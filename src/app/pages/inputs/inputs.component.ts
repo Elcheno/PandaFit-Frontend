@@ -130,7 +130,7 @@ export class InputsComponent {
    * Performs search
    * @param value The search value
    */
-  public search (value: string): void {
+  public search (term: string): void {
     
   }
 }
