@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
 
 @Component({
@@ -20,8 +19,6 @@ export class SearchEntityComponent {
   private inputBufferSubject = new Subject<string>();
 
   private readonly fb = inject(FormBuilder);
-  private readonly activedRouterService = inject(ActivatedRoute);
-  private readonly routerService = inject(Router);
 
   /**
    * Form group for search input.
@@ -37,15 +34,7 @@ export class SearchEntityComponent {
     .pipe(debounceTime(500))
     .subscribe(() => {
       this.emit();
-    });
-
-    this.activedRouterService.queryParams.subscribe((res) => {
-      const search = res['search'];
-      if (search) {
-        this.form.controls['search'].setValue(search);
-        this.submit();
-      }
-    });
+    });   
   }
 
   /**
@@ -56,9 +45,6 @@ export class SearchEntityComponent {
   }
 
   public emit (): void {
-    this.form.value.search === '' 
-      ? this.routerService.navigate([]) 
-      : this.routerService.navigate([], { queryParams: { search: this.form.value.search } });
-    this.onSearch.emit(this.form.value.search);
+    this.onSearch.emit(this.form.value.search ?? '');
   }
 }

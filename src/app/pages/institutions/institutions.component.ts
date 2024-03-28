@@ -51,6 +51,7 @@ export class InstitutionsComponent {
     if (!this.filteringString) {
       this.institutionService.getAll(page).subscribe((res) => {
         this.data = res;
+        this.table.toggleTableLoader(); 
       });
     } else {
       this.getAllFiltering(page, this.filteringString);
@@ -59,6 +60,7 @@ export class InstitutionsComponent {
 
   public getAllFiltering (page: IPage, term: string) {
     this.institutionService.filterByName(term, page).subscribe((res) => {
+      this.table.toggleTableLoader(); 
       if (!res) return;
       this.data = res;
     });
@@ -109,14 +111,16 @@ export class InstitutionsComponent {
   }
 
   public search (term: string, page?: number): void {
-      if (term) {
-        this.filteringString = term;
-        this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+    this.table.toggleTableLoader(); 
 
-      } else {
-        this.filteringString = '';
-        this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
-        
-      }
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+      
+    }
   }
 }
