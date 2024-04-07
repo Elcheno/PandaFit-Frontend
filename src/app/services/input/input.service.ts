@@ -126,6 +126,32 @@ export class InputService {
       );
   }
 
+  public getAllFilteringByName(pageParams: IPage, name: string): Observable<IPageable<IInputData>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;    
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the name parameter for filtering
+    };
+    
+    return this.http.get<IPageable<IInputData>>(`http://localhost:8080/form/page/input/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    .pipe(
+      map((res: any) => {
+        const response: IPageable<IInputData> = {
+          page: res['number'],
+          size: res['size'],
+          sort: pageParams?.sort ?? ['name'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'].map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
   /**
    * Retrieves an input data by its ID.
    * @param id - The ID of the input data to retrieve.
