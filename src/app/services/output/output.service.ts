@@ -98,7 +98,7 @@ export class OutputService {
       name, // Add the name parameter for filtering
     };
     
-    return this.http.get<IPageable<IOutputData>>(`http://localhost:8080/form/page/output/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.form}/page${env.api.output}/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
     .pipe(
       map((res: any) => {
         const response: IPageable<IOutputData> = {

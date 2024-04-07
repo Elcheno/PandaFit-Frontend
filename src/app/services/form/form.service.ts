@@ -62,7 +62,7 @@ export class FormService {
       name, // Add the name parameter for filtering
     };
     
-    return this.http.get<IPageable<IFormData>>(`http://localhost:8080/form/formulary/page/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IFormData>>(`${env.api.url}${env.api.form}${env.api.formulary}/page/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
     .pipe(
       map((res: any) => {
         const response: IPageable<IFormData> = {

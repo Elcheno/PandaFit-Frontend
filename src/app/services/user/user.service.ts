@@ -170,7 +170,7 @@ export class UserService {
       email, // Add the email parameter for filtering
     };
     
-    return this.http.get<IPageable<IUser>>(`http://localhost:8080/institution/users/page/email`, { 
+    return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}${env.api.users}/page/email`, { 
       params: queryParams as any, 
       headers: { Authorization: token ?? "" },
     })  
