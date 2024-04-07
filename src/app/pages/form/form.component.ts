@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -17,10 +17,13 @@ import { TableFormComponent } from '../../components/form/table-form/table-form.
   styleUrl: './form.component.scss'
 })
 export class FormComponent {
+  @ViewChild(TableFormComponent) table!: TableFormComponent;
+  
   private readonly formService = inject(FormService);
   private readonly toastService = inject(ToastService);
 
   public data!: IPageable<IFormData>;
+  private filteringString: string = '';
 
   ngOnInit (): void {
     this.formService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
@@ -29,7 +32,20 @@ export class FormComponent {
   }
 
   public async getAll (page: IPage): Promise<void> {
-    this.formService.getAll(page).subscribe((res) => {
+    if (!this.filteringString) {
+      this.formService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader();
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.formService.getAllFilteringByName(page, term).subscribe((res) => {
+      this.table.toggleTableLoader();
+      if (!res) return;
       this.data = res;
     });
   }
@@ -54,8 +70,16 @@ export class FormComponent {
     })
   }
 
-  public search (value: string): void {
-    
+  public search (term: string, page?: number): void {
+    this.table.toggleTableLoader();    
+
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: page ?? 0, size: 10, sort: ['name'] }, term);
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ?? 0, size: 10, sort: ['name'] });
+    }
   }
 }
 
