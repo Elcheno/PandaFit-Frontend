@@ -89,6 +89,32 @@ export class OutputService {
       );
   }
 
+  public getAllFilteringByName (pageParams: IPage, name: string): Observable<IPageable<IOutputData>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the name parameter for filtering
+    };
+    
+    return this.http.get<IPageable<IOutputData>>(`http://localhost:8080/form/page/output/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    .pipe(
+      map((res: any) => {
+        const response: IPageable<IOutputData> = {
+          page: res['number'],
+          size: res['size'],
+          sort: pageParams?.sort ?? ['name'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content']
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
   public getById (id: string): Observable<IOutputData> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -107,8 +133,6 @@ export class OutputService {
   public create (data: IOutputData): Observable<IOutputData> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
-
 
     const userId: string = sessionData.id;
 

@@ -36,7 +36,7 @@ export class InstitutionsComponent {
   
   public filteringString: string = '';
 
-  public async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
     .subscribe((res) => {
       this.data = res;
