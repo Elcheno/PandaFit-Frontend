@@ -8,6 +8,7 @@ import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.comp
 import { IPageable } from '../../../model/interfaces/i-pageable';
 import { IPage } from '../../../model/interfaces/i-page';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { StoreService } from '../../../services/store/store.service';
 
 /**
  * Component representing a table for institutions.
@@ -30,7 +31,8 @@ export class TableInstitutionComponent {
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
-
+  private readonly storeService = inject(StoreService);
+  
   /**
    * Dropdown data for institution rows.
    */
@@ -53,7 +55,9 @@ export class TableInstitutionComponent {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.3-2a6 6 0 0 0 0-6A4 4 0 0 1 20 8a4 4 0 0 1-6.7 3Zm2.2 9a4 4 0 0 0 .5-2v-1a6 6 0 0 0-1.5-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.5Z"clip-rule="evenodd" /></svg>',
         fnc: (data: any) => { 
           if (data == null) return;
-          this.router.navigate(['/institutions/users'], { queryParams: { id: data.id } });
+          // this.router.navigate(['/institutions/users'], { queryParams: { id: data.id } });
+          // this.storeService.institutionStore.revalidate();
+          this.storeService.institutionStore.reloadData();
         }
       },
       {
@@ -62,6 +66,7 @@ export class TableInstitutionComponent {
         fnc: (data: any) => { 
           if (data == null) return;
           this.onUpdate.emit(data);
+          // this.storeService.institutionStore.reloadData();
         }
       },
       {
@@ -86,6 +91,7 @@ export class TableInstitutionComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.institutionStore.revalidate();
     this.onChangePage.emit(nextPage);
   }
 
@@ -98,6 +104,7 @@ export class TableInstitutionComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.institutionStore.revalidate();
     this.onChangePage.emit(previousPage);
   }
 

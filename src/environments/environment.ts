@@ -1,8 +1,8 @@
 export const environment = {
   dev: false,
   api: {
-    url: 'https://pandafit-backend-0-1.onrender.com/',
-    // url: 'http://localhost:8080/',
+    // url: 'https://pandafit-backend-0-1.onrender.com/',
+    url: 'http://localhost:8080/',
     institution: 'institution',
     users: '/users',
     schoolyear: '/schoolYear',

@@ -3,10 +3,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IPage } from '../../model/interfaces/i-page';
-import { Observable, catchError, map, take, throwError } from 'rxjs';
+import { Observable, catchError, map, of, take, throwError } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 import { ToastService } from '../modal/toast.service';
+import { StoreService } from '../store/store.service';
 
 /**
  * Service for managing institutions.
@@ -18,6 +19,7 @@ export class InstitutionService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Retrieves mock institutions for testing.
@@ -137,8 +139,15 @@ export class InstitutionService {
    * @returns Observable of paginated institution data.
    */
   public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
+    console.log(this.storeService.institutionStore.rehidrate(), this.storeService.institutionStore.reload(), this.storeService.institutionStore.data());
+
+    const cacheData = this.storeService.institutionStore.getData();
+    if (!(this.storeService.institutionStore.rehidrate() || this.storeService.institutionStore.reload()) && cacheData) return of(cacheData);
+
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
+
+    console.log('fetching...');
 
     return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
@@ -156,6 +165,9 @@ export class InstitutionService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.institutionStore.setData(response);
+          console.log('fetching completado');
+          
           return response;
         }),
         take(1)

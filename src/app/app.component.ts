@@ -1,9 +1,9 @@
 import { Component, inject, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthService } from './services/auth/auth.service';
-import { ToastService } from './services/modal/toast.service';
+import { StoreService } from './services/store/store.service';
 
 /**
  * Root component of the application.
@@ -17,20 +17,7 @@ import { ToastService } from './services/modal/toast.service';
 })
 export class AppComponent implements OnInit {
   private readonly authService = inject(AuthService);
-  private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
-
-
-  /**
-   * Logs out the user.
-   */
-  // logout() {
-  //   this.loginS.loggedIn = false;
-  //   sessionStorage.removeItem('user');
-  //   this.loginS.logOut().then(() => this.toastService.showToast('Sesión cerrada correctamente', 'success'));
-  //   this.router.navigateByUrl('/RefrshComponent', { skipLocationChange: true }).then(() => this.router.navigate(["/"]));
-  // }
-
+  private readonly storeService = inject(StoreService);
 
   constructor() { }
 
@@ -40,6 +27,7 @@ export class AppComponent implements OnInit {
    */
   ngOnInit (): void {
     this.authService.loadSessionData();
+    console.log(this.storeService.institutionStore.data());
     // this.toastService.showToast('Esto es un toast', 'success');
   }
 }
