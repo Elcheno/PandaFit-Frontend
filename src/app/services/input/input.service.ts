@@ -4,9 +4,10 @@ import { IInputType } from '../../model/interfaces/i-input-type';
 import { HttpClient } from '@angular/common/http';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
-import { Observable, map, take } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
+import { StoreService } from '../store/store.service';
 
 
 /**
@@ -58,7 +59,6 @@ export class InputService {
       unit: ''
     },
   ]
-  constructor() { }
 
   /**
    * Getter for mock data.
@@ -76,16 +76,6 @@ export class InputService {
     this._mockData = value;
   }
 
-  // addInput(input:IInputData){
-  //   if(this.searchInput(input.id)){
-  //     return
-  //   }
-  //   this._mockData.push(input)
-  // }
-  // removeInput(id:number){
-  //   this._mockData=this._mockData.filter(input=>input.id!==id)
-  // }
-
   /**
    * Searches for an input data by its ID.
    * @param id - The ID of the input data to search for.
@@ -99,6 +89,7 @@ export class InputService {
 
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Retrieves all input data paginated.
@@ -108,6 +99,9 @@ export class InputService {
   public getAll(pageParams?: IPage): Observable<IPageable<IInputData>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
+
+    const cacheData = this.storeService.inputStore.getData();
+    if (!(this.storeService.inputStore.rehidrate() || this.storeService.inputStore.reload()) && cacheData) return of(cacheData);
 
     return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.form}${environment.api.input}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
@@ -120,6 +114,7 @@ export class InputService {
             totalPages: res['totalPages'],
             content: res['content'].map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
           };
+          this.storeService.inputStore.setData(response);
           return response;
         }),
         take(1)
