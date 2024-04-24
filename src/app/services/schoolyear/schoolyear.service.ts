@@ -77,7 +77,7 @@ export class SchoolyearService {
       name, // Add the name parameter for filtering
     };
 
-    return this.http.get<IPageable<ISchoolYear>>(`${env.api.url}${env.api.institution}/${id}${env.api.schoolyear}/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<ISchoolYear>>(`${env.api.url}${env.api.institution}/${id}${env.api.schoolyear}/page/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
     .pipe(
       catchError((error) => {
         const errorMessage = `Error al cargar los registros. ${error.message}`;

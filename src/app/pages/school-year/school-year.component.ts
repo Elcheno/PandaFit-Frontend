@@ -163,13 +163,13 @@ export class SchoolYearComponent {
    * @returns A promise that resolves when the search is completed.
    */
   public search (searchValue: string, page?: number): void {
-    // if (searchValue) {
-    //   this.filteringString = searchValue;
-    //   this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, searchValue);
-    // } else {
-    //   this.filteringString = '';
-    //   this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
-    // }
+    if (searchValue) {
+      this.filteringString = searchValue;
+      this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, searchValue);
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+    }
   }
 
   /**
