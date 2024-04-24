@@ -10,10 +10,11 @@ import { ModalService } from '../../services/modal/modal.service';
 import { CreateUsersModalComponent } from '../../components/modals/users/create-users-modal/create-users-modal.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { IPage } from '../../model/interfaces/i-page';
 import { ToastService } from '../../services/modal/toast.service';
 import { ActivatedRoute } from '@angular/router';
+import { StoreService } from '../../services/store/store.service';
 
 @Component({
   selector: 'app-users',
@@ -30,11 +31,19 @@ export class UsersComponent implements OnInit {
   private readonly modalService = inject(ModalService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(ActivatedRoute);
+  private readonly storeService = inject(StoreService);
 
   public institutionId!: string;
 
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
+
+  constructor() {
+    effect(() => {
+      const userReload = this.storeService.userStore.reload();
+      if (userReload) this.getAll({ page: 0, size: 10, sort: ['email'] });
+    }, { manualCleanup: false, allowSignalWrites: true });
+  }
 
   /**
    * Initializes the component.
@@ -57,12 +66,8 @@ export class UsersComponent implements OnInit {
           }; 
         });
       } else {
-        this.userService.getAll({ page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
-          this.data = res;
-        });
-        this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
-          this.institutionList = res;
-        });
+        this.getAll({ page: 0, size: 10, sort: ['email'] });
+        this.getAllInstitutions({ page: 0, size: 100, sort: ['name'] });
       }
     });
   }
@@ -72,10 +77,17 @@ export class UsersComponent implements OnInit {
    * 
    * @param page The page configuration.
    */
-  public async getAll (page: IPage): Promise<void> {
+  public getAll (page: IPage): void {
     this.userService.getAll(page).subscribe((res) => {
       this.data = res;
       this.table.toggleTableLoader(); 
+    });
+  }
+
+  public getAllInstitutions (page: IPage): void {
+    this.institutionService.getAll(page).subscribe((res) => {
+      if (!res) return;
+      this.institutionList = res;
     });
   }
 
@@ -89,6 +101,7 @@ export class UsersComponent implements OnInit {
       this.userService.create(user).subscribe((res: IUser) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.storeService.userStore.revalidate();
         this.toastService.showToast('Usuario creado', 'success');
       });
     });
@@ -106,6 +119,7 @@ export class UsersComponent implements OnInit {
       if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== user.id);
       this.data.totalElements -= 1;
+      this.storeService.userStore.revalidate();
       this.toastService.showToast('Usuario eliminado', 'success');
     })
   }
@@ -121,6 +135,7 @@ export class UsersComponent implements OnInit {
       
       this.userService.update(res).subscribe((response: IUser) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.storeService.userStore.revalidate();
         this.toastService.showToast('Usuario actualizado', 'success');
       });
     });

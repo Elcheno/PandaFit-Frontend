@@ -6,8 +6,9 @@ import { type IUser } from '../../model/interfaces/i-user';
 import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { environment } from '../../../environments/environment.development';
-import { Observable, map, take } from 'rxjs';
+import { Observable, map, take, of } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { StoreService } from '../store/store.service';
 
 /**
  * Service for managing user-related operations.
@@ -18,6 +19,7 @@ import { AuthService } from '../auth/auth.service';
 export class UserService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Fetches mock user data.
@@ -143,6 +145,9 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+    const cacheData = this.storeService.userStore.getData();
+    if (!(this.storeService.userStore.rehidrate() || this.storeService.userStore.reload()) && cacheData) return of(cacheData);
+
     return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
@@ -154,6 +159,7 @@ export class UserService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.userStore.setData(response);
           return response;
         }),
         take(1)
