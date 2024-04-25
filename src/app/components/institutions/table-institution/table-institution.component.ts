@@ -86,6 +86,8 @@ export class TableInstitutionComponent {
    * Handles going to the next page.
    */
   public handleNextPage(): void {
+    if ((this.data.page + 1) > this.data.totalPages) return;
+    this.toggleTableLoader();
     const nextPage: IPage = {
       page: this.data.page + 1,
       size: this.data.size,
@@ -99,6 +101,8 @@ export class TableInstitutionComponent {
    * Handles going to the previous page.
    */
   public handlePreviousPage(): void {
+    if (this.data.page === 0) return;
+    this.toggleTableLoader();
     const previousPage: IPage = {
       page: this.data.page - 1,
       size: this.data.size,

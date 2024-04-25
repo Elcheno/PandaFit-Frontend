@@ -1,4 +1,3 @@
-import { FormBuilder, type FormGroup, Validators } from '@angular/forms';
 import { TableUsersComponent } from '../../components/users/table-users/table-users.component';
 import { UserService } from '../../services/user/user.service';
 import { type IUser } from '../../model/interfaces/i-user';
@@ -37,6 +36,7 @@ export class UsersComponent implements OnInit {
 
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
+  public filteringString: string = '';
 
   constructor() {
     effect(() => {
@@ -66,7 +66,9 @@ export class UsersComponent implements OnInit {
           }; 
         });
       } else {
-        this.getAll({ page: 0, size: 10, sort: ['email'] });
+        this.userService.getAll({ page: 0, size: 10, sort: ['email'] }).subscribe((res) => {
+          this.data = res;
+        });
         this.getAllInstitutions({ page: 0, size: 100, sort: ['name'] });
       }
     });
@@ -78,9 +80,21 @@ export class UsersComponent implements OnInit {
    * @param page The page configuration.
    */
   public getAll (page: IPage): void {
-    this.userService.getAll(page).subscribe((res) => {
+    if (!this.filteringString) {
+      this.userService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader(); 
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.userService.getAllFilterByEmail(term, page).subscribe((res) => {
+      this.table.toggleTableLoader();
+      if (!res) return;
       this.data = res;
-      this.table.toggleTableLoader(); 
     });
   }
 
@@ -146,7 +160,17 @@ export class UsersComponent implements OnInit {
    * 
    * @param searchValue The value to search for.
    */
-  public search (searchValue: string): void {
+  public search (searchValue: string, page?: number): void {
+    this.table.toggleTableLoader();
     
+    if (searchValue) {
+      this.filteringString = searchValue;
+      this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['email'] }, searchValue);
+    
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ? page : 0, size: 10, sort: ['email'] });
+   
+    }
   }
 }
