@@ -35,6 +35,7 @@ export class UsersComponent implements OnInit {
 
   public institutionList!: IPageable<IInstitution>;
   public data!: IPageable<IUser>;
+  public filteringString: string = '';
 
   /**
    * Initializes the component.
@@ -73,9 +74,21 @@ export class UsersComponent implements OnInit {
    * @param page The page configuration.
    */
   public async getAll (page: IPage): Promise<void> {
-    this.userService.getAll(page).subscribe((res) => {
+    if (!this.filteringString) {
+      this.userService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader(); 
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.userService.getAllFilterByEmail(term, page).subscribe((res) => {
+      this.table.toggleTableLoader();
+      if (!res) return;
       this.data = res;
-      this.table.toggleTableLoader(); 
     });
   }
 
@@ -131,7 +144,17 @@ export class UsersComponent implements OnInit {
    * 
    * @param searchValue The value to search for.
    */
-  public search (searchValue: string): void {
+  public search (searchValue: string, page?: number): void {
+    this.table.toggleTableLoader();
     
+    if (searchValue) {
+      this.filteringString = searchValue;
+      this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['email'] }, searchValue);
+    
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ? page : 0, size: 10, sort: ['email'] });
+   
+    }
   }
 }

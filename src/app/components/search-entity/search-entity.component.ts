@@ -34,19 +34,17 @@ export class SearchEntityComponent {
     .pipe(debounceTime(500))
     .subscribe(() => {
       this.emit();
-    });
+    });   
   }
 
   /**
    * Submits the search query.
    */
   public submit (): void {
-    //if (this.form.invalid) return;
-    // this.onSearch.emit(this.form.value.search);
     this.inputBufferSubject.next('');
   }
 
   public emit (): void {
-    this.onSearch.emit(this.form.value.search);
+    this.onSearch.emit(this.form.value.search ?? '');
   }
 }

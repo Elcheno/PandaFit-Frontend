@@ -35,6 +35,8 @@ export class InputsComponent {
   /** Holds the data for inputs */
   public data!: IPageable<IInputData>;
 
+  private filteringString: string = '';
+
   /** Initializes the component */
   public async ngOnInit (): Promise<void> {
     this.inputService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
@@ -47,7 +49,20 @@ export class InputsComponent {
    * @param page The page object
    */
   public async getAll (page: IPage): Promise<void> {
-    this.inputService.getAll(page).subscribe((res) => {
+    if (!this.filteringString) {
+      this.inputService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader(); 
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering(page: IPage, term: string) {
+    this.inputService.getAllFilteringByName(page, term).subscribe((res) => {
+      this.table.toggleTableLoader();       
+      if (!res) return;
       this.data = res;
     });
   }
@@ -130,7 +145,15 @@ export class InputsComponent {
    * Performs search
    * @param value The search value
    */
-  public search (value: string): void {
-    
+  public search (term: string): void {
+    this.table.toggleTableLoader();
+
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: 0, size: 10, sort: ['name'] }, term);
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }
   }
 }

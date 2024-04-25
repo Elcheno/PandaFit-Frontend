@@ -16,7 +16,6 @@ import { ModalConfirmService } from '../../services/modal/modal-confirm.service'
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
-import { FormActiveComponent } from '../../components/modals/form-active/form-active.component';
 
 /** Component for managing school years */
 @Component({
@@ -57,12 +56,18 @@ export class SchoolYearComponent {
   /** Holds the institution ID */
   private institutionId!: string;
 
+  private filteringString: string = '';
+
   /** Initializes the component and form */
   constructor(private readonly fb: FormBuilder) {
     this.router.queryParams.subscribe((params) => {
       this.institutionId = params['id'] ?? '';
       if (this.institutionId) {
-        this.loadTable();
+        this.getAll({ 
+          page: this.pageable.page, 
+          size: this.pageable.size, 
+          sort: this.pageable.sort 
+        } as IPage, );
       }
     })
     this.form = this.fb.group({
@@ -82,25 +87,22 @@ export class SchoolYearComponent {
     content: []
   };
 
-  /** 
-   * Initializes the component 
-   */
-  public ngOnInit(): void {
-    this.loadTable();
+  public getAll (page: IPage): void {
+    if (!this.filteringString) {
+      this.schoolYearService.getAllByInstitution(page ,this.institutionId).subscribe((res) => {
+        if (!res) return;
+        this.data = res;
+      });
+    } else {
+      this.getAllFiltering (page, this.filteringString);
+    }
   }
 
-  /** 
-   * Loads the table data 
-   */
-  public loadTable(): void {
-    this.schoolYearService.getAllByInstitution(
-      { 
-        page: this.pageable.page, 
-        size: this.pageable.size, 
-        sort: this.pageable.sort 
-      } as IPage, 
-    this.institutionId
-    ).subscribe((res) => {
+  public getAllFiltering (page: IPage, term: string) {
+    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {
+      console.log(res);
+      
+      if (!res) return;
       this.data = res;
     });
   }
@@ -160,11 +162,14 @@ export class SchoolYearComponent {
    * @param searchValue The value to search for.
    * @returns A promise that resolves when the search is completed.
    */
-  public async search (searchValue: string): Promise <void> {
-    return await new Promise((resolve, _reject) => {
-      
-      resolve();
-    });
+  public search (searchValue: string, page?: number): void {
+    // if (searchValue) {
+    //   this.filteringString = searchValue;
+    //   this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, searchValue);
+    // } else {
+    //   this.filteringString = '';
+    //   this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+    // }
   }
 
   /**

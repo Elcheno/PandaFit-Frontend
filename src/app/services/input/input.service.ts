@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { Observable, map, take } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 
 
@@ -76,16 +76,6 @@ export class InputService {
     this._mockData = value;
   }
 
-  // addInput(input:IInputData){
-  //   if(this.searchInput(input.id)){
-  //     return
-  //   }
-  //   this._mockData.push(input)
-  // }
-  // removeInput(id:number){
-  //   this._mockData=this._mockData.filter(input=>input.id!==id)
-  // }
-
   /**
    * Searches for an input data by its ID.
    * @param id - The ID of the input data to search for.
@@ -109,7 +99,7 @@ export class InputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IPageable<IInputData>>(`${environment.api.url}${environment.api.form}${environment.api.input}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IInputData>>(`${env.api.url}${env.api.form}${env.api.input}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IInputData> = {
@@ -126,6 +116,32 @@ export class InputService {
       );
   }
 
+  public getAllFilteringByName(pageParams: IPage, name: string): Observable<IPageable<IInputData>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;    
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the name parameter for filtering
+    };
+    
+    return this.http.get<IPageable<IInputData>>(`${env.api.url}${env.api.form}/page${env.api.input}/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    .pipe(
+      map((res: any) => {
+        const response: IPageable<IInputData> = {
+          page: res['number'],
+          size: res['size'],
+          sort: pageParams?.sort ?? ['name'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'].map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
   /**
    * Retrieves an input data by its ID.
    * @param id - The ID of the input data to retrieve.
@@ -135,7 +151,7 @@ export class InputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}/${id}`, { headers: { Authorization: token ?? "" } })
+    return this.http.get<IInputData>(`${env.api.url}${env.api.form}${env.api.input}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};
@@ -165,7 +181,7 @@ export class InputService {
       userOwnerId: sessionData.id
     };
 
-    return this.http.post<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
+    return this.http.post<IInputData>(`${env.api.url}${env.api.form}${env.api.input}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};
@@ -184,7 +200,7 @@ export class InputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.delete<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, { body: data, headers: { Authorization: token ?? "" } })
+    return this.http.delete<IInputData>(`${env.api.url}${env.api.form}${env.api.input}`, { body: data, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};
@@ -203,7 +219,7 @@ export class InputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.put<IInputData>(`${environment.api.url}${environment.api.form}${environment.api.input}`, data, { headers: { Authorization: token ?? "" } })
+    return this.http.put<IInputData>(`${env.api.url}${env.api.form}${env.api.input}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IInputData = { ...res , type: IInputType[res.type].toString()};

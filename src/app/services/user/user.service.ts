@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { type IPage } from '../../model/interfaces/i-page';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
-import { type IInstitution } from '../../model/interfaces/i-institution';
 import { ITypeRole } from '../../model/type/i-type-role';
-import { environment } from '../../../environments/environment.development';
-import { Observable, map, take } from 'rxjs';
+import { environment as env } from '../../../environments/environment.development';
+import { Observable, catchError, map, take, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { ToastService } from '../modal/toast.service';
 
 /**
  * Service for managing user-related operations.
@@ -18,6 +18,7 @@ import { AuthService } from '../auth/auth.service';
 export class UserService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   /**
    * Fetches mock user data.
@@ -143,7 +144,7 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}${env.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IUser> = {
@@ -160,6 +161,40 @@ export class UserService {
       );
   }
 
+  public getAllFilterByEmail (email: string, pageParams?: IPage): Observable<IPageable<IUser>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      email, // Add the email parameter for filtering
+    };
+    
+    return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}${env.api.users}/page/email`, { 
+      params: queryParams as any, 
+      headers: { Authorization: token ?? "" },
+    })  
+    .pipe(
+      // catchError((error: HttpErrorResponse) => {
+      //   const errorMessage = `Error al cargar los registros. ${error.message}`;
+      //   this.toastService.showToast('Error al cargar los registros', 'error');
+      //   return throwError(() => errorMessage);
+      // }),  
+      map((res: any) => {
+        const response: IPageable<IUser> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? ['email'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
   /**
    * Fetches all users belonging to a specific institution.
    * @param institutionId - ID of the institution.
@@ -170,7 +205,7 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IPageable<IUser>>(`${environment.api.url}${environment.api.institution}/${institutionId}${environment.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+    return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}/${institutionId}${env.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IUser> = {
@@ -196,7 +231,7 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.get<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}/${id}`, { headers: { Authorization: token ?? "" } })
+    return this.http.get<IUser>(`${env.api.url}${env.api.institution}${env.api.users}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = {
@@ -227,7 +262,7 @@ export class UserService {
       institutionId: user.institutionId
     };
 
-    return this.http.post<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, data, { headers: { Authorization: token ?? "" } })
+    return this.http.post<IUser>(`${env.api.url}${env.api.institution}${env.api.users}`, data, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = { ...res };
@@ -246,7 +281,7 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.delete<boolean>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, { body: data, headers: { Authorization: token ?? "" } })
+    return this.http.delete<boolean>(`${env.api.url}${env.api.institution}${env.api.users}`, { body: data, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: boolean) => {
           return res;
@@ -269,7 +304,7 @@ export class UserService {
       email: data.email,
       password: data.password,
     }
-    return this.http.put<IUser>(`${environment.api.url}${environment.api.institution}${environment.api.users}`, dataUpdate, { headers: { Authorization: token ?? "" } })
+    return this.http.put<IUser>(`${env.api.url}${env.api.institution}${env.api.users}`, dataUpdate, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IUser = { ...res };
