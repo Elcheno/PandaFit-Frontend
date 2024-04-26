@@ -4,9 +4,10 @@ import { environment as env } from '../../../environments/environment.developmen
 import { type IPage } from '../../model/interfaces/i-page';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
 import { AuthService } from '../auth/auth.service';
-import { Observable, catchError, map, take, throwError } from 'rxjs';
+import { Observable, catchError, map, of, take, throwError } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { ToastService } from '../modal/toast.service';
+import { StoreService } from '../store/store.service';
 
 /**
  * Service for handling school year data.
@@ -18,6 +19,7 @@ export class SchoolyearService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Retrieves mock data for all school years.
@@ -48,9 +50,12 @@ export class SchoolyearService {
    * @returns An observable of type `IPageable<ISchoolYear>` containing the paginated list of school years.
    */
   public getAllByInstitution(pageParams: IPage, id: any): Observable<IPageable<ISchoolYear>> {
+    const cacheData = this.storeService.schoolYearStore.getData();
+    if (!(this.storeService.schoolYearStore.rehidrate() || this.storeService.schoolYearStore.reload()) && cacheData && cacheData.institutionId === id) return of(cacheData.data);
+    
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
+    
     return this.http.get<IPageable<ISchoolYear>>(env.api.url + env.api.institution + "/" + id + env.api.schoolyear +'/page', { params: pageParams as any, headers: { Authorization: token ?? "" } })  
     .pipe(
         catchError((error) => {
@@ -59,7 +64,9 @@ export class SchoolyearService {
           return throwError(() => errorMessage);
         }),
         map((res: any) => {
-          return res as IPageable<ISchoolYear>;
+          const response = res as IPageable<ISchoolYear>;
+          this.storeService.schoolYearStore.setData(response, id);
+          return response;
         }),
         take(1)
       );

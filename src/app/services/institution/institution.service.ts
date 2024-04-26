@@ -139,15 +139,11 @@ export class InstitutionService {
    * @returns Observable of paginated institution data.
    */
   public getAll (pageParams?: IPage): Observable<IPageable<IInstitution>> {
-    console.log(this.storeService.institutionStore.rehidrate(), this.storeService.institutionStore.reload(), this.storeService.institutionStore.data());
-
     const cacheData = this.storeService.institutionStore.getData();
     if (!(this.storeService.institutionStore.rehidrate() || this.storeService.institutionStore.reload()) && cacheData) return of(cacheData);
 
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
-    console.log('fetching...');
 
     return this.http.get<IPageable<IInstitution>>(`${env.api.url}${env.api.institution}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
@@ -165,9 +161,7 @@ export class InstitutionService {
             totalPages: res['totalPages'],
             content: res['content']
           };
-          this.storeService.institutionStore.setData(response);
-          console.log('fetching completado');
-          
+          this.storeService.institutionStore.setData(response);          
           return response;
         }),
         take(1)
