@@ -22,6 +22,7 @@ import { Router, RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
 import { ToastService } from '../../services/modal/toast.service';
+import { StoreService } from '../../services/store/store.service';
 
 
 /** Component for creating a new form */
@@ -46,6 +47,7 @@ export class CreateFormComponent {
   private readonly router = inject(Router);
   public outputsRelated = signal<any>({state:true, value:[]});
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   totalInputsPages: number = 0; 
   currentPage: number = 0; // Página actual de elementos cargados
@@ -146,6 +148,7 @@ export class CreateFormComponent {
     // console.log(form)
     await lastValueFrom(this.formService.create(form))
     this.formGroup.reset();
+    this.storeService.formStore.revalidate();
     this.toastService.showToast('Formulario creado', 'success');
     await this.router.navigateByUrl('formulary/forms')
   }
