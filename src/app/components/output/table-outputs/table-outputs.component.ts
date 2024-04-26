@@ -7,6 +7,7 @@ import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { StoreService } from '../../../services/store/store.service';
 
 /**
  * Component for displaying outputs in a table format.
@@ -47,6 +48,7 @@ export class TableOutputsComponent {
   @Output() public onChangePage = new EventEmitter<IPage>();
 
   private readonly confirmService = inject(ModalConfirmService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Dropdown data for output actions.
@@ -96,6 +98,7 @@ export class TableOutputsComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.outputStore.revalidate();
     this.onChangePage.emit(nextPage);
   }
 
@@ -108,6 +111,7 @@ export class TableOutputsComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.outputStore.revalidate();
     this.onChangePage.emit(previousPage);
   }
 

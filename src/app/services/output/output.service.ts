@@ -2,10 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { IOutputData } from '../../model/interfaces/i-output-data';
 import { HttpClient } from '@angular/common/http';
 import { IPage } from '../../model/interfaces/i-page';
-import { Observable, lastValueFrom, map, take } from 'rxjs';
+import { Observable, lastValueFrom, map, of, take } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
+import { StoreService } from '../store/store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ import { AuthService } from '../auth/auth.service';
 export class OutputService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly storeService = inject(StoreService);
+
   private allOutputs: IOutputData[] = [];
 
   private _mockData: IOutputData[] = [
@@ -72,6 +75,9 @@ export class OutputService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+    const cacheData = this.storeService.outputStore.getData();
+    if (!(this.storeService.outputStore.rehidrate() || this.storeService.outputStore.reload()) && cacheData) return of(cacheData);
+
     return this.http.get<IPageable<IOutputData>>(`${env.api.url}${env.api.form}${env.api.output}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
@@ -83,6 +89,7 @@ export class OutputService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.outputStore.setData(response);
           return response;
         }),
         take(1)
