@@ -5,9 +5,10 @@ import { type IPageable } from '../../model/interfaces/i-pageable';
 import { type IUser } from '../../model/interfaces/i-user';
 import { ITypeRole } from '../../model/type/i-type-role';
 import { environment as env } from '../../../environments/environment.development';
-import { Observable, catchError, map, take, throwError } from 'rxjs';
+import { Observable, catchError, map, take, throwError, of } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ToastService } from '../modal/toast.service';
+import { StoreService } from '../store/store.service';
 
 /**
  * Service for managing user-related operations.
@@ -18,6 +19,7 @@ import { ToastService } from '../modal/toast.service';
 export class UserService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly storeService = inject(StoreService);
   private readonly toastService = inject(ToastService);
 
   /**
@@ -144,6 +146,9 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+    const cacheData = this.storeService.userStore.getData();
+    if (!(this.storeService.userStore.rehidrate() || this.storeService.userStore.reload()) && cacheData) return of(cacheData);
+
     return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}${env.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
@@ -155,6 +160,7 @@ export class UserService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.userStore.setData(response);
           return response;
         }),
         take(1)
@@ -205,6 +211,9 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+    const cacheData = this.storeService.userInstitutionStore.getData();
+    if (!(this.storeService.userInstitutionStore.rehidrate() || this.storeService.userInstitutionStore.reload()) && cacheData && cacheData.institutionId === institutionId) return of(cacheData.data);
+
     return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}/${institutionId}${env.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
@@ -216,6 +225,7 @@ export class UserService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.userInstitutionStore.setData(response, institutionId);
           return response;
         }),
         take(1)

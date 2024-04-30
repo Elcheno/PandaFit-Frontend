@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SchoolyearService } from '../../services/schoolyear/schoolyear.service';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -16,6 +16,7 @@ import { ModalConfirmService } from '../../services/modal/modal-confirm.service'
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
+import { StoreService } from '../../services/store/store.service';
 
 /** Component for managing school years */
 @Component({
@@ -25,7 +26,7 @@ import { ToastService } from '../../services/modal/toast.service';
   templateUrl: './school-year.component.html',
   styleUrl: './school-year.component.scss'
 })
-export class SchoolYearComponent {
+export class SchoolYearComponent implements OnInit {
 
   /** Form group for school year */
   public form!: FormGroup;
@@ -48,6 +49,10 @@ export class SchoolYearComponent {
   /** Instance of Router for navigation */
   private readonly routerService = inject(Router);
 
+  private readonly fb = inject(FormBuilder);
+
+  private readonly storeService = inject(StoreService);
+
   // public data: ISchoolYear[] = [];
 
   /** Holds the data for school years */
@@ -59,7 +64,17 @@ export class SchoolYearComponent {
   private filteringString: string = '';
 
   /** Initializes the component and form */
-  constructor(private readonly fb: FormBuilder) {
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.institutionStore.reload;
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    });
+    this.form = this.fb.group({
+      name: ''
+    });
+  }
+
+  public ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.institutionId = params['id'] ?? '';
       if (this.institutionId) {
@@ -69,9 +84,6 @@ export class SchoolYearComponent {
           sort: this.pageable.sort 
         } as IPage, );
       }
-    })
-    this.form = this.fb.group({
-      name: ''
     });
   }
 
@@ -117,6 +129,7 @@ export class SchoolYearComponent {
       this.schoolYearService.create(schoolYear, this.institutionId).subscribe((res: ISchoolYear) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
+        this.storeService.institutionStore.revalidate();
         this.toastService.showToast('Curso creado', 'success');
       });
     });
@@ -135,6 +148,7 @@ export class SchoolYearComponent {
       if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== schoolYear.id);
       this.data.totalElements -= 1;
+      this.storeService.institutionStore.revalidate();
       this.toastService.showToast('Curso eliminado', 'success');
     })
   }
@@ -151,6 +165,7 @@ export class SchoolYearComponent {
       
       this.schoolYearService.update(res).subscribe((response: ISchoolYear) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+        this.storeService.institutionStore.revalidate();
         this.toastService.showToast('Curso actualizado', 'success');
       });
     });

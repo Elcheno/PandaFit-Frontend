@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
@@ -10,6 +10,7 @@ import { RouterLink, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
 import { OutputInfoComponent } from '../../components/modals/output/output-info/output-info.component';
 import { ModalService } from '../../services/modal/modal.service';
+import { StoreService } from '../../services/store/store.service';
 
 /** Component for managing outputs */
 @Component({
@@ -30,10 +31,19 @@ export class OutputComponent implements OnInit {
   /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  private readonly storeService = inject(StoreService);
+
   /** Holds the data for outputs */
   public data!: IPageable<IOutputData>;
 
   private filteringString: string = '';
+
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.outputStore.reload();
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: false, allowSignalWrites: true });
+  }
 
   /** Initializes the component */
   ngOnInit (): void {
@@ -119,6 +129,7 @@ export class OutputComponent implements OnInit {
     this.outputService.delete(output).subscribe((res: IOutputData) => {
       this.data.content = this.data.content.filter((item) => item.id !== res.id);
       this.data.totalElements -= 1;
+      this.storeService.outputStore.revalidate();
       this.toastService.showToast('Respuesta eliminada', 'success');
     })
   }

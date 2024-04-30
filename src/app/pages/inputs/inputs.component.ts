@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject, input } from '@angular/core';
+import { Component, ViewChild, effect, inject, input } from '@angular/core';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { TableInputComponent } from '../../components/inputs/table-input/table-input.component';
 import { InputService } from '../../services/input/input.service';
@@ -11,6 +11,7 @@ import { UpdateInputModalComponent } from '../../components/modals/input/update-
 import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
 import { ToastService } from '../../services/modal/toast.service';
 import { ButtonComponent } from '../../components/button/button.component';
+import { StoreService } from '../../services/store/store.service';
 
 /** Component for managing inputs */
 @Component({
@@ -32,10 +33,18 @@ export class InputsComponent {
   /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  private readonly storeService = inject(StoreService);
+
   /** Holds the data for inputs */
   public data!: IPageable<IInputData>;
-
   private filteringString: string = '';
+
+  constructor() {
+    effect(() => {
+      const userReload = this.storeService.userStore.reload();
+      if (userReload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: false, allowSignalWrites: true });
+  }
 
   /** Initializes the component */
   public async ngOnInit (): Promise<void> {
@@ -101,7 +110,8 @@ export class InputsComponent {
 
       this.inputService.create(input).subscribe((res: IInputData) => { 
         this.data.content.unshift(res); 
-        this.data.totalElements++
+        this.data.totalElements++;
+        this.storeService.inputStore.revalidate();
         this.toastService.showToast('Campo creado', 'success');
       });
     });
@@ -121,6 +131,7 @@ export class InputsComponent {
       if (res) {
         this.inputService.update(res).subscribe((response: IInputData) => {
           this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
+          this.storeService.inputStore.revalidate();
           this.toastService.showToast('Campo actualizado', 'success');
         });
       }
@@ -137,6 +148,7 @@ export class InputsComponent {
     this.inputService.delete(input).subscribe((res: IInputData) => {
       this.data.content = this.data.content.filter((item) => item.id !== input.id);
       this.data.totalElements -= 1;
+      this.storeService.inputStore.revalidate();
       this.toastService.showToast('Campo eliminado', 'success');
     })
   }

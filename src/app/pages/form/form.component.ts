@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -8,6 +8,7 @@ import { ToastService } from '../../services/modal/toast.service';
 import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
 import { TableFormComponent } from '../../components/form/table-form/table-form.component';
+import { StoreService } from '../../services/store/store.service';
 
 @Component({
   selector: 'app-form',
@@ -21,9 +22,17 @@ export class FormComponent {
   
   private readonly formService = inject(FormService);
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   public data!: IPageable<IFormData>;
   private filteringString: string = '';
+
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.formStore.reload();
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: true, allowSignalWrites: true });
+  }
 
   ngOnInit (): void {
     this.formService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
@@ -66,6 +75,7 @@ export class FormComponent {
     this.formService.delete(form).subscribe((res: IFormData) => {
       this.data.content = this.data.content.filter((item) => item.id !== form.id);
       this.data.totalElements -= 1;
+      this.storeService.formStore.revalidate();
       this.toastService.showToast('Formulario eliminado', 'success');
     })
   }

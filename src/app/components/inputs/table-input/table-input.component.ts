@@ -8,6 +8,7 @@ import { IPage } from '../../../model/interfaces/i-page';
 import { ModalConfirmService } from '../../../services/modal/modal-confirm.service';
 import { Router } from '@angular/router';
 import { IDropdownData } from '../../../model/interfaces/i-dropdown';
+import { StoreService } from '../../../services/store/store.service';
 
 /**
  * Component representing a table for input data.
@@ -31,6 +32,7 @@ export class TableInputComponent {
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Dropdown data for input rows.
@@ -79,6 +81,7 @@ export class TableInputComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.inputStore.revalidate();
     this.onChangePage.emit(nextPage);
   }
 
@@ -91,6 +94,7 @@ export class TableInputComponent {
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.inputStore.revalidate();
     this.onChangePage.emit(previousPage);
   }
 

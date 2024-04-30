@@ -9,6 +9,7 @@ import { ModalService } from '../../../services/modal/modal.service';
 import { IInputData } from '../../../model/interfaces/i-input-data';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/modal/toast.service';
+import { StoreService } from '../../../services/store/store.service';
 
 @Component({
   selector: 'app-create-output',
@@ -23,6 +24,7 @@ export class CreateOutputComponent {
   private readonly modalService = inject(ModalService);
   private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   public form!: FormGroup;
 
@@ -126,6 +128,7 @@ export class CreateOutputComponent {
     this.outputService.create(output).subscribe(
       (res: IOutputData) => {
         this.form.reset();
+        this.storeService.outputStore.revalidate();
         this.toastService.showToast('Respuesta guardada', 'success');
         this.router.navigateByUrl('formulary/outputs');
       }

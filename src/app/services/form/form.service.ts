@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { IFormData } from '../../model/interfaces/i-form-data';
-import { Observable, catchError, map, take } from 'rxjs';
+import { Observable, catchError, map, of, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { IPage } from '../../model/interfaces/i-page';
 import { IPageable } from '../../model/interfaces/i-pageable';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
+import { StoreService } from '../store/store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class FormService {
 
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
+  private readonly storeService = inject(StoreService);
 
   private _mockData:IFormData[]=[
     {
@@ -36,7 +38,13 @@ export class FormService {
   }
 
   public getAll (pageParams?: IPage): Observable<IPageable<IFormData>> {
-    return this.http.get<IPageable<IFormData>>(`${env.api.url}${env.api.form}${env.api.formulary}/page`, { params: pageParams as any }) //cambiar URL
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const cacheData = this.storeService.formStore.getData();
+    if (!(this.storeService.formStore.rehidrate() || this.storeService.formStore.reload()) && cacheData) return of(cacheData);
+    
+    return this.http.get<IPageable<IFormData>>(`${env.api.url}${env.api.form}${env.api.formulary}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
           const response: IPageable<IFormData> = {
@@ -47,6 +55,7 @@ export class FormService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.formStore.setData(response);
           return response;
         }),
         take(1)

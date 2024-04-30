@@ -4,9 +4,10 @@ import { IInputType } from '../../model/interfaces/i-input-type';
 import { HttpClient } from '@angular/common/http';
 import { type IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
-import { Observable, map, take } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
+import { StoreService } from '../store/store.service';
 
 
 /**
@@ -58,7 +59,6 @@ export class InputService {
       unit: ''
     },
   ]
-  constructor() { }
 
   /**
    * Getter for mock data.
@@ -89,6 +89,7 @@ export class InputService {
 
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Retrieves all input data paginated.
@@ -98,6 +99,10 @@ export class InputService {
   public getAll(pageParams?: IPage): Observable<IPageable<IInputData>> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
+
+
+    const cacheData = this.storeService.inputStore.getData();
+    if (!(this.storeService.inputStore.rehidrate() || this.storeService.inputStore.reload()) && cacheData) return of(cacheData);
 
     return this.http.get<IPageable<IInputData>>(`${env.api.url}${env.api.form}${env.api.input}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
@@ -110,6 +115,7 @@ export class InputService {
             totalPages: res['totalPages'],
             content: res['content'].map((input: IInputData) => ({ ...input , type: IInputType[input.type].toString()}))
           };
+          this.storeService.inputStore.setData(response);
           return response;
         }),
         take(1)
