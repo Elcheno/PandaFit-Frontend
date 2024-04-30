@@ -115,7 +115,7 @@ export class UsersComponent implements OnInit {
       this.userService.create(user).subscribe((res: IUser) => {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
-        this.storeService.userStore.revalidate();
+        this.revalidate();
         this.toastService.showToast('Usuario creado', 'success');
       });
     });
@@ -133,7 +133,7 @@ export class UsersComponent implements OnInit {
       if (!res) return;
       this.data.content = this.data.content.filter((item) => item.id !== user.id);
       this.data.totalElements -= 1;
-      this.storeService.userStore.revalidate();
+      this.revalidate();
       this.toastService.showToast('Usuario eliminado', 'success');
     })
   }
@@ -149,7 +149,7 @@ export class UsersComponent implements OnInit {
       
       this.userService.update(res).subscribe((response: IUser) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
-        this.storeService.userStore.revalidate();
+        this.revalidate();
         this.toastService.showToast('Usuario actualizado', 'success');
       });
     });
@@ -172,5 +172,10 @@ export class UsersComponent implements OnInit {
       this.getAll({ page: page ? page : 0, size: 10, sort: ['email'] });
    
     }
+  }
+
+  private revalidate() {
+    this.storeService.userStore.revalidate();
+    this.storeService.userInstitutionStore.revalidate();
   }
 }

@@ -87,6 +87,7 @@ export class TableUsersComponent {
       sort: this.data.sort 
     };
     this.storeService.userStore.revalidate();
+    this.storeService.userInstitutionStore.revalidate();
     this.onChangePage.emit(page);
   }
 
@@ -102,6 +103,7 @@ export class TableUsersComponent {
       sort: this.data.sort 
     };
     this.storeService.userStore.revalidate();
+    this.storeService.userInstitutionStore.revalidate();
     this.onChangePage.emit(page);
   }
 

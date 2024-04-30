@@ -211,6 +211,9 @@ export class UserService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
+    const cacheData = this.storeService.userInstitutionStore.getData();
+    if (!(this.storeService.userInstitutionStore.rehidrate() || this.storeService.userInstitutionStore.reload()) && cacheData && cacheData.institutionId === institutionId) return of(cacheData.data);
+
     return this.http.get<IPageable<IUser>>(`${env.api.url}${env.api.institution}/${institutionId}${env.api.users}/page`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
@@ -222,6 +225,7 @@ export class UserService {
             totalPages: res['totalPages'],
             content: res['content']
           };
+          this.storeService.userInstitutionStore.setData(response, institutionId);
           return response;
         }),
         take(1)
