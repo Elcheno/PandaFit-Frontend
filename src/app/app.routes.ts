@@ -11,10 +11,13 @@ import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guards/auth-guard.guard';
 import { roleGuard } from './guards/role.guard';
 import { loginGuard } from './guards/login.guard';
-
-
+import { LandingComponent } from './pages/landing/landing.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingComponent
+  },
   {
     path: 'institutions',
     component: InstitutionsComponent,
@@ -111,11 +114,6 @@ export const routes: Routes = [
   {
     path: 'active/success/:id',
     loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dynamic-active-success/formulary-dynamic-active-success.component').then(m => m.FormularyDynamicActiveSuccessComponent)
-  },
-  {
-    path: '',
-    redirectTo: 'institutions',
-    pathMatch: 'full'
   },
   {
     path: '**',
