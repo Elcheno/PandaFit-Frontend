@@ -5,6 +5,8 @@ import { authGuard } from './guards/auth-guard.guard';
 import { roleGuard } from './guards/role.guard';
 import { loginGuard } from './guards/login.guard';
 import { LandingComponent } from './pages/landing/landing.component';
+import { AnswersInstitutionsComponent } from './answers-institutions/answers-institutions.component';
+import { AnswersSchoolYearComponent } from './answers-school-year/answers-school-year.component';
 
 export const routes: Routes = [
   {
@@ -111,6 +113,36 @@ export const routes: Routes = [
       }
     ]
   },
+
+
+
+  {
+    path: 'answers',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'institutions',
+        component: AnswersInstitutionsComponent,
+        canActivate: [authGuard],
+        children: [ 
+          {
+            path: 'schoolyear',
+            component: AnswersSchoolYearComponent,
+            canActivate: [authGuard]
+          }
+        ]
+      },
+      {
+        path: 'schoolyears',
+        component: AnswersSchoolYearComponent,
+        canActivate: [authGuard]
+      }
+    ]
+  }
+  ,
+
+
+
   {
     path: 'active/:id',
     loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dinamic-active.component').then(m => m.FormularyDinamicActiveComponent)

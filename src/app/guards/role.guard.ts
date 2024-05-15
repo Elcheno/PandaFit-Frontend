@@ -18,6 +18,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   if (sessionData && roles) {
     roles.map((role) => {
       if (role['authority'] === 'ROLE_ADMIN') response = true;
+      //if (role['authority'] === 'ROLE_USER') response = true;
     });
   }
   

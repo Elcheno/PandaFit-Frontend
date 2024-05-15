@@ -47,12 +47,26 @@ export class DropdownComponent implements OnInit, OnChanges {
       icon: this.dropdownData.button.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(this.dropdownData.button.icon) : ''
     };
 
-    this.rows = this.dropdownData.rows.map(row => {
+    /*this.rows = this.dropdownData.rows.map(row => {
       return {
         ...row,
         icon: row.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(row.icon) : ''
       }
-    });
+    });*/
+
+    if (this.dropdownData.rows) {
+      this.rows = this.dropdownData.rows.map(row => {
+        return {
+          ...row,
+          icon: row.icon !== undefined ? this.sanitizer.bypassSecurityTrustHtml(row.icon) : ''
+        }
+      });
+    } else {
+      // Manejar el caso en que dropdownData.rows no esté definido
+      //console.error('Error: dropdownData.rows no está definido.');
+      // Puedes decidir cómo manejar este caso, por ejemplo, asignar un valor por defecto a this.rows o dejarlo vacío
+      this.rows = [];
+    }
   }
 
   /**
