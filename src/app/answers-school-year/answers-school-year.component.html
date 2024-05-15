@@ -1,0 +1,16 @@
+<div class="w-full mx-auto lg:w-2/3">
+    <h1 class="text-3xl font-bold mb-7 text-black-primary">{{ institutionName }}</h1>
+    <h2 class="text-3xl font-bold mb-7 text-black-primary">Cursos</h2>
+    <div class="flex items-center my-5">
+        <!-- Search Component -->
+        <!--<app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>-->
+
+        <!-- Create Modal Component Trigger -->
+    </div>
+
+    <!-- Table Institutions Component -->
+    <app-table-school-year-answers
+        [data]="data"
+        (onChangePage)="getAll($event)"
+    ></app-table-school-year-answers>
+</div>
