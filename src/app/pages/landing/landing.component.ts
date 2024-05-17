@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 
 @Component({
@@ -9,6 +10,17 @@ import { ButtonComponent } from '../../components/button/button.component';
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
+
+  private readonly authService = inject(AuthService);
+
+  public isLogged: boolean = false;
+
+  constructor() { }
+
+  ngOnInit(): void {
+    const sessionData = this.authService.sessionData();
+    this.isLogged = sessionData?.token ? true : false;
+  }
 
 }
