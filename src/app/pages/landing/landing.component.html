@@ -2,9 +2,21 @@
 <nav class="fixed top-0 left-0 z-40 bg-[#e5e5e5] w-full">
   <div class="w-full h-full flex flex-row-reverse justify-between items-center px-3 py-2">
     @if(!this.isLogged) {
-      <buttonComp text="Iniciar Sesión" buttonStyle="h-full" class="justify-self-end"></buttonComp>
+      <a routerLink="/login">
+        <buttonComp 
+          text="Iniciar Sesión" 
+          buttonStyle="h-full" 
+          class="justify-self-end"
+        ></buttonComp>
+      </a>
     } @else {
-      <buttonComp text="Dashboard" buttonStyle="h-full" class="justify-self-end"></buttonComp>
+      <a routerLink="/dashboard">
+        <buttonComp 
+          text="Dashboard" 
+          buttonStyle="h-full" 
+          class="justify-self-end"
+        ></buttonComp>
+      </a>
     }
     <div>
       <span>
@@ -26,7 +38,7 @@
         <h2 class="text-xl 2xl:text-2xl font-bold mb-3 text-black-primary text-center knockout">El socio perfecto para el éxito estudiantil y la salud</h2>
       </div>
     
-      <img src="/assets/mockup-landing.webp" class="mx-auto drop panda-mockup-img w-dvw md:w-4/5 xl:w-2/4" />
+      <img src="/assets/mockup-landing.webp" width="100px" height="100px" class="mx-auto drop panda-mockup-img w-dvw md:w-4/5 xl:w-2/4" />
 
       <div class=" w-full flex flex-col lg:flex-row gap-4 items-center justify-center mt-2 md:mt-10 ">
         <section class="md:h-24 w-full rounded-xl flex justify-start items-center p-2 md:p-4 gap-2 bg-[#e5e5e5]">
