@@ -1,108 +1,115 @@
 import { type Routes } from '@angular/router';
-import { InstitutionsComponent } from './pages/institutions/institutions.component';
-import { UsersComponent } from './pages/users/users.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { InputsComponent } from './pages/inputs/inputs.component';
-import { FormComponent } from './pages/form/form.component';
-import { OutputComponent } from './pages/output/output.component';
-import { FormularyComponent } from './pages/formulary/formulary.component';
 import { CreateOutputComponent } from './components/output/create-output/create-output.component';
-import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guards/auth-guard.guard';
 import { roleGuard } from './guards/role.guard';
 import { loginGuard } from './guards/login.guard';
-
-
+import { LandingComponent } from './pages/landing/landing.component';
 
 export const routes: Routes = [
   {
-    path: 'institutions',
-    component: InstitutionsComponent,
-    canActivate: [authGuard, roleGuard]
+    path: '',
+    component: LandingComponent
   },
   {
-    path: 'institutions',
-    loadComponent: () => import('./pages/institutions/info-institution/info-institution.component').then(m => m.InfoInstitutionComponent),
-    canActivate: [authGuard, roleGuard],
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
+    canActivate: [loginGuard]
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
     children: [
       {
-        path: 'schoolyear',
-        loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
+        path: 'institutions',
+        loadComponent: () => import('./pages/institutions/institutions.component').then(m => m.InstitutionsComponent),
+        canActivate: [authGuard, roleGuard]
+      },
+      {
+        path: 'institutions',
+        loadComponent: () => import('./pages/institutions/info-institution/info-institution.component').then(m => m.InfoInstitutionComponent),
         canActivate: [authGuard, roleGuard],
+        children: [
+          {
+            path: 'schoolyear',
+            loadComponent: () => import('./pages/school-year/school-year.component').then(m => m.SchoolYearComponent),
+            canActivate: [authGuard, roleGuard],
+          },
+          {
+            path: 'users',
+            loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
+            canActivate: [authGuard, roleGuard]
+          }
+        ]
       },
       {
         path: 'users',
         loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
         canActivate: [authGuard, roleGuard]
-      }
-    ]
-  },
-  {
-    path: 'users',
-    component: UsersComponent,
-    canActivate: [authGuard, roleGuard]
-  },
-  {
-    path: 'form/input',
-    component: InputsComponent,
-    canActivate: [authGuard, roleGuard]
-  },
-  {
-    path: 'formulary',
-    component: FormularyComponent,
-    canActivate: [authGuard, roleGuard],
-    children: [
+      },
       {
-        path: 'inputs',
-        component: InputsComponent,
+        path: 'form/input',
+        loadComponent: () => import('./pages/inputs/inputs.component').then(m => m.InputsComponent),
         canActivate: [authGuard, roleGuard]
       },
       {
-        path: 'outputs',
-        component: OutputComponent,
+        path: 'formulary',
+        loadComponent: () => import('./pages/formulary/formulary.component').then(m => m.FormularyComponent),
+        canActivate: [authGuard, roleGuard],
+        children: [
+          {
+            path: 'inputs',
+            loadComponent: () => import('./pages/inputs/inputs.component').then(m => m.InputsComponent),
+            canActivate: [authGuard, roleGuard]
+          },
+          {
+            path: 'outputs',
+            loadComponent: () => import('./pages/output/output.component').then(m => m.OutputComponent),
+            canActivate: [authGuard, roleGuard]
+          },
+          {
+            path: 'forms',
+            loadComponent: () => import('./pages/form/form.component').then(m => m.FormComponent),
+            canActivate: [authGuard, roleGuard]
+          },
+          {
+            path: '',
+            redirectTo: 'inputs',
+            pathMatch: 'full'
+          }
+        ]
+      },
+      {
+        path: 'formulary/forms/create',
+        loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent),
         canActivate: [authGuard, roleGuard]
       },
       {
-        path: 'forms',
-        component: FormComponent,
+        path: 'formulary/forms/view/:formId',
+        loadComponent: () => import('./components/form/view-form/view-form.component').then(m => m.ViewFormComponent),
         canActivate: [authGuard, roleGuard]
+      },
+      {
+        path: 'formulary/outputs/create',
+        loadComponent: () => import('./components/output/create-output/create-output.component').then(m => m.CreateOutputComponent),
+        canActivate: [authGuard, roleGuard]
+      },
+      {
+        path: 'formactive',
+        loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
+        canActivate: [authGuard, roleGuard],
+      },
+      {
+        path: 'formactive/:id/responses',
+        loadComponent: () => import('./pages/form-act-responses/form-act-responses.component').then(m => m.FormActResponsesComponent),
+        canActivate: [authGuard],
       },
       {
         path: '',
-        redirectTo: 'inputs',
+        redirectTo: 'institutions',
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: 'formulary/forms/create',
-    loadComponent: () => import('./pages/create-form/create-form.component').then(m => m.CreateFormComponent),
-    canActivate: [authGuard, roleGuard]
-  },
-  {
-    path: 'formulary/forms/view/:formId',
-    loadComponent: () => import('./components/form/view-form/view-form.component').then(m => m.ViewFormComponent),
-    canActivate: [authGuard, roleGuard]
-  },
-  {
-    path: 'formulary/outputs/create',
-    component: CreateOutputComponent,
-    canActivate: [authGuard, roleGuard]
-  },
-  {
-    path: 'formactive',
-    loadComponent: () => import('./pages/form-act/form-act.component').then(m => m.FormActComponent),
-    canActivate: [authGuard, roleGuard],
-  },
-  {
-    path: 'formactive/:id/responses',
-    loadComponent: () => import('./pages/form-act-responses/form-act-responses.component').then(m => m.FormActResponsesComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [loginGuard]
   },
   {
     path: 'active/:id',
@@ -114,7 +121,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'institutions',
+    redirectTo: 'Landing',
     pathMatch: 'full'
   },
   {

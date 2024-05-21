@@ -1,0 +1,90 @@
+
+<nav class="fixed top-0 left-0 z-40 bg-[#e5e5e5] w-full">
+  <div class="w-full h-full flex flex-row-reverse justify-between items-center px-3 py-2">
+    @if(!this.isLogged) {
+      <a routerLink="/login">
+        <buttonComp 
+          text="Iniciar Sesión" 
+          buttonStyle="h-full" 
+          class="justify-self-end"
+        ></buttonComp>
+      </a>
+    } @else {
+      <a routerLink="/dashboard">
+        <buttonComp 
+          text="Dashboard" 
+          buttonStyle="h-full" 
+          class="justify-self-end"
+        ></buttonComp>
+      </a>
+    }
+    <div>
+      <span>
+        <img src="/assets/logo-recortado.webp" class="w-10 h-10 xl:w-12 xl:h-12" />
+      </span>
+    </div>
+  </div>
+
+  <div class="main bg-[#fafafa] snap-proximity snap-y overflow-y-scroll overflow-x-hidden h-dvh w-screen ">
+
+    <div class="snap-center h-screen overflow-hidden block flex flex-col align-center w-[90vw] xl:w-[75vw] m-auto">
+      <!-- <div class="w-full mx-auto d-flex flex-col justify-center items-center mb-[-70px] mt-10">
+        <h1 class="text-4xl 2xl:text-8xl font-bold mb-3 text-black-primary text-center">PandaFit</h1>
+        <h2 class="text-xl 2xl:text-2xl font-bold mb-3 text-black-primary text-center">El socio perfecto para el éxito estudiantil y la salud</h2>
+      </div> -->
+
+      <div class="w-full mx-auto d-flex flex-col justify-center items-center mb-[-70px] mt-10">
+        <h1 class="text-4xl 2xl:text-8xl font-bold mb-3 text-black-primary text-center knockout">PandaFit</h1>
+        <h2 class="text-xl 2xl:text-2xl font-bold mb-3 text-black-primary text-center knockout">El socio perfecto para el éxito estudiantil y la salud</h2>
+      </div>
+    
+      <img src="/assets/mockup-landing.webp" width="100px" height="100px" class="mx-auto drop panda-mockup-img w-dvw md:w-4/5 xl:w-2/4" />
+
+      <div class=" w-full flex flex-col lg:flex-row gap-4 items-center justify-center mt-2 md:mt-10 ">
+        <section class="md:h-24 w-full rounded-xl flex justify-start items-center p-2 md:p-4 gap-2 bg-[#e5e5e5]">
+          <div class="rounded-xl bg-green-light p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-ruler h-6 w-6 md:h-8 md:w-8 text-white"><path d="m15 5 4 4"/><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m2 22 5.5-1.5L21.17 6.83a2.82 2.82 0 0 0-4-4L3.5 16.5Z"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/></svg>
+          </div>
+  
+          <span class="md:text-xl text-black-primary ml-4 font-bold">Gestiona y personaliza</span>
+        </section>
+  
+        <section class="md:h-24 w-full rounded-xl flex justify-start items-center p-2 md:p-4 gap-2 bg-[#e5e5e5]">
+          <div class="rounded-xl bg-green-light p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen h-6 w-6 md:h-8 md:w-8 text-white"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
+          </div>
+  
+          <span class="md:text-xl text-black-primary ml-4 font-bold">Almacena y analiza</span>
+        </section>
+  
+        <section class="md:h-24 w-full rounded-xl flex justify-start items-center p-2 md:p-4 gap-2 bg-[#e5e5e5]">
+          <div class="rounded-xl bg-green-light p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cog h-6 w-6 md:h-8 md:w-8 text-white"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m11 13.73-4 6.93"/></svg>
+          </div>
+  
+          <span class="md:text-xl text-black-primary ml-4 font-bold">Rápido y sencillo</span>
+        </section>
+        
+      </div>
+    </div>  
+
+    <div class="snap-center h-dvh md:h-screen overflow-hidden flex flex-col md:grid md:grid-cols-2 md:grid-rows-1 w-[90vw] xl:w-[75vw] m-auto md:gap-12 justify-center align-center py-10">      
+      <section class="w-full h-dvh mx-auto bg-black-secondary rounded-xl md:h-[90%] md:h-[80vh] md:col-start-2"></section>
+
+      <section class="w-full h-[50%] flex justify-center items-center md:h-[90%] md:h-[80vh] mx-auto md:col-start-1 md:row-start-1">
+        <span class="text-xl text-black-primary text-center">Crea formularios personalizados de forma dinámica con facilidad</span>
+      </section>
+    </div>
+  
+  
+    <div class="snap-center h-dvh md:h-screen overflow-hidden flex flex-col md:grid md:grid-cols-2 w-[90vw] xl:w-[75vw] m-auto md:gap-12 justify-center align-center py-10">      
+      <section class="w-full h-dvh mx-auto bg-black-secondary rounded-xl md:h-[90%] md:h-[80vh]"></section>
+
+      <section class="w-full h-[50%] flex justify-center items-center md:h-[90%] md:h-[80vh] mx-auto">
+        <span class="text-xl text-black-primary text-center">Genera informes personalizados automáticamente y compartelos con todo el mundo</span>
+      </section>
+    </div>
+  
+  </div>
+</nav>
+
