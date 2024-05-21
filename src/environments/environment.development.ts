@@ -2,7 +2,8 @@ export const environment = {
   production: false,
   dev: false,
   api: {
-    url: 'https://pandafit-backend-0-1.onrender.com/',
+    // url: 'https://pandafit-backend-0-1.onrender.com/',
+    url: 'https://backend.pandafit.es/',
     institution: 'institution',
     users: '/users',
     schoolyear: '/schoolYear',
