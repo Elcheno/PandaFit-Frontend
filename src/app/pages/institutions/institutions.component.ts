@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, effect, inject } from '@angular/core';
 import { TableInstitutionComponent } from '../../components/institutions/table-institution/table-institution.component';
 import { InstitutionService } from '../../services/institution/institution.service';
 import { type IInstitution } from '../../model/interfaces/i-institution';
@@ -10,6 +10,7 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 import { IPage } from '../../model/interfaces/i-page';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ToastService } from '../../services/modal/toast.service';
+import { StoreService } from '../../services/store/store.service';
 
 /** Component for managing institutions */
 @Component({
@@ -31,16 +32,25 @@ export class InstitutionsComponent {
   /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  /** Instance of StoreService for storing data */
+  private readonly storeService = inject(StoreService);
+
   /** Holds the data for institutions */
   public data!: IPageable<IInstitution>;
   
   public filteringString: string = '';
 
-  public async ngOnInit(): Promise<void> {
-    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
-    .subscribe((res) => {
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.institutionStore.reload();
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: false, allowSignalWrites: true });
+  }
+
+  public ngOnInit (): void {
+    this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
       this.data = res;
-    }); 
+    });
   }
 
   /**
@@ -51,6 +61,7 @@ export class InstitutionsComponent {
     if (!this.filteringString) {
       this.institutionService.getAll(page).subscribe((res) => {
         this.data = res;
+        this.table.toggleTableLoader();
       });
     } else {
       this.getAllFiltering(page, this.filteringString);
@@ -59,6 +70,7 @@ export class InstitutionsComponent {
 
   public getAllFiltering (page: IPage, term: string) {
     this.institutionService.filterByName(term, page).subscribe((res) => {
+      this.table.toggleTableLoader(); 
       if (!res) return;
       this.data = res;
     });
@@ -75,6 +87,7 @@ export class InstitutionsComponent {
         this.data.content.splice(0, 0, res);
         this.data.totalElements += 1;
         this.toastService.showToast('Instituto creado', 'success');
+        this.storeService.institutionStore.revalidate();
       });
     });
   }
@@ -90,6 +103,7 @@ export class InstitutionsComponent {
       this.institutionService.update(res).subscribe((response: IInstitution) => {
         this.data.content = this.data.content.map((item) => item.id === response.id ? response : item);
         this.toastService.showToast('Instituto actualizado', 'success');
+        this.storeService.institutionStore.revalidate();
       });
     });
   }
@@ -105,18 +119,21 @@ export class InstitutionsComponent {
       this.data.content = this.data.content.filter((item) => item.id !== institution.id);
       this.data.totalElements -= 1;
       this.toastService.showToast('Instituto eliminado', 'success');
+      this.storeService.institutionStore.revalidate();
     });
   }
 
   public search (term: string, page?: number): void {
-      if (term) {
-        this.filteringString = term;
-        this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+    this.table.toggleTableLoader(); 
 
-      } else {
-        this.filteringString = '';
-        this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
-        
-      }
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, term);
+
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
+      
+    }
   }
 }

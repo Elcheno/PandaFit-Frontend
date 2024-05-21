@@ -59,14 +59,12 @@ export class TableFormActComponent implements OnInit {
     rows: [
       {
         title: 'Ver Respuestas',
-        disabled: true,
         fnc: (data: any) => {
           if (data == null) return;
-          
-          // this.onUpdate.emit(data);
+          this.routerService.navigateByUrl(`/formactive/${data.id}/responses`);
         },
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.6 8.5h8m-8 3.5H12m7.1-7H5c-.2 0-.5 0-.6.3-.2.1-.3.3-.3.6V15c0 .3 0 .5.3.6.1.2.4.3.6.3h4l3 4 3-4h4.1c.2 0 .5 0 .6-.3.2-.1.3-.3.3-.6V6c0-.3 0-.5-.3-.6a.9.9 0 0 0-.6-.3Z"/></svg>'
-      }
+      },
     ]
   };
 
@@ -89,11 +87,9 @@ export class TableFormActComponent implements OnInit {
       },
       {
         title: 'Ver Respuestas',
-        disabled: true,
         fnc: (data: any) => {
           if (data == null) return;
-          
-          // this.onUpdate.emit(data);
+          this.routerService.navigateByUrl(`/formactive/${data.id}/responses`);
         },
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.6 8.5h8m-8 3.5H12m7.1-7H5c-.2 0-.5 0-.6.3-.2.1-.3.3-.3.6V15c0 .3 0 .5.3.6.1.2.4.3.6.3h4l3 4 3-4h4.1c.2 0 .5 0 .6-.3.2-.1.3-.3.3-.6V6c0-.3 0-.5-.3-.6a.9.9 0 0 0-.6-.3Z"/></svg>'
       },

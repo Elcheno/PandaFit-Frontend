@@ -38,7 +38,7 @@ export class FormActiveService {
   }
 
   public getById (id: string): Observable<any> {
-    return this.http.get<any>(`${env.api.url}${env.api.active}` + id)
+    return this.http.get<any>(`${env.api.url}${env.api.active}/` + id)
       .pipe(
         catchError((error) => {
           this.toastService.showToast('Error al cargar los registros', 'error');
