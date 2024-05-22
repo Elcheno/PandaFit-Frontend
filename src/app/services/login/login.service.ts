@@ -43,8 +43,10 @@ export class LoginService {
   public login (): void {
     this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
-        this.router.navigateByUrl('/dashboard/institutions');
-        this.toastService.showToast('Sesión iniciada correctamente', 'success');
+        if (res && res?.token) {
+          this.router.navigateByUrl('/dashboard/institutions');
+          this.toastService.showToast('Sesión iniciada correctamente', 'success');
+        }
       },
       (error) => {
         this.toastService.showToast('No existe el usuario', 'error');
