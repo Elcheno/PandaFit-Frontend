@@ -130,7 +130,7 @@ export class CreateOutputComponent {
         this.form.reset();
         this.storeService.outputStore.revalidate();
         this.toastService.showToast('Respuesta guardada', 'success');
-        this.router.navigateByUrl('formulary/outputs');
+        this.router.navigateByUrl('/dashboard/formulary/outputs');
       }
     );
   }
