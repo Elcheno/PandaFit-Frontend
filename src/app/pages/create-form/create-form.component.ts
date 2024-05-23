@@ -150,7 +150,7 @@ export class CreateFormComponent {
     this.formGroup.reset();
     this.storeService.formStore.revalidate();
     this.toastService.showToast('Formulario creado', 'success');
-    await this.router.navigateByUrl('formulary/forms')
+    await this.router.navigateByUrl('/dashboard/formulary/forms')
   }
 
   /**

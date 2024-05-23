@@ -194,7 +194,7 @@ export class SchoolYearComponent implements OnInit {
    * @returns A promise that resolves when the activation is completed.
    */
   public async handlerFormActive (data: ISchoolYear): Promise<void> {
-    this.routerService.navigate(['/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
+    this.routerService.navigate(['/dashboard/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
   }
 
   public dropdownRows: IDropdownData<ISchoolYear> = {

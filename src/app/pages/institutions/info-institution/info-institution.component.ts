@@ -35,7 +35,7 @@ export class InfoInstitutionComponent implements OnInit, AfterViewInit {
 
     
 
-    const route = this.routerService.url.split('/')[2].split('?')[0];
+    const route = this.routerService.url.split('/')[3].split('?')[0];
     
 
     const item = document.getElementById(route);
