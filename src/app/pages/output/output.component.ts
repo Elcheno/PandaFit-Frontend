@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
@@ -10,6 +10,7 @@ import { RouterLink, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
 import { OutputInfoComponent } from '../../components/modals/output/output-info/output-info.component';
 import { ModalService } from '../../services/modal/modal.service';
+import { StoreService } from '../../services/store/store.service';
 
 /** Component for managing outputs */
 @Component({
@@ -20,9 +21,9 @@ import { ModalService } from '../../services/modal/modal.service';
   styleUrl: './output.component.scss'
 })
 export class OutputComponent implements OnInit {
+  @ViewChild(TableOutputsComponent) table!: TableOutputsComponent;
 
   /** Instance of OutputService for interacting with output data */
-
   private readonly outputService = inject(OutputService);
   /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
@@ -30,8 +31,19 @@ export class OutputComponent implements OnInit {
   /** Instance of ToastService for displaying toast notifications */
   private readonly toastService = inject(ToastService);
 
+  private readonly storeService = inject(StoreService);
+
   /** Holds the data for outputs */
   public data!: IPageable<IOutputData>;
+
+  private filteringString: string = '';
+
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.outputStore.reload();
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: false, allowSignalWrites: true });
+  }
 
   /** Initializes the component */
   ngOnInit (): void {
@@ -44,8 +56,21 @@ export class OutputComponent implements OnInit {
    * Fetches all outputs based on the provided page information
    * @param page The page object
    */
-  public async getAll (page: IPage): Promise<void> {
-    this.outputService.getAll(page).subscribe((res) => {
+  public getAll (page: IPage): void {
+    if (!this.filteringString) {
+      this.outputService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader(); 
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.outputService.getAllFilteringByName(page, term).subscribe((res) => {
+      this.table.toggleTableLoader(); 
+      if (!res) return;
       this.data = res;
     });
   }
@@ -104,6 +129,7 @@ export class OutputComponent implements OnInit {
     this.outputService.delete(output).subscribe((res: IOutputData) => {
       this.data.content = this.data.content.filter((item) => item.id !== res.id);
       this.data.totalElements -= 1;
+      this.storeService.outputStore.revalidate();
       this.toastService.showToast('Respuesta eliminada', 'success');
     })
   }
@@ -112,8 +138,16 @@ export class OutputComponent implements OnInit {
    * Performs search
    * @param value The search value
    */
-  public search (value: string): void {
-    
+  public search (term: string, page?: number): void {
+    this.table.toggleTableLoader();
+
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: page ?? 0, size: 10, sort: ['name'] }, term);
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ?? 0, size: 10, sort: ['name'] });
+    }
   }
 
 }

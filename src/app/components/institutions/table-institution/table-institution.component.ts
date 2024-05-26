@@ -8,6 +8,7 @@ import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.comp
 import { IPageable } from '../../../model/interfaces/i-pageable';
 import { IPage } from '../../../model/interfaces/i-page';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { StoreService } from '../../../services/store/store.service';
 
 /**
  * Component representing a table for institutions.
@@ -30,7 +31,8 @@ export class TableInstitutionComponent {
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
-
+  private readonly storeService = inject(StoreService);
+  
   /**
    * Dropdown data for institution rows.
    */
@@ -45,7 +47,7 @@ export class TableInstitutionComponent {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1c0 .6-.4 1-1 1h-4a1 1 0 0 1-1-1Z" clip-rule="evenodd"/><path d="M2 6c0-1.1.9-2 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"/></svg>',
         fnc: (data: any) => { 
           if (data == null) return;
-          this.router.navigate(['/institutions/schoolyear'], { queryParams: { id: data.id } });
+          this.router.navigate(['/dashboard/institutions/schoolyear'], { queryParams: { id: data.id } });
         }
       },
       {
@@ -53,7 +55,7 @@ export class TableInstitutionComponent {
         icon: '<svg class="w-6 h-6 inline mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.3-2a6 6 0 0 0 0-6A4 4 0 0 1 20 8a4 4 0 0 1-6.7 3Zm2.2 9a4 4 0 0 0 .5-2v-1a6 6 0 0 0-1.5-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.5Z"clip-rule="evenodd" /></svg>',
         fnc: (data: any) => { 
           if (data == null) return;
-          this.router.navigate(['/institutions/users'], { queryParams: { id: data.id } });
+          this.router.navigate(['/dashboard/institutions/users'], { queryParams: { id: data.id } });
         }
       },
       {
@@ -81,11 +83,14 @@ export class TableInstitutionComponent {
    * Handles going to the next page.
    */
   public handleNextPage(): void {
+    if ((this.data.page + 1) > this.data.totalPages) return;
+    this.toggleTableLoader();
     const nextPage: IPage = {
       page: this.data.page + 1,
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.institutionStore.revalidate();
     this.onChangePage.emit(nextPage);
   }
 
@@ -93,11 +98,14 @@ export class TableInstitutionComponent {
    * Handles going to the previous page.
    */
   public handlePreviousPage(): void {
+    if (this.data.page === 0) return;
+    this.toggleTableLoader();
     const previousPage: IPage = {
       page: this.data.page - 1,
       size: this.data.size,
       sort: this.data.sort
     };
+    this.storeService.institutionStore.revalidate();
     this.onChangePage.emit(previousPage);
   }
 
@@ -114,7 +122,7 @@ export class TableInstitutionComponent {
    * @param institution The institution to view.
    */
   public handleViewInstitution (institution: IInstitution): void {
-    this.router.navigate(['/institutions/schoolyear'], { queryParams: { id: institution.id } });
+    this.router.navigate(['/dashboard/institutions/schoolyear'], { queryParams: { id: institution.id } });
   }
 
 }

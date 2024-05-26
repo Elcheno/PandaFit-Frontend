@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -8,6 +8,7 @@ import { ToastService } from '../../services/modal/toast.service';
 import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
 import { TableFormComponent } from '../../components/form/table-form/table-form.component';
+import { StoreService } from '../../services/store/store.service';
 
 @Component({
   selector: 'app-form',
@@ -17,10 +18,21 @@ import { TableFormComponent } from '../../components/form/table-form/table-form.
   styleUrl: './form.component.scss'
 })
 export class FormComponent {
+  @ViewChild(TableFormComponent) table!: TableFormComponent;
+  
   private readonly formService = inject(FormService);
   private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   public data!: IPageable<IFormData>;
+  private filteringString: string = '';
+
+  constructor() {
+    effect(() => {
+      const reload = this.storeService.formStore.reload();
+      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
+    }, { manualCleanup: true, allowSignalWrites: true });
+  }
 
   ngOnInit (): void {
     this.formService.getAll({ page: 0, size: 10, sort: ['name'] }).subscribe((res) => {
@@ -29,7 +41,20 @@ export class FormComponent {
   }
 
   public async getAll (page: IPage): Promise<void> {
-    this.formService.getAll(page).subscribe((res) => {
+    if (!this.filteringString) {
+      this.formService.getAll(page).subscribe((res) => {
+        this.data = res;
+        this.table.toggleTableLoader();
+      });
+    } else {
+      this.getAllFiltering(page, this.filteringString);
+    }
+  }
+
+  public getAllFiltering (page: IPage, term: string) {
+    this.formService.getAllFilteringByName(page, term).subscribe((res) => {
+      this.table.toggleTableLoader();
+      if (!res) return;
       this.data = res;
     });
   }
@@ -50,12 +75,21 @@ export class FormComponent {
     this.formService.delete(form).subscribe((res: IFormData) => {
       this.data.content = this.data.content.filter((item) => item.id !== form.id);
       this.data.totalElements -= 1;
+      this.storeService.formStore.revalidate();
       this.toastService.showToast('Formulario eliminado', 'success');
     })
   }
 
-  public search (value: string): void {
-    
+  public search (term: string, page?: number): void {
+    this.table.toggleTableLoader();    
+
+    if (term) {
+      this.filteringString = term;
+      this.getAllFiltering({ page: page ?? 0, size: 10, sort: ['name'] }, term);
+    } else {
+      this.filteringString = '';
+      this.getAll({ page: page ?? 0, size: 10, sort: ['name'] });
+    }
   }
 }
 

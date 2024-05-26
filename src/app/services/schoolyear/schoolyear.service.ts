@@ -4,8 +4,10 @@ import { environment as env } from '../../../environments/environment.developmen
 import { type IPage } from '../../model/interfaces/i-page';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
 import { AuthService } from '../auth/auth.service';
-import { Observable, catchError, map, take } from 'rxjs';
+import { Observable, catchError, map, of, take, throwError } from 'rxjs';
 import { IPageable } from '../../model/interfaces/i-pageable';
+import { ToastService } from '../modal/toast.service';
+import { StoreService } from '../store/store.service';
 
 /**
  * Service for handling school year data.
@@ -16,6 +18,8 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 export class SchoolyearService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
+  private readonly storeService = inject(StoreService);
 
   /**
    * Retrieves mock data for all school years.
@@ -46,19 +50,52 @@ export class SchoolyearService {
    * @returns An observable of type `IPageable<ISchoolYear>` containing the paginated list of school years.
    */
   public getAllByInstitution(pageParams: IPage, id: any): Observable<IPageable<ISchoolYear>> {
+    const cacheData = this.storeService.schoolYearStore.getData();
+    if (!(this.storeService.schoolYearStore.rehidrate() || this.storeService.schoolYearStore.reload()) && cacheData && cacheData.institutionId === id) return of(cacheData.data);
+    
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
+    
     return this.http.get<IPageable<ISchoolYear>>(env.api.url + env.api.institution + "/" + id + env.api.schoolyear +'/page', { params: pageParams as any, headers: { Authorization: token ?? "" } })  
     .pipe(
         catchError((error) => {
-          return error;
+          const errorMessage = `Error al cargar los registros. ${error.message}`;
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return throwError(() => errorMessage);
         }),
         map((res: any) => {
-          return res as IPageable<ISchoolYear>;
+          const response = res as IPageable<ISchoolYear>;
+          this.storeService.schoolYearStore.setData(response, id);
+          return response;
         }),
         take(1)
       );
+  }
+
+  public getAllInstitutionsFilteringByName(pageParams: IPage, name: string, id: string): Observable<IPageable<ISchoolYear>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    console.log(name, id);
+    
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the name parameter for filtering
+    };
+
+    return this.http.get<IPageable<ISchoolYear>>(`${env.api.url}${env.api.institution}/${id}${env.api.schoolyear}/page/name`, { params: queryParams as any, headers: { Authorization: token ?? "" } })
+    .pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {
+        return res as IPageable<ISchoolYear>;
+      }),
+      take(1)
+    );
   }
 
   /**
