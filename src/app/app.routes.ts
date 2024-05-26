@@ -1,6 +1,5 @@
 import { type Routes } from '@angular/router';
 import { ErrorComponent } from './pages/error/error.component';
-import { CreateOutputComponent } from './components/output/create-output/create-output.component';
 import { authGuard } from './guards/auth-guard.guard';
 import { roleGuard } from './guards/role.guard';
 import { loginGuard } from './guards/login.guard';
@@ -107,42 +106,40 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
+        path: 'answers',
+        canActivate: [authGuard],
+        children: [
+          {
+            path: 'institutions',
+            component: AnswersInstitutionsComponent,
+            canActivate: [authGuard],
+            children: [ 
+              {
+                path: 'schoolyear',
+                component: AnswersSchoolYearComponent,
+                canActivate: [authGuard]
+              }
+            ]
+          },
+          {
+            path: 'schoolyears',
+            component: AnswersSchoolYearComponent,
+            canActivate: [authGuard]
+          },
+          {
+            path: ':schoolyear',
+            loadComponent: () => import('./pages/answers/answers.component').then(m => m.AnswersComponent),
+            canActivate: [authGuard]
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: 'institutions',
         pathMatch: 'full'
       }
     ]
   },
-
-
-
-  {
-    path: 'answers',
-    canActivate: [authGuard],
-    children: [
-      {
-        path: 'institutions',
-        component: AnswersInstitutionsComponent,
-        canActivate: [authGuard],
-        children: [ 
-          {
-            path: 'schoolyear',
-            component: AnswersSchoolYearComponent,
-            canActivate: [authGuard]
-          }
-        ]
-      },
-      {
-        path: 'schoolyears',
-        component: AnswersSchoolYearComponent,
-        canActivate: [authGuard]
-      }
-    ]
-  }
-  ,
-
-
-
   {
     path: 'active/:id',
     loadComponent: () => import('./pages/formulary-dinamic-active/formulary-dinamic-active.component').then(m => m.FormularyDinamicActiveComponent)

@@ -46,18 +46,18 @@ export class AnswersSchoolYearComponent implements OnInit {
   }*/
 
   getInstitutionId(): void {
-    const institutionId = this.authService.getInstitutionId();
-    if (institutionId) {
-      this.schoolYearService.getAllByInstitution({ page: 0, size: 10, sort: ['name'] }, institutionId).subscribe((res) => {
-        this.data = res;
-      });
-    } else {
-      console.error('Institution ID is not available.');
-    }
+    // const institutionId = this.authService.getInstitutionId();
+    // if (institutionId) {
+    //   this.schoolYearService.getAllByInstitution({ page: 0, size: 10, sort: ['name'] }, institutionId).subscribe((res) => {
+    //     this.data = res;
+    //   });
+    // } else {
+    //   console.error('Institution ID is not available.');
+    // }
   }
 
   getInstitutionName(): void {
-    this.institutionName = this.authService.getInstitutionName() ?? ''; // Asigna el nombre del instituto a la propiedad
+    // this.institutionName = this.authService.getInstitutionName() ?? ''; // Asigna el nombre del instituto a la propiedad
   }
 
 
@@ -76,14 +76,14 @@ export class AnswersSchoolYearComponent implements OnInit {
     }
   }*/
   public getAll(page: IPage): void {
-    const institutionId = this.authService.getInstitutionId();
-    if (institutionId) {
-      this.schoolYearService.getAllByInstitution(page, institutionId).subscribe((res) => {
-        this.data = res;
-      });
-    } else {
-      console.error('Institution ID is not available.');
-    }
+    // const institutionId = this.authService.getInstitutionId();
+    // if (institutionId) {
+    //   this.schoolYearService.getAllByInstitution(page, institutionId).subscribe((res) => {
+    //     this.data = res;
+    //   });
+    // } else {
+    //   console.error('Institution ID is not available.');
+    // }
   }
   
 

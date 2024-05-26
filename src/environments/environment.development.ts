@@ -14,7 +14,7 @@ export const environment = {
     formulary: '/formulary',
     login: "login",
     active: "active",
-    response: "response",
+    response: "response"
   },
   firebaseConfig: {
     apiKey: "AIzaSyDnC8LbF_TXTxanafSpT1UQBSJp5aaVWY8",
@@ -23,5 +23,5 @@ export const environment = {
     storageBucket: "pandafit-f2eb1.appspot.com",
     messagingSenderId: "995795586010",
     appId: "1:995795586010:web:9b0cfa781fd8b7981a0ee3"
-}
+  }
 };

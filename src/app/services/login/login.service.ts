@@ -44,8 +44,13 @@ export class LoginService {
     this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
         if (res && res.token) {
-          this.router.navigateByUrl('/dashboard/institutions');
           this.toastService.showToast('Sesión iniciada correctamente', 'success');
+          const role = this.authS.getRole();
+          if (role === 'ROLE_ADMIN') {
+            this.router.navigateByUrl('/dashboard/institutions');
+          } else {
+            this.router.navigateByUrl('/dashboard/answers/schoolyears');
+          }
         }
       },
       (error) => {

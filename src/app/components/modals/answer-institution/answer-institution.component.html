@@ -1,0 +1,39 @@
+<!-- Modal content -->
+<div class="relative bg-white rounded-lg shadow w-10/12 md:w-full m-auto">
+  <!-- Modal header -->
+  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+    <h3 class="text-lg font-semibold text-black-primary">
+      {{ institution?.name }}
+    </h3>
+    <button type="button" (click)="cancel()"
+      class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+      <svg class="w-6 h-6 text-black-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M6 18 18 6m0 12L6 6" />
+      </svg>
+    </button>
+  </div>
+  <!-- Modal body -->
+  <div class="p-4 md:p-5">
+    @defer ( when data ) {
+      @if (data.length > 0) {
+        <div class="grid grid-cols-2 gap-4">
+          @for (item of data; track index; let index = $index) {
+            <div class="rounded-lg p-4 bg-gray-100 flex justify-center items-center cursor-pointer hover:bg-gray-200" (click)="handlerSubmit(item)">
+              <span>{{ item.name }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <span>No existen cursos escolares en este instituto</span>
+      }
+    } @placeholder (minimum 0.5s) {
+      <div class="flex justify-center items-center h-56">
+        <app-loader-spinner></app-loader-spinner>
+      </div>
+
+    }
+  </div>
+
+</div>

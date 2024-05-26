@@ -8,12 +8,13 @@ import { IInstitution } from '../model/interfaces/i-institution';
 import { ModalConfirmService } from '../services/modal/modal-confirm.service';
 import { Router } from '@angular/router';
 import { IDropdownData } from '../model/interfaces/i-dropdown';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { CdkAccordion, CdkAccordionItem, CdkAccordionModule } from '@angular/cdk/accordion';
 import { CommonModule } from '@angular/common';
 import { ISchoolYear } from '../model/interfaces/i-school-year';
 import { SchoolyearService } from '../services/schoolyear/schoolyear.service';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../services/modal/modal.service';
+import { AnswerInstitutionComponent } from '../components/modals/answer-institution/answer-institution.component';
 
 @Component({
   selector: 'app-table-institution-answers',
@@ -34,11 +35,10 @@ export class TableInstitutionAnswersComponent {
 
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
 
   private schoolYearsSubscription: Subscription | undefined;
   //private readonly schoolyearService!: SchoolyearService
-
-
   
   // Variable para almacenar los IDs de las instituciones con el acordeón abierto
   public openAccordionId: string | null = null;
@@ -142,7 +142,15 @@ export class TableInstitutionAnswersComponent {
    * @param institution The institution to view.
    */
   public handleViewInstitution (institution: IInstitution): void {
-    this.router.navigate(['/institutions/schoolyear'], { queryParams: { id: institution.id } });
+    this.router.navigate(['/dashboard/institutions/schoolyear'], { queryParams: { id: institution.id } });
+  }
+
+  public async showInstitutionSchoolYear(item: IInstitution): Promise<any> {
+    ( await this.modalService.open(AnswerInstitutionComponent, item) ).closed.subscribe((res: any) => {
+      console.log(res);
+      this.router.navigateByUrl('/dashboard/answers/'+ res.id);
+      
+    })
   }
 
 }
