@@ -61,4 +61,21 @@ export class AnswerService {
         take(1)
       );
   }
+
+  public getById(id: string): Observable<any> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`${env.api.url}${env.api.active}/${env.api.response}/${id}`, { headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          return res;
+        })
+      )
+  }
 }
