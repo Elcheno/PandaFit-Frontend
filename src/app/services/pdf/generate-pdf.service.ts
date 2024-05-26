@@ -64,25 +64,65 @@ export class GeneratePdfService {
           ]
         },
         {
+          layout: 'lightHorizontalLines', // optional
+          table: {
+            headerRows: 1,
+            widths: [ '*' ],
+            body: [
+              [ '' ],
+              [ '' ],
+            ]
+          }
+        },
+        {
           text: 'Formulario de: ' + res.uuid,
           style: 'header',
         },
-        ...outputsForPdf.map(output => ([
-          {
-          text: `${output.name}`,
-          style: {
-            fontSize: 13,
-            bold: true
-          },
-          margin: [0, 10, 0, 0]
-          },
-          {
-            text: `Resultado: ${output.result}`,
-          },
-          {
-            text: `Umbral: ${output.umbralText}`,
+        {
+          layout: 'lightHorizontalLines', // optional
+          fillColor: '#eeeeee',
+          table: {
+            headerRows: 0,
+            widths: [ '*' ],
+            body: [
+              ...outputsForPdf.map(output => ([[
+              
+                {
+                text: `${output.name}`,
+                style: {
+                  fontSize: 13,
+                  bold: true
+                },
+                margin: [10, 15, 10, 0]
+                },
+                {
+                  text: `Cálculo: ${output.result} ${output.unit}`,
+                  margin: [10, 10, 10, 0]
+                },
+                {
+                  text: `Resultado: ${output.umbralText}`,
+                  margin: [10, 10, 10, 10]
+                }
+              ]]))
+            ]
           }
-        ]))
+        },
+        // ...outputsForPdf.map(output => ([
+        //   {
+        //   text: `${output.name}`,
+        //   style: {
+        //     fontSize: 13,
+        //     bold: true
+        //   },
+        //   margin: [0, 15, 0, 0]
+        //   },
+        //   {
+        //     text: `Cálculo: ${output.result} ${output.unit}`,
+        //   },
+        //   {
+        //     text: `Resultado: ${output.umbralText}`,
+        //   }
+        // ]))
       ];
 
       const pdfDefinition: any = {
@@ -96,7 +136,7 @@ export class GeneratePdfService {
           },
           header: {
             fontSize: 15,
-            margin: [0, 0, 0, 10],
+            margin: [0, 20, 0, 30],
             bold: true
           }
         }
@@ -158,7 +198,8 @@ export class GeneratePdfService {
       calculatedOutputs.push({
         name: output.name,
         result: result,
-        umbralText: umbralText
+        umbralText: umbralText,
+        unit : output.unit
       });
     });
   
