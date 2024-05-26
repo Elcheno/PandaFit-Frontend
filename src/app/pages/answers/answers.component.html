@@ -1,0 +1,24 @@
+<div class="w-full mx-auto lg:w-2/3">
+  <h1 class="text-3xl font-bold mb-7 text-black-primary">Respuestas del curso {{ this.schoolyear?.name }}</h1>
+  <div class="flex items-center my-5 gap-2">
+
+    <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
+    
+    <input type="datetime-local" id="startDate" name="startDate" class="datepicker" >
+
+    <select id="selectState" [(ngModel)]="selectState" (ngModelChange)="onChangeStateOrPage()"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block p-2.5 cursor-pointer">
+      <option value=">">></option>
+      <option selected value="<"><</option>
+      <option value="inactive">Cerrados</option>
+    </select>
+
+  </div>
+
+  <app-table-answer 
+    [data]="data" 
+    (onChangePage)="getResponsesBySchoolYear($event)"
+  ></app-table-answer>
+
+
+</div>

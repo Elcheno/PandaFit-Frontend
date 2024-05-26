@@ -10,13 +10,12 @@
         ></buttonComp>
       </a>
     } @else {
-      <a routerLink="/dashboard">
-        <buttonComp 
-          text="Dashboard" 
-          buttonStyle="h-full" 
-          class="justify-self-end"
-        ></buttonComp>
-      </a>
+      <buttonComp 
+        text="Dashboard" 
+        buttonStyle="h-full" 
+        class="justify-self-end"
+        (click)="handlerDashboard()"
+      ></buttonComp>
     }
     <div>
       <span>

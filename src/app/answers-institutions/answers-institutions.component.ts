@@ -30,7 +30,7 @@ export class AnswersInstitutionsComponent {
     this.institutionService.getAll({ page: 0, size: 10, sort: ['name'] })
     .subscribe((res) => {
       this.data = res;
-    }); 
+    });
   }
 
   /**
