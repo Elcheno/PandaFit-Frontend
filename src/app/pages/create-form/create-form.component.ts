@@ -6,11 +6,10 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostListener, Output, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { InputService } from '../../services/input/input.service';
 import { IInputData } from '../../model/interfaces/i-input-data';
-import { IOutputData } from '../../model/interfaces/i-output-data';
 import { OutputService } from '../../services/output/output.service';
 import { FormService } from '../../services/form/form.service';
 import { IFormData } from '../../model/interfaces/i-form-data';
@@ -18,7 +17,7 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { ModalService } from '../../services/modal/modal.service';
 import { ShowInputModalComponent } from '../../components/modals/input/show-input-modal/show-input-modal.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { LoaderSpinnerComponent } from '../../components/loader-spinner/loader-spinner.component';
 import { ToastService } from '../../services/modal/toast.service';
@@ -38,7 +37,6 @@ export class CreateFormComponent {
   formGroup!:FormGroup;
   inputsAvailable:IInputData[]=[];
   inputsSelected:IInputData[]=[];
-  // outputsRelated:IOutputData[]=[];
   outputService = inject(OutputService);
   formService = inject(FormService);
   inputService = inject(InputService);
@@ -50,7 +48,7 @@ export class CreateFormComponent {
   private readonly storeService = inject(StoreService);
 
   totalInputsPages: number = 0; 
-  currentPage: number = 0; // Página actual de elementos cargados
+  currentPage: number = 0;
   itemsPerPage: number = 10;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -60,14 +58,8 @@ export class CreateFormComponent {
       outputsSelected:new FormArray([]),
       description:['']
     })
+    this.storeService.inputStore.reloadData();
     this.getInputs();
-  }
-
-  ngOnInit(): void {
-    // this.getInputs();
-    // this.inputService.getAll({ page: this.currentPage, size: this.itemsPerPage, sort: ['name'] }).subscribe((res) => {
-    //   this.inputsAvailable.push(...res.content);
-    // });
   }
 
   /**
