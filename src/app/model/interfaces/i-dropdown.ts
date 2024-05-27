@@ -2,12 +2,13 @@
 export interface IDropdownData <T> {
   button: IDropdownButton
   header?: string
-  rows: IDropdownRow<T>[]
+  rows?: IDropdownRow<T>[]
 }
 
 export interface IDropdownButton {
   title?: string
   icon?: any
+  fnc?: (data?: any) => void | Promise<void>;
 }
 
 export interface IDropdownRow <T> {

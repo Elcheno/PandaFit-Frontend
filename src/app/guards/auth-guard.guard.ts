@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const sessionData = authService.sessionData();
 
-  const isLoggger = sessionData?.token ? true : false;
+  const isLoggger = sessionData?.token ? true : false;  
 
  if (isLoggger) {
     return true;
