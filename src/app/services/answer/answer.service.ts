@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ToastService } from '../modal/toast.service';
-import { Observable, catchError, map, take } from 'rxjs';
+import { Observable, catchError, map, take, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { environment as env } from '../../../environments/environment.development';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -90,7 +90,7 @@ export class AnswerService {
           this.toastService.showToast('Error al cargar los registros', 'error');
           return error;
         }),
-        map((res: any) => {
+        map((res: any) => {          
           const response: IPageable<any> = {
             page: res['number'],
             size: res['size'],
@@ -119,12 +119,14 @@ export class AnswerService {
       headers: { Authorization: token ?? "" },
     })  
     .pipe(
-      // catchError((error: HttpErrorResponse) => {
-      //   const errorMessage = `Error al cargar los registros. ${error.message}`;
-      //   this.toastService.showToast('Error al cargar los registros', 'error');
-      //   return throwError(() => errorMessage);
-      // }),  
+      catchError((error) => {
+        console.error(error);
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return error;
+      }),  
       map((res: any) => {
+        console.log(res);
+        
         const response: IPageable<any> = {
           page: res['number'],
           size: res['size'],
@@ -153,12 +155,14 @@ export class AnswerService {
       headers: { Authorization: token ?? "" },
     })  
     .pipe(
-      // catchError((error: HttpErrorResponse) => {
-      //   const errorMessage = `Error al cargar los registros. ${error.message}`;
-      //   this.toastService.showToast('Error al cargar los registros', 'error');
-      //   return throwError(() => errorMessage);
-      // }),  
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),  
       map((res: any) => {
+        console.log(res);
+        
         const response: IPageable<any> = {
           page: res['number'],
           size: res['size'],
