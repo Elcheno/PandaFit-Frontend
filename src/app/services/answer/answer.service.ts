@@ -62,6 +62,7 @@ export class AnswerService {
       );
   }
 
+
   public getById(id: string): Observable<any> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
@@ -77,5 +78,31 @@ export class AnswerService {
           return res;
         })
       )
+  }
+
+  public getBySchoolYear(pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`${env.api.url}${env.api.active}/${env.api.response}/page/schoolyear/${schoolYearId}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {
+          const response: IPageable<any> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      );
   }
 }
