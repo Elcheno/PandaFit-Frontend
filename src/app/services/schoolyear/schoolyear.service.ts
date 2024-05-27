@@ -64,7 +64,14 @@ export class SchoolyearService {
           return throwError(() => errorMessage);
         }),
         map((res: any) => {
-          const response = res as IPageable<ISchoolYear>;
+          const response: IPageable<ISchoolYear> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
           this.storeService.schoolYearStore.setData(response, id);
           return response;
         }),

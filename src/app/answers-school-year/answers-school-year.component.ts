@@ -6,6 +6,8 @@ import { IPageable } from '../model/interfaces/i-pageable';
 import { ISchoolYear } from '../model/interfaces/i-school-year';
 import { IPage } from '../model/interfaces/i-page';
 import { AuthService } from '../services/auth/auth.service';
+import { InstitutionService } from '../services/institution/institution.service';
+import { IInstitution } from '../model/interfaces/i-institution';
 
 @Component({
   selector: 'app-answers-school-year',
@@ -20,75 +22,50 @@ export class AnswersSchoolYearComponent implements OnInit {
 
   /** Instance of InstitutionService for interacting with institution data */
   private readonly schoolYearService = inject(SchoolyearService);
+  private readonly institutionService = inject(InstitutionService);
+  private readonly authService = inject(AuthService);
 
   /** Holds the data for institutions */
   public data!: IPageable<ISchoolYear>;
+  public institution!: IInstitution;
   
   public filteringString: string = '';
-  institutionName: string = '';
+  private institutionId!: string;
   
-  constructor(private authService: AuthService) { }
-
   ngOnInit(): void {
-    // Aquí puedes llamar a un método del AuthService para obtener el institutionId
     this.getInstitutionId();
-    this.getInstitutionName();
+    this.getInstitution();
+    this.getAll();    
   }
-
-  /*getInstitutionId(): void {
-    // Llama al método del AuthService para obtener el institutionId
-    const institutionId = this.authService.getInstitutionId();
-    console.log('Institution ID:', institutionId);
-
-    this.schoolYearService.getAllByInstitution({ page: 0, size: 10, sort: ['name'] }, institutionId).subscribe((res) => {
-      this.data = res;
-    })
-  }*/
 
   getInstitutionId(): void {
-    // const institutionId = this.authService.getInstitutionId();
-    // if (institutionId) {
-    //   this.schoolYearService.getAllByInstitution({ page: 0, size: 10, sort: ['name'] }, institutionId).subscribe((res) => {
-    //     this.data = res;
-    //   });
-    // } else {
-    //   console.error('Institution ID is not available.');
-    // }
+    const id = this.authService.getInstitutionId();
+    if (id) this.institutionId = id;
   }
-
-  getInstitutionName(): void {
-    // this.institutionName = this.authService.getInstitutionName() ?? ''; // Asigna el nombre del instituto a la propiedad
-  }
-
-
-
   
+  public getInstitution(): void {
+    this.institutionService.getById(this.institutionId).subscribe((res) => {
+      if (!res) return;
+      this.institution = res;
+    });
+  }
 
-  /*public getAll (page: IPage): void {
-    const institutionId = this.authService.getInstitutionId();
+  public getAll(page: IPage = { page: 0, size: 10, sort: ['name'] }): void {
     if (!this.filteringString) {
-      this.schoolYearService.getAllByInstitution(page, institutionId).subscribe((res) => {
+      this.schoolYearService.getAllByInstitution(page ,this.institutionId).subscribe((res) => {
+        if (!res) return;
         this.data = res;
-        console.log('this.institutionId', institutionId);
+        console.log(this.data);
+        
       });
     } else {
-      //this.getAllFiltering(page, this.filteringString);
+      this.getAllFiltering (page, this.filteringString);
     }
-  }*/
-  public getAll(page: IPage): void {
-    // const institutionId = this.authService.getInstitutionId();
-    // if (institutionId) {
-    //   this.schoolYearService.getAllByInstitution(page, institutionId).subscribe((res) => {
-    //     this.data = res;
-    //   });
-    // } else {
-    //   console.error('Institution ID is not available.');
-    // }
   }
   
 
-  /*public getAllFiltering (page: IPage, term: string) {
-    this.schoolYearService.filterByName(term, page).subscribe((res) => {
+  public getAllFiltering (page: IPage, term: string) {
+    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {
       if (!res) return;
       this.data = res;
     });
@@ -104,5 +81,5 @@ export class AnswersSchoolYearComponent implements OnInit {
         this.getAll({ page: page ? page : 0, size: 10, sort: ['name'] });
         
       }
-  }*/
+  }
 }

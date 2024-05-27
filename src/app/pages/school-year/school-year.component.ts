@@ -111,9 +111,7 @@ export class SchoolYearComponent implements OnInit {
   }
 
   public getAllFiltering (page: IPage, term: string) {
-    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {
-      console.log(res);
-      
+    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {      
       if (!res) return;
       this.data = res;
     });
