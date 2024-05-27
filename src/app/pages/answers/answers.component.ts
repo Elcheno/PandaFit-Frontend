@@ -25,6 +25,7 @@ export class AnswersComponent implements OnInit {
   public data!: any;
   public schoolyearId!: string;
   public schoolyear!: ISchoolYear;
+  public filtering: string = '';
 
   public selectState: string = 'all';
 
@@ -48,45 +49,66 @@ export class AnswersComponent implements OnInit {
   public getResponsesBySchoolYear(page: IPage = { page: 0, size: 10, sort: [''] }): any {
     if (!this.schoolyearId) return;
 
-    this.answerService.getBySchoolYear(page, this.schoolyearId).subscribe((res) => {
-      console.log(res);
+    
+
+    if (this.filtering === '') {
+      this.answerService.getBySchoolYear(page, this.schoolyearId).subscribe((res) => {
+        console.log(res);
+        
+        if (!res) {
+          this.data = null;
+          return;
+        }
+        this.data = res;
+      });
+    } else {
+      this.getFilteringResponsesBySchoolYear(page);
+    }
       
-      if (!res) {
-        this.data = null;
-        return;
-      }
-      this.data = res;
-    });
+  }
+
+  public getFilteringResponsesBySchoolYear(pageParams: IPage): void {
+  
+        if (this.filtering.startsWith('@')) {
+        // Llamar a getAllFilterByUUID si el término comienza con '@'
+          const uuid = this.filtering.substring(1); // Eliminar el '@' del término
+          this.answerService.getAllFilterByUUID(uuid, pageParams, this.schoolyearId).subscribe((res) => {
+              if (!res) {
+                  this.data = null;
+                  return;
+              }
+              this.data = res;
+          }, (error) => {
+              console.error('Error al buscar por UUID:', error);
+          });
+        } else {
+          // Llamar a getAllFilterByNameFormulary si el término no contiene '@'
+          this.answerService.getAllFilterByNameFormulary(this.filtering, pageParams, this.schoolyearId).subscribe((res) => {
+              if (!res) {
+                  this.data = null;
+                  return;
+              }
+              this.data = res;
+          }, (error) => {
+              console.error('Error al buscar por nombre de formulario:', error);
+          });
+        }
   }
 
   public search(term: string): void {
     // Define los parámetros de la página si es necesario
     const pageParams: IPage = { page: 0, size: 10, sort: [''] };
+    if (term) {
+      this.filtering = term;
 
-    if (term.startsWith('@')) {
-        // Llamar a getAllFilterByUUID si el término comienza con '@'
-        const uuid = term.substring(1); // Eliminar el '@' del término
-        this.answerService.getAllFilterByUUID(uuid, pageParams, this.schoolyearId).subscribe((res) => {
-            if (!res) {
-                this.data = null;
-                return;
-            }
-            this.data = res;
-        }, (error) => {
-            console.error('Error al buscar por UUID:', error);
-        });
-    } else {
-        // Llamar a getAllFilterByNameFormulary si el término no contiene '@'
-        this.answerService.getAllFilterByNameFormulary(term, pageParams, this.schoolyearId).subscribe((res) => {
-            if (!res) {
-                this.data = null;
-                return;
-            }
-            this.data = res;
-        }, (error) => {
-            console.error('Error al buscar por nombre de formulario:', error);
-        });
+      this.getFilteringResponsesBySchoolYear(pageParams);
+
+      }else{
+        this.filtering = '';
+        this.getResponsesBySchoolYear();
     }
+
+    
 }
 
   public onChangeStateOrPage(): void {
