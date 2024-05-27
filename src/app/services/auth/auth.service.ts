@@ -60,13 +60,14 @@ export class AuthService {
     });
   }
 
-  public setSession(data: any): void {
+  public setSession(data: any): void {    
     try {
       const user = {
         id: data.id,
         email: data.email,
         token: data.token,
         roles: data.roles,
+        institutionId: data.institutionId
       };
 
       this.setSessionData(user);
@@ -89,6 +90,18 @@ export class AuthService {
     } else {
       return 'ROLE_USER';
     }
+  }
+
+  public getInstitutionId(): string | null {
+    const sessionData = this.sessionData();
+    if (!sessionData) {
+      this.logOut().catch(error => console.error(error));
+    }
+
+    if (sessionData.institutionId) 
+      return String(sessionData.institutionId);
+
+    return null;
   }
 
 }
