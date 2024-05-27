@@ -29,12 +29,29 @@ export class TableSchoolYearAnswersComponent {
   private readonly confirmService = inject(ModalConfirmService);
   private readonly router = inject(Router);
 
+  /**
+   * Dropdown data for schoolyear actions.
+   */
+    public dropdownRows: IDropdownData<any> = {
+      header: 'Curso',
+      button: {
+        icon: '<svg class="w-[28px] h-[28px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="3" d="M6 12h0m6 0h0m6 0h0" />/svg>'
+      },
+      rows: [
+        {
+          title: 'Ver Respuestas',
+          fnc: async (data: any) => {
+            if (data == null) return;
+              this.router.navigateByUrl(`/dashboard/answers/${data.id}`);
+          },
+          icon: '<svg class="w-6 h-6 inline mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" /></svg>'
+        }
+      ]
+    };
+
   verDetalleCurso(schoolYearId: string) {
-    // Aquí puedes implementar la lógica para mostrar el detalle del curso escolar
-    // Puedes acceder al ID del año escolar seleccionado a través del parámetro schoolYearId
-    console.log('Detalle del curso escolar con ID:', schoolYearId);
-    // Por ejemplo, podrías abrir un modal o cargar más información sobre el curso seleccionado
-}
+
+  }
 
   /**
    * Handles going to the next page.
