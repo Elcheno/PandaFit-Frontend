@@ -104,4 +104,72 @@ export class AnswerService {
         take(1)
       );
   }
+
+  public getAllFilterByUUID (uuid: string, pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      uuid, // Add the email parameter for filtering
+    };
+    
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/uuid`, { 
+      params: queryParams as any, 
+      headers: { Authorization: token ?? "" },
+    })  
+    .pipe(
+      // catchError((error: HttpErrorResponse) => {
+      //   const errorMessage = `Error al cargar los registros. ${error.message}`;
+      //   this.toastService.showToast('Error al cargar los registros', 'error');
+      //   return throwError(() => errorMessage);
+      // }),  
+      map((res: any) => {
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
+  public getAllFilterByNameFormulary (name: string, pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the email parameter for filtering
+    };
+    
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/name`, { 
+      params: queryParams as any, 
+      headers: { Authorization: token ?? "" },
+    })  
+    .pipe(
+      // catchError((error: HttpErrorResponse) => {
+      //   const errorMessage = `Error al cargar los registros. ${error.message}`;
+      //   this.toastService.showToast('Error al cargar los registros', 'error');
+      //   return throwError(() => errorMessage);
+      // }),  
+      map((res: any) => {
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
 }

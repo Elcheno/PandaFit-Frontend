@@ -59,9 +59,35 @@ export class AnswersComponent implements OnInit {
     });
   }
 
-  public search (term: string): void {
+  public search(term: string): void {
+    // Define los parámetros de la página si es necesario
+    const pageParams: IPage = { page: 0, size: 10, sort: [''] };
 
-  }
+    if (term.startsWith('@')) {
+        // Llamar a getAllFilterByUUID si el término comienza con '@'
+        const uuid = term.substring(1); // Eliminar el '@' del término
+        this.answerService.getAllFilterByUUID(uuid, pageParams, this.schoolyearId).subscribe((res) => {
+            if (!res) {
+                this.data = null;
+                return;
+            }
+            this.data = res;
+        }, (error) => {
+            console.error('Error al buscar por UUID:', error);
+        });
+    } else {
+        // Llamar a getAllFilterByNameFormulary si el término no contiene '@'
+        this.answerService.getAllFilterByNameFormulary(term, pageParams, this.schoolyearId).subscribe((res) => {
+            if (!res) {
+                this.data = null;
+                return;
+            }
+            this.data = res;
+        }, (error) => {
+            console.error('Error al buscar por nombre de formulario:', error);
+        });
+    }
+}
 
   public onChangeStateOrPage(): void {
     console.log(this.selectState);
