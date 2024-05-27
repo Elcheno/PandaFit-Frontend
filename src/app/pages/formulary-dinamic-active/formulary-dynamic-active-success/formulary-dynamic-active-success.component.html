@@ -1,11 +1,12 @@
-<div class="w-full mx-auto lg:w-2/3">
-  <h1 class="text-3xl font-bold mb-7 text-black-primary">Respuesta enviada correctamente</h1>
+<div class="w-full mx-auto lg:w-2/3 mt-10">
+  <h1 class="text-3xl font-bold mb-7 text-black-primary text-center">Respuesta enviada correctamente</h1>
 
   <!-- IMPLEMENTAR LA DESCARGA DEL FORMULARIO -->
 
   @defer (when this.load) {
     <div class="flex flex-col justify-center h-[75vh] items-center">
       <img class="animate-zoom-in-1 max-w-[225px] max-h-[225px]" src="../../../../assets/check2.gif" alt="">
+      <buttonComp [text]="'Descargar Resultados'" (click)="downloadPdf()" class="w-fit mt-20"></buttonComp>
     </div>
   }
 
