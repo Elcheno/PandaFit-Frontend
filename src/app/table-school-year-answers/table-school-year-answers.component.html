@@ -18,16 +18,11 @@
                 <app-loader-spinner class="flex items-center"></app-loader-spinner>
             </div>
             @for (item of data.content; track index; let index = $index) {
-            <tr class="bg-white border-b hover:bg-gray-50">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
+            <tr class="bg-white border-b hover:bg-gray-50" >
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer" (click)="handleNavigateToResponses(item.id)">
                     {{ item.name }}
                 </th>
                 <td class="px-6 py-4 text-right flex justify-end">
-                    <!-- <button
-                        class="text-white font-semibold py-2 px-4 rounded-lg bg-green-500 hover:bg-green-600 focus:outline-none focus:bg-green-700 mt-1 mb-1"
-                        style="background-color: #57ad57;" (click)="item.id && verDetalleCurso(item.id)">
-                        Ver Respuestas
-                    </button> -->
                     <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
                     [dropdownStyle]="'text-black-primary'"></app-dropdown>
                 </td>
