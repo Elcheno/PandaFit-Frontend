@@ -20,7 +20,7 @@
                   @for (item of data.content; track index; let index = $index) {
                       <tr class="bg-white border-b hover:bg-gray-50">
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                              {{ item.uuid }}
+                              {{ item.uuid | formatUUID }}
                           </th>
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                               {{ item.date | date:'medium' }}

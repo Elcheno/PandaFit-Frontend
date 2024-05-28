@@ -81,10 +81,7 @@ export class SchoolyearService {
 
   public getAllInstitutionsFilteringByName(pageParams: IPage, name: string, id: string): Observable<IPageable<ISchoolYear>> {
     const sessionData = this.authService.sessionData();
-    const token = sessionData?.token;
-
-    console.log(name, id);
-    
+    const token = sessionData?.token;    
 
     const queryParams = {
       ...pageParams,

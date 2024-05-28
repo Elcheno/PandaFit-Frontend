@@ -31,7 +31,6 @@ export class GeneratePdfService {
     return this.http.get<IAnswer>(`${env.api.url}${env.api.active}/${env.api.response}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
-          console.log(res)
           const response: IAnswer = { ...res };
           return response;
         }),
@@ -45,7 +44,6 @@ export class GeneratePdfService {
    */
   public generatePdf(id: string): void {
     this.getById(id).subscribe((res) => {
-      console.log(this.processApiResponse(res));
       const outputsForPdf = this.processApiResponse(res);
       
       const content = [

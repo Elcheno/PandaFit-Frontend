@@ -50,19 +50,16 @@ export class TableInstitutionAnswersComponent {
    * @param institutionId ID de la institución.
    */
   loadSchoolYears(institutionId: string): void {
-    //console.log("Institution ID:", institutionId);
     const pageParams: IPage = { page: 0, size: 10 }; // Define los parámetros de paginación según sea necesario
   
     this.schoolYearsSubscription = this.schoolyearService.getAllByInstitution(pageParams, institutionId)
       .subscribe({
         next: (res: IPageable<ISchoolYear>) => {
-          //console.log("Received school years data:", res);
           // Filtra los años escolares que pertenecen a la institución seleccionada
           this.schoolYears = {
             ...res,
             content: res.content.filter(schoolYear => schoolYear.institutionId === institutionId)
           };
-          //console.log("Filtered school years:", this.schoolYears);
         },
         error: (error) => {
           console.error("Error fetching school years:", error);
@@ -92,13 +89,6 @@ export class TableInstitutionAnswersComponent {
       this.loadSchoolYears(institutionId);
     }
   }
-
-  verDetalleCurso(schoolYearId: string) {
-    // Aquí puedes implementar la lógica para mostrar el detalle del curso escolar
-    // Puedes acceder al ID del año escolar seleccionado a través del parámetro schoolYearId
-    console.log('Detalle del curso escolar con ID:', schoolYearId);
-    // Por ejemplo, podrías abrir un modal o cargar más información sobre el curso seleccionado
-}
 
   navigateToSchoolYear(item: any) {
     if (!item || !item.id) return;
@@ -147,9 +137,7 @@ export class TableInstitutionAnswersComponent {
 
   public async showInstitutionSchoolYear(item: IInstitution): Promise<any> {
     ( await this.modalService.open(AnswerInstitutionComponent, item) ).closed.subscribe((res: any) => {
-      console.log(res);
       this.router.navigateByUrl('/dashboard/answers/'+ res.id);
-      
     })
   }
 

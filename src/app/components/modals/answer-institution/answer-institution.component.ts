@@ -27,7 +27,6 @@ export class AnswerInstitutionComponent implements OnInit {
       { page: 0, size: 100, sort: ['name'] },
       this.institution?.id
     ).subscribe((res) => {
-      console.log(res);
       this.data = res.content;
     });
   }

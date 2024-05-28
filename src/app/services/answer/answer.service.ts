@@ -124,9 +124,7 @@ export class AnswerService {
         this.toastService.showToast('Error al cargar los registros', 'error');
         return error;
       }),  
-      map((res: any) => {
-        console.log(res);
-        
+      map((res: any) => {        
         const response: IPageable<any> = {
           page: res['number'],
           size: res['size'],
@@ -160,9 +158,7 @@ export class AnswerService {
         this.toastService.showToast('Error al cargar los registros', 'error');
         return throwError(() => errorMessage);
       }),  
-      map((res: any) => {
-        console.log(res);
-        
+      map((res: any) => {        
         const response: IPageable<any> = {
           page: res['number'],
           size: res['size'],
@@ -175,5 +171,72 @@ export class AnswerService {
       }),
       take(1)
     );
+  }
+
+  public getAllFilterBySchoolYearAndDateAfter(pageParams?: IPage, schoolYearId?: string, date?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      BeforeOrAfter: 'after',
+      date
+    }
+
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/date`,{
+      params: queryParams as any,
+      headers: { Authorization: token ?? "" },
+    }).pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    )
+  }
+  public getAllFilterBySchoolYearAndDateBefore(pageParams?: IPage, schoolYearId?: string, date?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      BeforeOrAfter: 'before',
+      date
+    }    
+
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/date`,{
+      params: queryParams as any,
+      headers: { Authorization: token ?? "" },
+    }).pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    )
   }
 }

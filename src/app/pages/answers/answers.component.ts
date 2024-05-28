@@ -27,7 +27,9 @@ export class AnswersComponent implements OnInit {
   public schoolyear!: ISchoolYear;
   public filtering: string = '';
 
-  public selectState: string = 'all';
+  public selectState: string = 'before';
+
+  public date!: string;
 
   constructor() {
     this.schoolyearId = this.routerActivatedService.snapshot.params['schoolyear'] ?? '';    
@@ -65,7 +67,23 @@ export class AnswersComponent implements OnInit {
       
   }
 
-  public getFilteringResponsesBySchoolYear(pageParams: IPage): void {
+  public getFilteringResponsesBySchoolYearAndDate(page: IPage = { page: 0, size: 10, sort: [''] }): any {
+    if (!this.schoolyearId) return;
+    
+    if (this.selectState === 'before') {
+      this.answerService.getAllFilterBySchoolYearAndDateBefore(page, this.schoolyearId, this.date).subscribe((res) => {
+        if (!res) return;
+        this.data = res;
+      })
+    } else {
+      this.answerService.getAllFilterBySchoolYearAndDateAfter(page, this.schoolyearId, this.date).subscribe((res) => {
+        if (!res) return;
+        this.data = res;
+      })
+    }
+  }
+
+  public getFilteringResponsesBySchoolYear(pageParams: IPage = { page: 0, size: 10, sort: [''] }): void {
   
         if (this.filtering.startsWith('@')) {
         // Llamar a getAllFilterByUUID si el término comienza con '@'
@@ -105,13 +123,15 @@ export class AnswersComponent implements OnInit {
         this.filtering = '';
         this.getResponsesBySchoolYear();
     }
-
-    
-}
+  }
 
   public onChangeStateOrPage(): void {
-    console.log(this.selectState);
-    
+    if (!this.date) return;
+
+    if (this.selectState === 'all') {
+      this.getFilteringResponsesBySchoolYear();
+    }
+    this.getFilteringResponsesBySchoolYearAndDate();
   }
 
 }

@@ -4,13 +4,13 @@
 
     <app-search-entity class="w-full" (onSearch)="search($event)"></app-search-entity>
     
-    <input type="datetime-local" id="startDate" name="startDate" class="datepicker" >
+    <input type="datetime-local" id="startDate" name="startDate" class="datepicker" [(ngModel)]="date" (ngModelChange)="onChangeStateOrPage()">
 
     <select id="selectState" [(ngModel)]="selectState" (ngModelChange)="onChangeStateOrPage()"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-light focus:border-green-light block p-2.5 cursor-pointer">
-      <option value=">">></option>
-      <option selected value="<"><</option>
-      <option value="inactive">Cerrados</option>
+      <option value="all">todos</option>
+      <option value="after">antes de </option>
+      <option value="before">despues de</option>
     </select>
 
   </div>
@@ -19,6 +19,5 @@
     [data]="data" 
     (onChangePage)="getResponsesBySchoolYear($event)"
   ></app-table-answer>
-
 
 </div>
