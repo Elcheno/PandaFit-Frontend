@@ -35,7 +35,6 @@ export class TableAnswerComponent {
       {
         title: 'Descargar Informe',
         fnc: async (data: any) => {
-          console.log(data);
           if (!data) return;
           this.pdfService.generatePdf(data.id);
         },
