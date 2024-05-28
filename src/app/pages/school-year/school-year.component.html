@@ -21,7 +21,7 @@
                 <buttonComp 
                     [text]="'Gestión Respuestas'" 
                     [buttonStyle]="'w-10/12 sm:w-11/12'"
-                    [disabled]="true"
+                    (click)="item.id ? navigateToAnswers(item.id) : null"
                     class="flex justify-center">
                 </buttonComp>
                 <buttonComp 
