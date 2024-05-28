@@ -54,9 +54,7 @@ export class AnswersSchoolYearComponent implements OnInit {
     if (!this.filteringString) {
       this.schoolYearService.getAllByInstitution(page ,this.institutionId).subscribe((res) => {
         if (!res) return;
-        this.data = res;
-        console.log(this.data);
-        
+        this.data = res;        
       });
     } else {
       this.getAllFiltering (page, this.filteringString);
