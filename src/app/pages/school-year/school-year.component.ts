@@ -223,4 +223,8 @@ export class SchoolYearComponent implements OnInit {
       }
     ]
   };
+
+  public navigateToAnswers(schoolYearId: string): void {
+    this.routerService.navigate(['/dashboard/answers', schoolYearId]);
+  }
 }
