@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { PaginationComponent } from '../../pagination/pagination.component';
@@ -7,6 +7,8 @@ import { IDropdownData } from '../../../model/interfaces/i-dropdown';
 import { IPage } from '../../../model/interfaces/i-page';
 import { DatePipe } from '@angular/common';
 import { FormatUUIDPipe } from '../../../pipes/format-uuid.pipe';
+import { GeneratePdfService } from '../../../services/pdf/generate-pdf.service';
+
 
 @Component({
   selector: 'app-table-answer',
@@ -22,6 +24,7 @@ export class TableAnswerComponent {
 
   @Output() public onChangePage = new EventEmitter<IPage>();
 
+  private readonly pdfService = inject(GeneratePdfService);
 
   public dropdownRows: IDropdownData<any> = {
     header: 'Respuesta',
@@ -30,10 +33,13 @@ export class TableAnswerComponent {
     },
     rows: [
       {
-        title: 'Eliminar',
-        disabled: true,
-        fnc: async (data: any) => {},
-        icon: '<svg class="w-6 h-6 inline mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" /></svg>'
+        title: 'Descargar Informe',
+        fnc: async (data: any) => {
+          console.log(data);
+          if (!data) return;
+          this.pdfService.generatePdf(data.id);
+        },
+        icon: '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/></svg>'
       }
     ]
   };
