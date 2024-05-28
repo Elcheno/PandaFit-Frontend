@@ -30,7 +30,6 @@ export class FormActResponsesComponent implements OnInit {
       if (!id) return;
 
       this.formActiveService.getById(id).subscribe((res) => {
-        console.log(res);
         this.formularyActive = res;
       });
 
@@ -41,12 +40,10 @@ export class FormActResponsesComponent implements OnInit {
 
   private getData(id: string) {
     this.answerService.getByFormAct({ page: 0, size: 10, sort: [''] }, id).subscribe((res) => {
-      console.log(res);
       this.data = res;
     });
   }
 
   public search(query: string) {
-    console.log(query);
   }
 }

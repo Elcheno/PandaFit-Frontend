@@ -36,16 +36,11 @@ export class SidebarComponent {
         ? true
         : this.authService.sessionData() ? true : false;
 
-     // console.log(this.authService.sessionData());
-     // console.log(this.logginStatus);
       const userDataString = this.authService.sessionData()
       if (userDataString) {
-        //const userData = JSON.parse(userDataString);
         this.userRole = userDataString.roles;
         // Verifica si el array tiene al menos un elemento
         if (this.userRole && this.userRole.length > 0) {
-            // Obtén el primer valor del array y asígnalo a userRole
-            //this.userRole = this.userRole[0];
             this.userRole = Object.values(this.userRole[0])[0];
         } else {
             console.error('El array de roles está vacío');
