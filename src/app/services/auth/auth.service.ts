@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, catchError, map, take } from 'rxjs';
+import { Observable, catchError, map, sequenceEqual, take } from 'rxjs';
 import { environment as env } from '../../../environments/environment.development';
 import { Router } from '@angular/router';
 
@@ -49,32 +49,59 @@ export class AuthService {
 
   public async logOut (): Promise<void> {
     await new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          // this.setSessionData(null);
-          this.sessionData.set(null);
-          window.localStorage.removeItem('sessionData');
-          this.router.navigateByUrl('/login');
-          resolve();
-        } catch (error) {
-          reject(error);
-        }
-      }, 1000);
+      try {
+        this.setSessionData(null);
+        window.localStorage.removeItem('sessionData');
+        this.router.navigateByUrl('/login');
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
-  public setSession (data: any): void {
+  public setSession(data: any): void {    
     try {
       const user = {
         id: data.id,
         email: data.email,
         token: data.token,
-        roles: data.roles
+        roles: data.roles,
+        institutionId: data.institutionId
       };
+
       this.setSessionData(user);
       window.localStorage.setItem('sessionData', JSON.stringify(user));
+      
     } catch (error) {
       console.error(error);
     }
   }
+
+  public getRole(): string {
+    const sessionData = this.sessionData();
+    if (!sessionData) {
+      if (env.dev) return 'ROLE_ADMIN';
+      this.logOut().catch(error => console.error(error));
+    }
+        
+    if (sessionData.roles[0].authority === 'ROLE_ADMIN') {
+      return 'ROLE_ADMIN';
+    } else {
+      return 'ROLE_USER';
+    }
+  }
+
+  public getInstitutionId(): string | null {
+    const sessionData = this.sessionData();
+    if (!sessionData) {
+      this.logOut().catch(error => console.error(error));
+    }
+
+    if (sessionData.institutionId) 
+      return String(sessionData.institutionId);
+
+    return null;
+  }
+
 }

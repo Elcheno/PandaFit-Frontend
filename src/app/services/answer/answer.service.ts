@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ToastService } from '../modal/toast.service';
-import { Observable, catchError, map, take } from 'rxjs';
+import { Observable, catchError, map, take, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { environment as env } from '../../../environments/environment.development';
 import { IPageable } from '../../model/interfaces/i-pageable';
@@ -77,5 +77,166 @@ export class AnswerService {
           return res;
         })
       )
+  }
+
+  public getBySchoolYear(pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    return this.http.get<any>(`${env.api.url}${env.api.active}/${env.api.response}/page/schoolyear/${schoolYearId}`, { params: pageParams as any, headers: { Authorization: token ?? "" } })
+      .pipe(
+        catchError((error) => {
+          console.error(error);
+          this.toastService.showToast('Error al cargar los registros', 'error');
+          return error;
+        }),
+        map((res: any) => {          
+          const response: IPageable<any> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
+          return response;
+        }),
+        take(1)
+      );
+  }
+
+  public getAllFilterByUUID (uuid: string, pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      uuid, // Add the email parameter for filtering
+    };
+    
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/uuid`, { 
+      params: queryParams as any, 
+      headers: { Authorization: token ?? "" },
+    })  
+    .pipe(
+      catchError((error) => {
+        console.error(error);
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return error;
+      }),  
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
+  public getAllFilterByNameFormulary (name: string, pageParams?: IPage, schoolYearId?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      name, // Add the email parameter for filtering
+    };
+    
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/name`, { 
+      params: queryParams as any, 
+      headers: { Authorization: token ?? "" },
+    })  
+    .pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),  
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    );
+  }
+
+  public getAllFilterBySchoolYearAndDateAfter(pageParams?: IPage, schoolYearId?: string, date?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      BeforeOrAfter: 'after',
+      date
+    }
+
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/date`,{
+      params: queryParams as any,
+      headers: { Authorization: token ?? "" },
+    }).pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    )
+  }
+  public getAllFilterBySchoolYearAndDateBefore(pageParams?: IPage, schoolYearId?: string, date?: string): Observable<IPageable<any>> {
+    const sessionData = this.authService.sessionData();
+    const token = sessionData?.token;
+
+    const queryParams = {
+      ...pageParams,
+      BeforeOrAfter: 'before',
+      date
+    }    
+
+    return this.http.get<IPageable<any>>(`${env.api.url}${env.api.active}/${env.api.response}/schoolyear/${schoolYearId}/date`,{
+      params: queryParams as any,
+      headers: { Authorization: token ?? "" },
+    }).pipe(
+      catchError((error) => {
+        const errorMessage = `Error al cargar los registros. ${error.message}`;
+        this.toastService.showToast('Error al cargar los registros', 'error');
+        return throwError(() => errorMessage);
+      }),
+      map((res: any) => {        
+        const response: IPageable<any> = {
+          page: res['number'],
+          size: res['size'],
+          sort: queryParams?.sort ?? [''],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content'],
+        };
+        return response;
+      }),
+      take(1)
+    )
   }
 }

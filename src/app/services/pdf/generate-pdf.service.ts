@@ -8,6 +8,7 @@ import { environment as env } from '../../../environments/environment.developmen
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { FormatUUIDPipe } from '../../pipes/format-uuid.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class GeneratePdfService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly storeService = inject(StoreService);
 
   constructor() { }
 
@@ -31,7 +31,6 @@ export class GeneratePdfService {
     return this.http.get<IAnswer>(`${env.api.url}${env.api.active}/${env.api.response}/${id}`, { headers: { Authorization: token ?? "" } })
       .pipe(
         map((res: any) => {
-          console.log(res)
           const response: IAnswer = { ...res };
           return response;
         }),
@@ -45,7 +44,6 @@ export class GeneratePdfService {
    */
   public generatePdf(id: string): void {
     this.getById(id).subscribe((res) => {
-      console.log(this.processApiResponse(res));
       const outputsForPdf = this.processApiResponse(res);
       
       const content = [
@@ -75,7 +73,7 @@ export class GeneratePdfService {
           }
         },
         {
-          text: 'Formulario de: ' + res.uuid,
+          text: 'Formulario de: ' + this.formatUUID(res.uuid),
           style: 'header',
         },
         {
@@ -186,8 +184,8 @@ export class GeneratePdfService {
   private processApiResponse(apiResponse: IAnswer): any[] {
     const calculatedOutputs: any[] = [];
   
-
     const inputs: { [key: string]: number } = {};
+
     apiResponse.response.forEach(response => {
       inputs[response.inputId] = Number(response.value);
     });
@@ -204,6 +202,20 @@ export class GeneratePdfService {
     });
   
     return calculatedOutputs;
+  }
+
+  public formatUUID(uuid: string): string {
+    let response = String(uuid);
+
+    let name = response.split('-')[0];
+    let surname1 = response.split('-')[1];
+    let surname2 = response.split('-')[2];
+
+    name = name[0].toUpperCase() + name.slice(1);
+    surname1 = surname1[0].toUpperCase() + surname1.slice(1);
+    surname2 = surname2[0].toUpperCase() + surname2.slice(1);
+
+    return `${name} ${surname1} ${surname2}`;
   }
   
 }

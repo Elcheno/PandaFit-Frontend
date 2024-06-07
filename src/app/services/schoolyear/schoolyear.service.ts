@@ -64,7 +64,14 @@ export class SchoolyearService {
           return throwError(() => errorMessage);
         }),
         map((res: any) => {
-          const response = res as IPageable<ISchoolYear>;
+          const response: IPageable<ISchoolYear> = {
+            page: res['number'],
+            size: res['size'],
+            sort: pageParams?.sort ?? ['email'],
+            totalElements: res['totalElements'],
+            totalPages: res['totalPages'],
+            content: res['content']
+          };
           this.storeService.schoolYearStore.setData(response, id);
           return response;
         }),
@@ -74,10 +81,7 @@ export class SchoolyearService {
 
   public getAllInstitutionsFilteringByName(pageParams: IPage, name: string, id: string): Observable<IPageable<ISchoolYear>> {
     const sessionData = this.authService.sessionData();
-    const token = sessionData?.token;
-
-    console.log(name, id);
-    
+    const token = sessionData?.token;    
 
     const queryParams = {
       ...pageParams,

@@ -43,8 +43,15 @@ export class LoginService {
   public login (): void {
     this.authS.login({ email: this.user.email, uuid: this.user.id }).subscribe(
       (res: any) => {
-        this.router.navigateByUrl('/institutions');
-        this.toastService.showToast('Sesión iniciada correctamente', 'success');
+        if (res && res.token) {
+          this.toastService.showToast('Sesión iniciada correctamente', 'success');
+          const role = this.authS.getRole();
+          if (role === 'ROLE_ADMIN') {
+            this.router.navigateByUrl('/dashboard/institutions');
+          } else {
+            this.router.navigateByUrl('/dashboard/answers/schoolyears');
+          }
+        }
       },
       (error) => {
         this.toastService.showToast('No existe el usuario', 'error');

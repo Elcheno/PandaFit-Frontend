@@ -112,9 +112,9 @@ export class FormularyDinamicActiveComponent implements OnInit {
     const name = this.form.get('name')?.value.toLowerCase().trim();
     const surname1 = this.form.get('surname1')?.value.toLowerCase().trim();
     const surname2 = this.form.get('surname2')?.value.toLowerCase().trim();
-    const birthdate = new Date(this.form.get('birthdate')?.value);
-    result = `${name.substring(0, 2)}${surname1.substring(0, 2)}${surname2.substring(0, 2)}${birthdate.getMonth() + 1}${birthdate.getFullYear()}`
-
+    const birthdate = new Date(this.form.get('birthdate')?.value).toISOString();
+    result = `${name}-${surname1}-${surname2}-${birthdate}`;
+    
     return result;
   }
 

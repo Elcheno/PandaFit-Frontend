@@ -8,11 +8,12 @@ import { PaginationComponent } from '../../pagination/pagination.component';
 import { LoaderSpinnerComponent } from '../../loader-spinner/loader-spinner.component';
 import { DropdownComponent } from '../../dropdown/dropdown.component';
 import { GeneratePdfService } from '../../../services/pdf/generate-pdf.service';
+import { FormatUUIDPipe } from '../../../pipes/format-uuid.pipe';
 
 @Component({
   selector: 'app-table-responses',
   standalone: true,
-  imports: [DatePipe, PaginationComponent, LoaderSpinnerComponent, DropdownComponent],
+  imports: [DatePipe, PaginationComponent, LoaderSpinnerComponent, DropdownComponent, FormatUUIDPipe],
   templateUrl: './table-responses.component.html',
   styleUrl: './table-responses.component.scss'
 })

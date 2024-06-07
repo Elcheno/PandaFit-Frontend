@@ -27,7 +27,5 @@ export class AppComponent implements OnInit {
    */
   ngOnInit (): void {
     this.authService.loadSessionData();
-    console.log(this.storeService.institutionStore.data());
-    // this.toastService.showToast('Esto es un toast', 'success');
   }
 }

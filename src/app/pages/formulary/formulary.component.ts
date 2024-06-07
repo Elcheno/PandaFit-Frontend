@@ -13,7 +13,7 @@ export class FormularyComponent implements AfterViewInit, OnInit {
   private readonly routerService = inject(Router);
 
   ngOnInit(): void {
-    const route = this.routerService.url.split('/')[2];
+    const route = this.routerService.url.split('/')[3];
     
     const item = document.getElementById(route);
     const menuBackdrop = document.querySelector('#menu-backdrop') as HTMLDivElement;

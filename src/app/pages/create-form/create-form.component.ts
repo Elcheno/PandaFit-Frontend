@@ -137,12 +137,12 @@ export class CreateFormComponent {
       outputIdList:this.formGroup.get('outputsSelected')?.value,
       inputIdList:this.inputsSelected.map(item => item.id) as any
     };
-    // console.log(form)
+    
     await lastValueFrom(this.formService.create(form))
     this.formGroup.reset();
     this.storeService.formStore.revalidate();
     this.toastService.showToast('Formulario creado', 'success');
-    await this.router.navigateByUrl('formulary/forms')
+    await this.router.navigateByUrl('/dashboard/formulary/forms')
   }
 
   /**

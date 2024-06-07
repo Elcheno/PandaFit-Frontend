@@ -111,9 +111,7 @@ export class SchoolYearComponent implements OnInit {
   }
 
   public getAllFiltering (page: IPage, term: string) {
-    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {
-      console.log(res);
-      
+    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {      
       if (!res) return;
       this.data = res;
     });
@@ -194,7 +192,7 @@ export class SchoolYearComponent implements OnInit {
    * @returns A promise that resolves when the activation is completed.
    */
   public async handlerFormActive (data: ISchoolYear): Promise<void> {
-    this.routerService.navigate(['/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
+    this.routerService.navigate(['/dashboard/formactive'], { queryParams: {id: this.institutionId, schoolyear: data.id}});
   }
 
   public dropdownRows: IDropdownData<ISchoolYear> = {
@@ -225,4 +223,8 @@ export class SchoolYearComponent implements OnInit {
       }
     ]
   };
+
+  public navigateToAnswers(schoolYearId: string): void {
+    this.routerService.navigate(['/dashboard/answers', schoolYearId]);
+  }
 }

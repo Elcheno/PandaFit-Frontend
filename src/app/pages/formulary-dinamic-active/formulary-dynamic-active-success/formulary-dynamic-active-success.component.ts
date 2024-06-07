@@ -36,9 +36,6 @@ export class FormularyDynamicActiveSuccessComponent {
 
     if (match) {
       const number = match[0];
-      console.log('Número final:', number);
-    } else {
-      console.log('No se encontró un número al final de la URL');
     }
   }
 
