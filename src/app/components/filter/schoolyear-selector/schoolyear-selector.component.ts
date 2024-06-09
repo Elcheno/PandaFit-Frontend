@@ -14,12 +14,12 @@ import { catchError, switchMap } from 'rxjs/operators';
   styleUrls: ['./schoolyear-selector.component.scss']
 })
 export class SchoolyearSelectorComponent implements OnInit, OnChanges {
-  @Input() selectedInstitutions: string[] = [];
-  @Input() selectedSizes: string[] = [];
-  @Output() selectedSizesUpdated = new EventEmitter<string[]>();
+  @Input() selectedInstitutions: { id: string, name: string }[] = [];
+  @Input() selectedSizes: { id: string, name: string }[] = [];
+  @Output() selectedSizesUpdated = new EventEmitter<{ id: string, name: string }[]>();
   @Output() jsonGenerated = new EventEmitter<any>();
   schoolyears: ISchoolYear[] = [];
-  options: string[] = [];
+  options: { id: string, name: string, institutionNmae?: string }[] = [];
 
   constructor(
     private schoolYearService: SchoolyearService,
@@ -45,10 +45,10 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
     }
 
     // Primero, obtenemos los IDs de las instituciones
-    const institutionObservables = this.selectedInstitutions.map(name =>
-      this.institutionService.filterByName(name).pipe(
+    const institutionObservables = this.selectedInstitutions.map(institution =>
+      this.institutionService.filterByName(institution.name).pipe(
         catchError(error => {
-          console.error(`Error al cargar la institución ${name}:`, error);
+          console.error(`Error al cargar la institución ${institution.name}:`, error);
           return of(null); // Retornar null en caso de error
         })
       )
@@ -58,7 +58,7 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
       switchMap(institutions => {
         // Filtrar los resultados nulos
         const validInstitutions = institutions.filter(inst => inst && inst.content);
-        const institutionIds = validInstitutions.flatMap(inst => inst!.content.map(i => i.id)); // Usar el operador de aserción no nula (!)
+        const institutionIds = validInstitutions.flatMap(inst => inst!.content.map(i => i.id));
 
         // Ahora, obtenemos los años escolares utilizando los IDs
         const schoolyearObservables = institutionIds.map(id => {
@@ -77,7 +77,7 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
       })
     ).subscribe(responses => {
       this.schoolyears = responses.flatMap(response => response.content);
-      this.options = this.schoolyears.map(schoolyear => schoolyear.name);
+      this.options = this.schoolyears.map(schoolyear => ({ id: schoolyear.id!, name: schoolyear.name }));
       console.log(this.schoolyears);
     });
   }
@@ -87,11 +87,11 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
     console.log('Generated JSON:', json);
   }
 
-  toggleSize(size: string, event: Event) {
+  toggleSize(size: { id: string, name: string }, event: Event) {
     event.preventDefault();
     event.stopPropagation();
 
-    const index = this.selectedSizes.indexOf(size);
+    const index = this.selectedSizes.findIndex(s => s.id === size.id);
     if (index >= 0) {
       this.selectedSizes.splice(index, 1);
     } else {
@@ -107,11 +107,10 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
       input: {
         field: 'curso',
         type: 'multiple',
-        body: this.selectedSizes
+        body: this.selectedSizes.map(size => size.id)
       }
     };
     this.jsonGenerated.emit(json);
     console.log('Generated JSON:', json);
   }
 }
-

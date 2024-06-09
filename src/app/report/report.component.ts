@@ -17,7 +17,7 @@ export class ReportComponent implements OnInit {
   selectAll: boolean = false;
   dropdownOpen: boolean = false;
   showModal = false;
-  selectedSizes: string[] = []; // Mover el estado a ReportComponent
+  selectedSizes: { id: string, name: string }[] = []; // Mover el estado a ReportComponent
 
   constructor(private institutionService: InstitutionService) {}
 
@@ -59,7 +59,7 @@ export class ReportComponent implements OnInit {
     this.showModal = !this.showModal;
   }
 
-  updateSelectedSizes(sizes: string[]) {
+  updateSelectedSizes(sizes: any) {
     this.selectedSizes = sizes;
   }
   

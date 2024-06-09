@@ -8,15 +8,15 @@ import { FormService } from '../../../services/form/form.service';
   standalone: true,
   imports: [MultiSelectComponent],
   templateUrl: './form-selector.component.html',
-  styleUrl: './form-selector.component.scss'
+  styleUrls: ['./form-selector.component.scss'] // Corregido: styleUrls en vez de styleUrl
 })
 export class FormSelectorComponent implements OnInit {
 
-  @Input() selectedSizes: string[] = [];
-  @Output() selectedSizesUpdated = new EventEmitter<string[]>();
+  @Input() selectedSizes: { id: string, name: string }[] = [];
+  @Output() selectedSizesUpdated = new EventEmitter<{ id: string, name: string }[]>();
   @Output() jsonGenerated = new EventEmitter<any>();
   forms: IFormData[] = [];
-  options: string[] = [];
+  options: { id: string, name: string }[] = [];
 
   constructor(private formService: FormService) {}
 
@@ -24,28 +24,26 @@ export class FormSelectorComponent implements OnInit {
     this.loadForms();
   }
 
-    loadForms(): void {
-      this.formService.getAll().subscribe(response => {
-        this.forms = response.content;
-        // Filtramos los elementos para asegurarnos de que solo asignamos strings
-        this.options = this.forms
-          .map(inst => inst.name)
-          .filter(name => name !== undefined) as string[];
-        console.log(this.forms);
-      });
-    }
-    
+  loadForms(): void {
+    this.formService.getAll().subscribe(response => {
+      this.forms = response.content;
+      this.options = this.forms
+      .filter(inst => inst.id !== undefined && inst.name !== undefined) // Asegurarse de que id y name no sean undefined
+      .map(inst => ({ id: inst.id as string, name: inst.name || '' })); // Mapear a objetos con id y name, y si name es undefined, asignar una cadena vacía
+      console.log(this.forms);
+    });
+  }
 
   handleJsonGenerated(json: any) {
     this.jsonGenerated.emit(json);
     console.log('Generated JSON:', json);
   }
 
-  toggleSize(size: string, event: Event) {
+  toggleSize(size: { id: string, name: string }, event: Event) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado
     event.stopPropagation();
 
-    const index = this.selectedSizes.indexOf(size);
+    const index = this.selectedSizes.findIndex(s => s.id === size.id);
     if (index >= 0) {
       this.selectedSizes.splice(index, 1);
     } else {
@@ -61,11 +59,10 @@ export class FormSelectorComponent implements OnInit {
       input: {
         field: 'formulario',
         type: 'multiple',
-        body: this.selectedSizes
+        body: this.selectedSizes.map(size => size.id)
       }
     };
     this.jsonGenerated.emit(json);
     console.log('Generated JSON:', json);
   }
-
 }
