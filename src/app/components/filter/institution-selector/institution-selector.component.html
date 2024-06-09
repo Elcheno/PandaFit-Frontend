@@ -1,0 +1,34 @@
+
+  <!--<div class="relative inline-block w-full" (click)="$event.stopPropagation()">
+    <button (click)="toggleDropdown($event)" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-left">
+      {{ selectedSizes.length > 0 ? selectedSizes.join(', ') : 'Instituciones' }}
+    </button>
+    
+    <div *ngIf="isOpen" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg p-2">
+      <div *ngFor="let institution of institutions" (click)="toggleSize(institution.name, $event)" 
+           [class.selected]="selectedSizes.includes(institution.name)"
+           class="inline-block px-4 py-2 m-1 cursor-pointer border border-black rounded-md">
+        {{ institution.name }}
+      </div>
+    </div>
+  </div>-->
+  
+  <!--<app-multi-select 
+  [options]="options" 
+  [selectedOptions]="selectedSizes" 
+  (selectedOptionsUpdated)="selectedSizesUpdated.emit($event)" 
+  placeholder="Instituciones">
+</app-multi-select>-->
+
+<app-multi-select 
+  [options]="options" 
+  [selectedOptions]="selectedSizes" 
+  [field]="'instituto'"
+  (selectedOptionsUpdated)="selectedSizesUpdated.emit($event)" 
+  (jsonGenerated)="handleJsonGenerated($event)"
+  placeholder="Instituciones">
+</app-multi-select>
+
+
+  
+  

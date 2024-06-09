@@ -1,0 +1,48 @@
+.institutes-selector {
+    position: relative;
+    display: inline-block;
+  
+    h3 {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  
+      .open {
+        transform: rotate(180deg);
+      }
+    }
+  
+    .dropdown-content {
+      display: block;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  
+      label {
+        display: block;
+        padding: 8px 16px;
+      }
+  
+      input[type="checkbox"] {
+        margin-right: 8px;
+        accent-color: #57ad57;
+        
+      }
+    }
+
+
+  }
+
+  button {
+    background-color: #57ad57;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
