@@ -10,7 +10,6 @@ import { DropdownService } from '../../../services/dropdown/dropdown.service';
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss']
 })
-
 export class MultiSelectComponent {
   @Input() options: { id: string, name: string, institutionName?: string }[] = [];
   @Input() selectedOptions: { id: string, name: string }[] = [];
@@ -29,6 +28,7 @@ export class MultiSelectComponent {
         this.isOpen = false;
       }
     });
+    this.selectedOptions = [];
   }
 
   ngOnDestroy() {
@@ -75,6 +75,17 @@ export class MultiSelectComponent {
     this.jsonGenerated.emit(json);
   }
 
+  get groupedOptions() {
+    const groups: { [key: string]: { institutionName: string, options: { id: string, name: string, institutionName?: string }[] } } = {};
+    this.options.forEach(option => {
+      if (!groups[option.institutionName!]) {
+        groups[option.institutionName!] = { institutionName: option.institutionName!, options: [] };
+      }
+      groups[option.institutionName!].options.push(option);
+    });
+    return Object.values(groups);
+  }
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
@@ -83,6 +94,7 @@ export class MultiSelectComponent {
     }
   }
 }
+
 
 
 

@@ -5,11 +5,13 @@
   </button>
 
   <div *ngIf="isOpen" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg p-2">
-     <div *ngFor="let option of options" (click)="toggleOption(option, $event)" 
-           [class.selected]="selectedOptions.includes(option)"
-           class="inline-block px-4 py-2 m-1 cursor-pointer border border-black rounded-md">
+    <div *ngFor="let group of groupedOptions" class="mb-2">
+      <div class="font-bold border-b border-gray-300 mb-1">{{ group.institutionName }}</div>
+      <div *ngFor="let option of group.options" (click)="toggleOption(option, $event)" 
+        [class.selected]="selectedOptions.includes(option)"
+        class="inline-block px-4 py-2 m-1 cursor-pointer border border-black rounded-md">
         {{ option.name }}
       </div>
+    </div>
   </div>
 </div>
-

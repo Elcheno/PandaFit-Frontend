@@ -43,44 +43,54 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
       this.options = [];
       return;
     }
-
-    // Primero, obtenemos los IDs de las instituciones
+  
     const institutionObservables = this.selectedInstitutions.map(institution =>
       this.institutionService.filterByName(institution.name).pipe(
         catchError(error => {
           console.error(`Error al cargar la institución ${institution.name}:`, error);
-          return of(null); // Retornar null en caso de error
+          return of(null);
         })
       )
     );
-
+  
     forkJoin(institutionObservables).pipe(
       switchMap(institutions => {
-        // Filtrar los resultados nulos
         const validInstitutions = institutions.filter(inst => inst && inst.content);
-        const institutionIds = validInstitutions.flatMap(inst => inst!.content.map(i => i.id));
-
-        // Ahora, obtenemos los años escolares utilizando los IDs
-        const schoolyearObservables = institutionIds.map(id => {
-          if (id !== undefined) {
-            return this.schoolYearService.getAllByInstitution({ page: 0, size: 100 }, encodeURIComponent(id)).pipe(
+        const institutionIds = validInstitutions.flatMap(inst => inst!.content.map(i => ({ id: i.id, name: i.name })));
+  
+        const schoolyearObservables = institutionIds.map(inst => {
+          if (inst.id) {
+            return this.schoolYearService.getAllByInstitution({ page: 0, size: 100 }, encodeURIComponent(inst.id)).pipe(
               catchError(error => {
-                console.error(`Error al cargar los registros para la institución ${id}:`, error);
-                return of({ content: [] }); // Retornar un array vacío en caso de error
+                console.error(`Error al cargar los registros para la institución ${inst.id}:`, error);
+                return of({ content: [] });
               })
             );
+          } else {
+            console.error(`Institución ${inst.name} no tiene un ID definido`);
+            return of({ content: [] });
           }
-          return of({ content: [] });
         });
-
-        return forkJoin(schoolyearObservables);
+  
+        return forkJoin(schoolyearObservables).pipe(
+          switchMap(schoolyearResponses => {
+            return of({
+              institutions: institutionIds,
+              schoolyears: schoolyearResponses
+            });
+          })
+        );
       })
-    ).subscribe(responses => {
-      this.schoolyears = responses.flatMap(response => response.content);
-      this.options = this.schoolyears.map(schoolyear => ({ id: schoolyear.id!, name: schoolyear.name }));
+    ).subscribe(data => {
+      this.schoolyears = data.schoolyears.flatMap(response => response.content);
+      this.options = data.institutions.flatMap(inst => 
+        this.schoolyears.filter(schoolyear => schoolyear.institutionId === inst.id)
+          .map(schoolyear => ({ id: schoolyear.id!, name: schoolyear.name, institutionName: inst.name }))
+      );
       console.log(this.schoolyears);
     });
   }
+  
 
   handleJsonGenerated(json: any) {
     this.jsonGenerated.emit(json);
