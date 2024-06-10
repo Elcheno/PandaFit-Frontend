@@ -8,17 +8,18 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './selector-filter.component.scss'
 })
 export class SelectorFilterComponent {
+[x: string]: any;
   @Input() public question!: string;
   @Input() public options!: Array<{ checked?: boolean, label: string }>;
-  @Input() public name!: string;
+  @Input() public field!: string;
   @Output() public onSelect = new EventEmitter<any>();
 
-  public selectOption(value: string) {
+  public selectOption(value: string[]) {
     const eventPayload = {
       input: {
-        campo: this.name,
-        tipo: 'unico',
-        cuerpo: value
+        field: this.field,
+        type: 'unico',
+        body: value
       }
     };
     this.onSelect.emit(eventPayload);
