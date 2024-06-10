@@ -1,0 +1,28 @@
+<div class="w-full">
+    <label class="block text-sm font-medium text-gray-700 pb-1">{{ text }}</label>
+
+    @if (date) {
+        <div class="flex gap-4 w-full">
+            <div class="w-full">
+                <p class="block text-sm font-medium text-gray-700">Desde:</p>
+                <input #from type="date" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
+            </div>
+            <div class="w-full">
+                <p class="block text-sm font-medium text-gray-700">Hasta:</p>
+                <input #to type="date" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
+            </div>
+        </div>
+    } @else {
+        <div class="flex gap-4 w-full">
+            <div class="w-full">
+                <p class="block text-sm font-medium text-gray-700">Desde:</p>
+                <input #from type="number" (input)="emitFilterChange()" class="border w-full border-gray-300 rounded-md p-[0.3rem]">
+            </div>
+            <div class="w-full">
+                <p class="block text-sm font-medium text-gray-700">Hasta:</p>
+                <input #to type="number" (input)="emitFilterChange()" class="border w-full border-gray-300 rounded-md p-[0.3rem]">
+            </div>
+        </div>
+    }
+</div>
+

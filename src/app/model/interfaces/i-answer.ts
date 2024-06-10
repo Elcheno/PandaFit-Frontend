@@ -12,7 +12,9 @@ export interface IAnswer {
 
 export interface IResponse {
     inputId: string
+    text: string
     value: string
+    unit: string
 }
 
 
