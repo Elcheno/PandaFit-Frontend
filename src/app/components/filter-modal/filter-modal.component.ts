@@ -5,6 +5,7 @@ import { SchoolyearSelectorComponent } from '../filter/schoolyear-selector/schoo
 import { RangeFilterComponent } from '../range-filter/range-filter.component';
 import { SelectorFilterComponent } from '../selector-filter/selector-filter.component';
 import { FilterService } from '../../services/filter/filter.service';
+import { ExcelService } from '../../services/excel/excel.service';
 
 @Component({
   selector: 'app-filter-modal',
@@ -27,6 +28,7 @@ export class FilterModalComponent {
   filters: any[] = [];
 
   private readonly filterService = inject(FilterService);
+  private readonly genExcelService = inject(ExcelService);
 
   close() {
     this.closeModal.emit();
@@ -54,7 +56,7 @@ export class FilterModalComponent {
 
   applyFilters() {
     this.filterService.filter(this.filters).subscribe((res: any) => {
-      console.log(res);
+      this.genExcelService.exportAsExcelFile(res, 'formularios');
     })
   }
 
@@ -62,14 +64,13 @@ export class FilterModalComponent {
     const existingFilterIndex = this.filters.findIndex(f => f.field === filter.field);
     if (existingFilterIndex !== -1) {
       if (filter.body.length === 0 || filter.body[0] === '' && filter.body[1] === '') {
-        console.log('Eliminando filtro:', filter.field);
         this.filters = this.filters.filter(f => f.field !== filter.field);
       }else{
         this.filters[existingFilterIndex] = filter;
       }
-      console.log(this.filters)
+
     } else {
-      console.log(this.filters)
+
       this.filters.push(filter);
     }
   }
