@@ -1,0 +1,29 @@
+<div>
+    <h4 class="mb-5">{{ text }}</h4>
+
+    @if (date) {
+        <div class="flex gap-4">
+            <div>
+                <p>Desde:</p>
+                <input #from type="date" class="datepicker border border-black rounded-md p-[0.10rem] w-40">
+            </div>
+            <div>
+                <p>Hasta:</p>
+                <input #to type="date" class="datepicker border border-black rounded-md p-[0.10rem] w-40">
+            </div>
+        </div>
+    } @else {
+        <div class="flex gap-4">
+            <div>
+                <p>Desde:</p>
+                <input #from type="number" (input)="emitFilterChange()" class="border border-black rounded-md p-[0.10rem] w-40">
+            </div>
+            <div>
+                <p>Hasta:</p>
+                <input #to type="number" (input)="emitFilterChange()" class="border border-black rounded-md p-[0.10rem] w-40">
+            </div>
+        </div>
+    }
+    <button (click)="getJson()" class="bg-green-primary">json generator</button>
+</div>
+
