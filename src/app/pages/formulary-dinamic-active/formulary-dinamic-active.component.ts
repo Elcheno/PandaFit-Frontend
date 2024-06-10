@@ -91,7 +91,11 @@ export class FormularyDinamicActiveComponent implements OnInit {
       response: this.answers.value.map((answer: any) => {
         return {
           inputId: answer.id,
-          value: answer.value
+          value: answer.value,
+          unit: answer.unit,
+          decimal: answer.decimal,
+          type: answer.type,
+          text: answer.text
         }
       })
     };
