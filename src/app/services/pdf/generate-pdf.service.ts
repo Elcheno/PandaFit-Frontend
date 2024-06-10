@@ -74,29 +74,29 @@ export class GeneratePdfService {
           }
         },
         {
-          text: 'Formulario de: ' + this.formatUUID(res.uuid),
+          text: 'Nombre: ' + this.formatUUID(res.uuid),
           style: 'header',
         },
         {
-          layout: 'lightHorizontalLines', // optional
-          fillColor: '#eeeeee',
-          table: {
-            headerRows: 0,
-            widths: [ '*' ],
-            body: [
-              ...res.response.map(input => ([[
-              
-                {
-                text: `${input.value}`,
-                style: {
-                  fontSize: 13,
-                  bold: true
-                },
-                margin: [10, 15, 10, 0]
-                }
-              ]]))
-            ]
+          text: 'Datos:',
+          style: 'header',
+          margin: [10, 0, 10, 0]
+        },
+        ...res.response.map(input => ([[
+          {
+            fillColor: '#eeeeee',
+            text: `${input.text}: ${input.value} ${input.unit}`,
+            style: {
+              fontSize: 13,
+              bold: true
+            },
+            margin: [10, 15, 10, 0]
           }
+        ]])),
+        {
+          text: 'Resultados:',
+          style: 'header',
+          margin: [10, 35, 10, 15]
         },
         {
           layout: 'lightHorizontalLines', // optional
