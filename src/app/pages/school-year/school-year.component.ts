@@ -110,7 +110,6 @@ export class SchoolYearComponent implements OnInit {
         this.table.toggleTableLoader();
         if (!res) return;
         this.data = res;
-        console.log(res);
         
       });
     } else {

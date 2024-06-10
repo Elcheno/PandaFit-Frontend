@@ -18,11 +18,11 @@ export class FilterService {
   constructor() { }
 
   // metodo que consumen el endpoint de la api para filtrar los datos
-  public filter (filter: string[]): Observable<any> {
+  public filter (filter: any[]): Observable<any> {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
-
-    return this.http.post<any>(`${env.api.url}${env.api.active}/${env.api.response}/${env.api.query}`, { body: filter , headers: { Authorization: token ?? "" } })
+  
+    return this.http.post<any>(`${env.api.url}${env.api.active}/${env.api.response}/${env.api.query}`, filter, { headers: { Authorization: token ?? "" }})
       .pipe(
         catchError((error) => {
           console.error(error);
