@@ -1,7 +1,7 @@
 <app-multi-select
   [options]="options"
   [selectedOptions]="selectedSizes"
-  [field]="'instituto'"
+  [field]="'institutions'"
   (selectedOptionsUpdated)="selectedSizesUpdated.emit($event)"
   (jsonGenerated)="handleJsonGenerated($event)"
   placeholder="Instituciones">
