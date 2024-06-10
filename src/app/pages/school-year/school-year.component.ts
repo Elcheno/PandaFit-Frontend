@@ -5,34 +5,37 @@ import { IPageable } from '../../model/interfaces/i-pageable';
 import { ISchoolYear } from '../../model/interfaces/i-school-year';
 import { SearchEntityComponent } from '../../components/search-entity/search-entity.component';
 import { IPage } from '../../model/interfaces/i-page';
-import { IInstitution } from '../../model/interfaces/i-institution';
 import { ModalService } from '../../services/modal/modal.service';
 import { CreateSchoolYearModalComponent } from '../../components/modals/schoolYears/create-school-year-modal/create-school-year-modal.component';
 import { ButtonComponent } from '../../components/button/button.component';
-import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
-import { DropdownComponent } from '../../components/dropdown/dropdown.component';
 import { IDropdownData } from '../../model/interfaces/i-dropdown';
 import { ModalConfirmService } from '../../services/modal/modal-confirm.service';
 import { UpdateSchoolYearModalComponent } from '../../components/modals/schoolYears/update-school-year-modal/update-school-year-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../services/modal/toast.service';
 import { StoreService } from '../../services/store/store.service';
+import { TableSchoolYearComponent } from './components/table-school-year/table-school-year.component';
+import { InstitutionService } from '../../services/institution/institution.service';
+import { IInstitution } from '../../model/interfaces/i-institution';
 
 /** Component for managing school years */
 @Component({
   selector: 'app-school-year',
   standalone: true,
-  imports: [SearchEntityComponent, ButtonComponent, CdkMenuTrigger, CdkMenu, CdkMenuItem, DropdownComponent],
+  imports: [SearchEntityComponent, ButtonComponent, TableSchoolYearComponent],
   templateUrl: './school-year.component.html',
   styleUrl: './school-year.component.scss'
 })
 export class SchoolYearComponent implements OnInit {
+  @ViewChild(TableSchoolYearComponent) table!: TableSchoolYearComponent;
 
   /** Form group for school year */
   public form!: FormGroup;
 
   /** Instance of SchoolyearService for interacting with school year data */
   private readonly schoolYearService = inject(SchoolyearService);
+
+  private readonly institutionService = inject(InstitutionService);
 
   /** Instance of ModalService for managing modals */
   private readonly modalService = inject(ModalService);
@@ -53,8 +56,6 @@ export class SchoolYearComponent implements OnInit {
 
   private readonly storeService = inject(StoreService);
 
-  // public data: ISchoolYear[] = [];
-
   /** Holds the data for school years */
   public data!: IPageable<ISchoolYear>;
 
@@ -63,12 +64,10 @@ export class SchoolYearComponent implements OnInit {
 
   private filteringString: string = '';
 
+  public institution!: IInstitution;
+
   /** Initializes the component and form */
   constructor() {
-    effect(() => {
-      const reload = this.storeService.institutionStore.reload;
-      if (reload) this.getAll({ page: 0, size: 10, sort: ['name'] });
-    });
     this.form = this.fb.group({
       name: ''
     });
@@ -77,13 +76,19 @@ export class SchoolYearComponent implements OnInit {
   public ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.institutionId = params['id'] ?? '';
-      if (this.institutionId) {
-        this.getAll({ 
+      
+      this.institutionService.getById(this.institutionId).subscribe((res) => {
+        if (!res) return;
+        this.institution = res;
+        this.schoolYearService.getAllByInstitution({ 
           page: this.pageable.page, 
           size: this.pageable.size, 
           sort: this.pageable.sort 
-        } as IPage, );
-      }
+        } as IPage, this.institutionId).subscribe((res) => {
+          if (!res) return;
+          this.data = res;
+        });
+      })
     });
   }
 
@@ -99,11 +104,14 @@ export class SchoolYearComponent implements OnInit {
     content: []
   };
 
-  public getAll (page: IPage): void {
+  public getAll (page: IPage): void {    
     if (!this.filteringString) {
       this.schoolYearService.getAllByInstitution(page ,this.institutionId).subscribe((res) => {
+        this.table.toggleTableLoader();
         if (!res) return;
         this.data = res;
+        console.log(res);
+        
       });
     } else {
       this.getAllFiltering (page, this.filteringString);
@@ -111,7 +119,8 @@ export class SchoolYearComponent implements OnInit {
   }
 
   public getAllFiltering (page: IPage, term: string) {
-    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {      
+    this.schoolYearService.getAllInstitutionsFilteringByName(page, term, this.institutionId).subscribe((res) => {
+      this.table.toggleTableLoader(); 
       if (!res) return;
       this.data = res;
     });
@@ -176,6 +185,8 @@ export class SchoolYearComponent implements OnInit {
    * @returns A promise that resolves when the search is completed.
    */
   public search (searchValue: string, page?: number): void {
+    this.table.toggleTableLoader();
+
     if (searchValue) {
       this.filteringString = searchValue;
       this.getAllFiltering({ page: page ? page : 0, size: 10, sort: ['name'] }, searchValue);

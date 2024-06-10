@@ -1,0 +1,76 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+      @defer (when data) {
+          @if (data.content.length > 0) {
+              <thead class="text-xs text-white uppercase bg-black-primary">
+                  <tr>
+                      <th scope="col" class="px-6 py-3">
+                          Curso
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          Instituto
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                          <span class="sr-only">Options</span>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <div #tableLoaderPage id="tableLoaderPage" class="absolute inset-x-0 bottom-0 h-full bg-black bg-opacity-30 justify-center animate-opacityIn hidden"><app-loader-spinner class="flex items-center"></app-loader-spinner></div>
+                  @for (item of data.content; track index; let index = $index) {
+                      <tr class="bg-white border-b hover:bg-gray-50">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                              {{ item.name }}
+                          </th>
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                              {{ institution.name }}
+                          </th>
+                          <td class="px-6 py-4 text-right flex justify-end">
+                              <app-dropdown [rows]="dropdownRows" [data]="item" [triggerStyle]="'text-gray-800'"
+                                  [dropdownStyle]="'text-black-primary'"></app-dropdown>
+                          </td>
+                      </tr>
+                  }
+              </tbody>
+          } @else {
+              <thead class="text-xs text-white uppercase bg-black-primary">
+                  <tr>
+                      <th scope="col" class="px-6 py-3">
+                          Registros
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr class="bg-white border-b hover:bg-gray-50">
+                      <td scope="row" class="w-full px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap">
+                          Ningún elemento para mostrar
+                      </td>
+                  </tr>
+              </tbody>
+          }
+      } @placeholder (minimum 0.5s) {
+          <thead class="text-xs text-white uppercase bg-black-primary">
+              <tr>
+                  <th scope="col" class="px-6 py-3">
+                      Cargando
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+            <div #tableLoaderPage id="tableLoaderPage" class="absolute inset-x-0 bottom-0 h-full bg-black bg-opacity-30 justify-center animate-opacityIn hidden"><app-loader-spinner class="flex items-center"></app-loader-spinner></div>
+              <tr class="bg-white border-b hover:bg-gray-50">
+                  <td scope="row"
+                      class="w-full px-6 py-4 font-medium text-center text-black-primary whitespace-nowrap flex justify-center my-4">
+                      <app-loader-spinner></app-loader-spinner>
+                  </td>
+              </tr>
+          </tbody>
+      }
+
+  </table>
+</div>
+<app-pagination
+[data]="data"
+(nextPageEvent)="nextPage()"
+(previousPageEvent)="previousPage()"
+></app-pagination>

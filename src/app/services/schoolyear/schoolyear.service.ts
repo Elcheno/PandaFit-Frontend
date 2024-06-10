@@ -96,7 +96,15 @@ export class SchoolyearService {
         return throwError(() => errorMessage);
       }),
       map((res: any) => {
-        return res as IPageable<ISchoolYear>;
+        const response: IPageable<ISchoolYear> = {
+          page: res['number'],
+          size: res['size'],
+          sort: pageParams?.sort ?? ['email'],
+          totalElements: res['totalElements'],
+          totalPages: res['totalPages'],
+          content: res['content']
+        };
+        return response;
       }),
       take(1)
     );
