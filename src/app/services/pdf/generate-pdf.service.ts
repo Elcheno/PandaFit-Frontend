@@ -32,6 +32,7 @@ export class GeneratePdfService {
       .pipe(
         map((res: any) => {
           const response: IAnswer = { ...res };
+          console.log(response);
           return response;
         }),
         take(1)
@@ -83,6 +84,27 @@ export class GeneratePdfService {
             headerRows: 0,
             widths: [ '*' ],
             body: [
+              ...res.response.map(input => ([[
+              
+                {
+                text: `${input.value}`,
+                style: {
+                  fontSize: 13,
+                  bold: true
+                },
+                margin: [10, 15, 10, 0]
+                }
+              ]]))
+            ]
+          }
+        },
+        {
+          layout: 'lightHorizontalLines', // optional
+          fillColor: '#eeeeee',
+          table: {
+            headerRows: 0,
+            widths: [ '*' ],
+            body: [
               ...outputsForPdf.map(output => ([[
               
                 {
@@ -105,22 +127,6 @@ export class GeneratePdfService {
             ]
           }
         },
-        // ...outputsForPdf.map(output => ([
-        //   {
-        //   text: `${output.name}`,
-        //   style: {
-        //     fontSize: 13,
-        //     bold: true
-        //   },
-        //   margin: [0, 15, 0, 0]
-        //   },
-        //   {
-        //     text: `Cálculo: ${output.result} ${output.unit}`,
-        //   },
-        //   {
-        //     text: `Resultado: ${output.umbralText}`,
-        //   }
-        // ]))
       ];
 
       const pdfDefinition: any = {
