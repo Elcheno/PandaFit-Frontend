@@ -1,0 +1,8 @@
+<app-multi-select 
+  [options]="options" 
+  [selectedOptions]="selectedSizes" 
+  [field]="'formulario'"
+  (selectedOptionsUpdated)="selectedSizesUpdated.emit($event)" 
+  (jsonGenerated)="handleJsonGenerated($event)"
+  placeholder="Formularios">
+</app-multi-select>
