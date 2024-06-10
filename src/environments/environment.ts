@@ -11,7 +11,8 @@ export const environment = {
     output: '/output',
     formulary: '/formulary',
     login: "login",
-    active: "active"
+    active: "active",
+    query: "query"
   },
   firebaseConfig: {
     apiKey: "AIzaSyDnC8LbF_TXTxanafSpT1UQBSJp5aaVWY8",

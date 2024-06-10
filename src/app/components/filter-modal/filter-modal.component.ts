@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Output, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ViewChild, inject } from '@angular/core';
 import { InstitutionSelectorComponent } from '../filter/institution-selector/institution-selector.component';
 import { FormSelectorComponent } from '../filter/form-selector/form-selector.component';
 import { SchoolyearSelectorComponent } from '../filter/schoolyear-selector/schoolyear-selector.component';
 import { RangeFilterComponent } from '../range-filter/range-filter.component';
 import { SelectorFilterComponent } from '../selector-filter/selector-filter.component';
+import { FilterService } from '../../services/filter/filter.service';
 
 @Component({
   selector: 'app-filter-modal',
@@ -24,6 +25,8 @@ export class FilterModalComponent {
   formJson: any = {};
   selectedInstitutions: { id: string, name: string }[] = [];
   filters: any[] = [];
+
+  private readonly filterService = inject(FilterService);
 
   close() {
     this.closeModal.emit();
@@ -50,9 +53,9 @@ export class FilterModalComponent {
   }
 
   applyFilters() {
-    console.log('JSON generado para Instituciones:', this.institutionJson);
-    console.log('JSON generado para Cursos:', this.schoolyearJson);
-    console.log('JSON generado para Formularios:', this.formJson);
+    this.filterService.filter(this.filters).subscribe((res: any) => {
+      console.log(res);
+    })
   }
 
   handleFilterChange(filter: any) {
