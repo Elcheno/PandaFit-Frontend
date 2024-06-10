@@ -15,13 +15,14 @@ export class SelectorFilterComponent {
   @Output() public onSelect = new EventEmitter<any>();
 
   public selectOption(value: string[]) {
-    const eventPayload = {
-      input: {
-        field: this.field,
-        type: 'unico',
-        body: value
-      }
-    };
-    this.onSelect.emit(eventPayload);
+    this.onSelect.emit(this.generateJson(value));
+  }
+
+  private generateJson(value: string[]) {
+    return {
+      field: this.field,
+      type: 'unico',
+      body: value
+    }
   }
 }

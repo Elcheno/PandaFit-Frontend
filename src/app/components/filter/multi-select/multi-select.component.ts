@@ -42,7 +42,6 @@ export class MultiSelectComponent {
     if (this.isOpen) {
       this.dropdownService.closeAllDropdowns(this.field);
     }
-    console.log('Dropdown toggled', this.isOpen);
   }
 
   getSelectedOptionNames(): string {
@@ -65,14 +64,15 @@ export class MultiSelectComponent {
   }
 
   generateJson() {
-    const json = {
-      input: {
-        field: this.field,
-        type: 'multiple',
-        body: this.selectedOptions.map(o => o.id)
-      }
+    this.jsonGenerated.emit(this.createJson());
+  }
+
+  createJson() {
+    return {
+      field: this.field,
+      type: "multiple",
+      body: this.selectedOptions.map(o => o.id)
     };
-    this.jsonGenerated.emit(json);
   }
 
   get groupedOptions() {
@@ -90,7 +90,6 @@ export class MultiSelectComponent {
   handleClickOutside(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
-      console.log('Clicked outside, dropdown closed');
     }
   }
 }

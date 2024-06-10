@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InstitutionService } from '../services/institution/institution.service';
-import { IInstitution } from '../model/interfaces/i-institution';
-import { FilterModalComponent } from '../filter-modal/filter-modal.component';
+import { InstitutionService } from '../../services/institution/institution.service';
+import { IInstitution } from '../../model/interfaces/i-institution';
+import { FilterModalComponent } from '../../components/filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-report',
@@ -28,7 +28,7 @@ export class ReportComponent implements OnInit {
   loadInstitutions(): void {
     this.institutionService.getAll().subscribe(response => {
       this.institutions = response.content;
-      console.log(this.institutions);
+      // console.log(this.institutions);
     });
   }
 

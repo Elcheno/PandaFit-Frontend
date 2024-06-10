@@ -17,10 +17,9 @@ export class RangeFilterComponent {
 
   @Output() public filterChange = new EventEmitter<any>();
 
-  ngAfterViewInit() {
-    // Emit initial values
-    this.emitFilterChange();
-  }
+  // ngAfterViewInit() {
+  //   this.emitFilterChange();
+  // }
   
   public emitFilterChange() {
     this.filterChange.emit(this.getJson());
@@ -28,9 +27,9 @@ export class RangeFilterComponent {
 
   public getJson() {
     return {
-      "field": this.field,
-      "type": "range",
-      "body": [this.from.nativeElement.value, this.to.nativeElement.value]
+      field: this.field,
+      type: "range",
+      body: [this.from.nativeElement.value, this.to.nativeElement.value]
     };
   }
 }

@@ -31,12 +31,10 @@ export class InstitutionSelectorComponent implements OnInit {
       this.options = this.institutions
         .filter(inst => inst.id !== undefined)
         .map(inst => ({ id: inst.id as string, name: inst.name }));
-      console.log(this.institutions);
     });
   }
 
   handleJsonGenerated(json: any) {
     this.jsonGenerated.emit(json);
-    console.log('Generated JSON:', json);
   }
 }

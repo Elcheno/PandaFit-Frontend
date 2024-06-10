@@ -6,7 +6,7 @@ import { loginGuard } from './guards/login.guard';
 import { LandingComponent } from './pages/landing/landing.component';
 import { AnswersInstitutionsComponent } from './answers-institutions/answers-institutions.component';
 import { AnswersSchoolYearComponent } from './answers-school-year/answers-school-year.component';
-import { ReportComponent } from './report/report.component';
+import { ReportComponent } from './pages/report/report.component';
 
 export const routes: Routes = [
   {

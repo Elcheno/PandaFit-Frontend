@@ -7,7 +7,7 @@
         <label class="block text-sm font-medium text-gray-700">Formularios</label>
         <app-form-selector 
           [selectedSizes]="[]" 
-          (jsonGenerated)="handleFormJson($event)">
+          (jsonGenerated)="handleFilterChange($event)">
         </app-form-selector>
       </div>
 
@@ -15,7 +15,7 @@
         <label class="block text-sm font-medium text-gray-700">Instituciones</label>
         <app-institution-selector 
           [selectedSizes]="[]" 
-          (jsonGenerated)="handleInstitutionJson($event)" 
+          (jsonGenerated)="handleFilterChange($event)" 
           (selectedSizesUpdated)="updateSelectedInstitutions($event)">
         </app-institution-selector>
       </div>
@@ -25,9 +25,13 @@
         <app-schoolyear-selector 
           [selectedSizes]="selectedSizes" 
           [selectedInstitutions]="selectedInstitutions" 
-          (jsonGenerated)="handleSchoolyearJson($event)"
+          (jsonGenerated)="handleFilterChange($event)"
           (selectedSizesUpdated)="updateSelectedSizes.emit($event)">
         </app-schoolyear-selector>
+      </div>
+
+      <div class="mb-4">
+        <app-range-filter [text]="'Elige el rango'" (filterChange)="handleFilterChange($event)" [field]="'date'"></app-range-filter>
       </div>
 
       <div class="flex justify-end">

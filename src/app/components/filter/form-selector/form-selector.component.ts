@@ -30,13 +30,11 @@ export class FormSelectorComponent implements OnInit {
       this.options = this.forms
       .filter(inst => inst.id !== undefined && inst.name !== undefined) // Asegurarse de que id y name no sean undefined
       .map(inst => ({ id: inst.id as string, name: inst.name || '' })); // Mapear a objetos con id y name, y si name es undefined, asignar una cadena vacía
-      console.log(this.forms);
     });
   }
 
   handleJsonGenerated(json: any) {
     this.jsonGenerated.emit(json);
-    console.log('Generated JSON:', json);
   }
 
   toggleSize(size: { id: string, name: string }, event: Event) {
@@ -63,6 +61,5 @@ export class FormSelectorComponent implements OnInit {
       }
     };
     this.jsonGenerated.emit(json);
-    console.log('Generated JSON:', json);
   }
 }
