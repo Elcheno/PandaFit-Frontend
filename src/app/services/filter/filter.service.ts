@@ -22,7 +22,7 @@ export class FilterService {
     const sessionData = this.authService.sessionData();
     const token = sessionData?.token;
 
-    return this.http.post<any>(`${env.api.url}${env.api.active}/${env.api.response}/${env.api.query}`, { body: filter , headers: { Authorization: token ?? "" } })
+    return this.http.post<any>(`${env.api.url}${env.api.active}/${env.api.response}/${env.api.query}`, filter, { headers: { Authorization: token ?? "" } })
       .pipe(
         catchError((error) => {
           console.error(error);
