@@ -31,7 +31,7 @@
       </div>
 
       <div class="mb-4">
-        <app-range-filter [text]="'Elige el rango'" (filterChange)="handleFilterChange($event)" [field]="'date'"></app-range-filter>
+        <app-range-filter [text]="'Selecciona un rango de fechas de entrega'" (filterChange)="handleFilterChange($event)" [field]="'date'" [date]="true"></app-range-filter>
       </div>
 
       <div class="flex justify-end">

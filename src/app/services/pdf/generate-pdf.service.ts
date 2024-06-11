@@ -32,7 +32,6 @@ export class GeneratePdfService {
       .pipe(
         map((res: any) => {
           const response: IAnswer = { ...res };
-          console.log(response);
           return response;
         }),
         take(1)

@@ -5,11 +5,11 @@
         <div class="flex gap-4 w-full">
             <div class="w-full">
                 <p class="block text-sm font-medium text-gray-700">Desde:</p>
-                <input #from type="date" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
+                <input #from type="datetime-local" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
             </div>
             <div class="w-full">
                 <p class="block text-sm font-medium text-gray-700">Hasta:</p>
-                <input #to type="date" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
+                <input #to type="datetime-local" (input)="emitFilterChange()" class="datepicker border w-full border-gray-300 rounded-md p-[0.3rem]">
             </div>
         </div>
     } @else {

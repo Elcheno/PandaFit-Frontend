@@ -28,7 +28,6 @@ export class ReportComponent implements OnInit {
   loadInstitutions(): void {
     this.institutionService.getAll().subscribe(response => {
       this.institutions = response.content;
-      // console.log(this.institutions);
     });
   }
 
@@ -61,6 +60,10 @@ export class ReportComponent implements OnInit {
 
   updateSelectedSizes(sizes: any) {
     this.selectedSizes = sizes;
+  }
+
+  public genExcel() {
+    
   }
   
 }

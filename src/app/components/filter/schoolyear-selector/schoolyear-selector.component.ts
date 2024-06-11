@@ -87,14 +87,12 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
         this.schoolyears.filter(schoolyear => schoolyear.institutionId === inst.id)
           .map(schoolyear => ({ id: schoolyear.id!, name: schoolyear.name, institutionName: inst.name }))
       );
-      console.log(this.schoolyears);
     });
   }
   
 
   handleJsonGenerated(json: any) {
     this.jsonGenerated.emit(json);
-    console.log('Generated JSON:', json);
   }
 
   toggleSize(size: { id: string, name: string }, event: Event) {
@@ -121,6 +119,5 @@ export class SchoolyearSelectorComponent implements OnInit, OnChanges {
       }
     };
     this.jsonGenerated.emit(json);
-    console.log('Generated JSON:', json);
   }
 }
